@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     printf("Noted that if you enter 1, you have to press first button for spekaer to make sound\n");
     scanf("%s",&choice);
     switch(choice){
-        case 1:{
+        case 1:
             pullUpDnControl(P1,PUD_DOWN);
             sleep(1);
             while(1){
@@ -64,8 +64,8 @@ int main(int argc, char **argv)
                     }
                 }
             }
-        }
-        case 2:{
+        
+        case 2:
             sleep(1);
             if(digitalRead(P2) == 1){
                 while(1){
@@ -75,8 +75,8 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        }
-        case 3:{
+        
+        case 3:
             sleep(1);
             if(digitalRead(P3) == 1){
                 while(1){
@@ -86,8 +86,8 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        }
-        case 4:{
+        
+        case 4:
             sleep(1);
             if(digitalRead(P4) == 1){
                 while(1){
@@ -97,8 +97,8 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        }
-        case 5:{
+        
+        case 5:
             sleep(1);
             if(digitalRead(P5) == 1){
                 while(1){
@@ -108,10 +108,10 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        }
-        default:{
+        
+        default:
             printf("Please enter integer between 1-5!\n");
-        }
+        
 
 
     }
