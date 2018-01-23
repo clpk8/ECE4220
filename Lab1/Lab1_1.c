@@ -23,20 +23,20 @@ int main(int argc, char **argv)
 {
     wiringPiSetup();    // wiringPiSetupGpio() could be used. The numbers for the ports would
     // need to match the RPi GPIO pinout.
-    
+
     pinMode(LED1, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED2, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED3, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED4, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(P1, INPUT);
 
-    
-    
+
+
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
-    
+
 
 
 	while(1){
@@ -45,13 +45,12 @@ int main(int argc, char **argv)
 	    digitalWrite(LED1, LOW);
 		digitalWrite(LED2, HIGH);
 		sleep(1);
-	    digitalWrite(LED1, LOW);
-
+	    digitalWrite(LED2, LOW);
 
 	}
-    
-    
-    
+
+
+
     return 0;
 }
 

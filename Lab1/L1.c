@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     wiringPiSetup();    // wiringPiSetupGpio() could be used. The numbers for the ports would
     // need to match the RPi GPIO pinout.
-    
+
     pinMode(LED1, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED2, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED3, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
@@ -38,19 +38,21 @@ int main(int argc, char **argv)
     pinMode(P4, INPUT);
     pinMode(P5, INPUT);
     pinMode(S1, OUTPUT);
-    
-    
+
+
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
     digitalWrite(S1, LOW);
-    
+
     int choice;
     printf("Please enrter a value bewteen 1 and 5\n");
     printf("Noted that if you enter 1, you have to press first button for spekaer to make sound\n");
+    scanf("%s",&choice);
     switch(choice){
         case 1:{
+            pullUpDnControl(P1,PUD_DOWN);
             sleep(1);
             if(digitalRead(P1) == 1){
                 while(1){
@@ -108,8 +110,8 @@ int main(int argc, char **argv)
         default:{
             printf("Please enter integer between 1-5!\n");
         }
-    
-    
+
+
     }
     return 0;
 }
