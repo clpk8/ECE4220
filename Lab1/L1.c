@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 
         case 4:
             pullUpDnControl(P4,PUD_DOWN);
-            sleep(1);:
+            sleep(1);
             while(1){
                 if(digitalRead(P4) == 1){
                     while(1){
