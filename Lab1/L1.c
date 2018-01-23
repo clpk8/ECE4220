@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     int choice;
     printf("Please enrter a value bewteen 1 and 5\n");
     printf("Noted that if you enter 1, you have to press first button for spekaer to make sound\n");
-    scanf("%s",&choice);
+    scanf("%d",&choice);
     switch(choice){
         case 1:
             pullUpDnControl(P1,PUD_DOWN);
