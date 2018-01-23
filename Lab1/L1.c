@@ -54,12 +54,14 @@ int main(int argc, char **argv)
         case 1:{
             pullUpDnControl(P1,PUD_DOWN);
             sleep(1);
-            if(digitalRead(P1) == 1){
-                while(1){
-                    digitalWrite(S1, HIGH);
-                    usleep(3000);
-                    digitalWrite(S1,LOW);
-                    usleep(3000);
+            while(1){
+                if(digitalRead(P1) == 1){
+                    while(1){
+                        digitalWrite(S1, HIGH);
+                        usleep(3000);
+                        digitalWrite(S1,LOW);
+                        usleep(3000);
+                    }
                 }
             }
         }
