@@ -58,13 +58,13 @@ int main(int argc, char **argv)
                 if(digitalRead(P1) == 1){
                     while(1){
                         digitalWrite(S1, HIGH);
-                        usleep(3000);
+                        usleep(800);
                         digitalWrite(S1,LOW);
-                        usleep(3000);
+                        usleep(800);
                     }
                 }
             }
-        
+
         case 2:
             sleep(1);
             if(digitalRead(P2) == 1){
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        
+
         case 3:
             sleep(1);
             if(digitalRead(P3) == 1){
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        
+
         case 4:
             sleep(1);
             if(digitalRead(P4) == 1){
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        
+
         case 5:
             sleep(1);
             if(digitalRead(P5) == 1){
@@ -108,10 +108,10 @@ int main(int argc, char **argv)
                     usleep(3000);
                 }
             }
-        
+
         default:
             printf("Please enter integer between 1-5!\n");
-        
+
 
 
     }
