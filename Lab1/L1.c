@@ -66,46 +66,58 @@ int main(int argc, char **argv)
             }
 
         case 2:
+            pullUpDnControl(P2,PUD_DOWN);
             sleep(1);
-            if(digitalRead(P2) == 1){
-                while(1){
-                    digitalWrite(S1, HIGH);
-                    usleep(3000);
-                    digitalWrite(S1,LOW);
-                    usleep(3000);
+            while(1){
+                if(digitalRead(P2) == 1){
+                    while(1){
+                        digitalWrite(S1, HIGH);
+                        usleep(800);
+                        digitalWrite(S1,LOW);
+                        usleep(800);
+                    }
                 }
             }
 
         case 3:
+            pullUpDnControl(P3,PUD_DOWN);
             sleep(1);
-            if(digitalRead(P3) == 1){
-                while(1){
-                    digitalWrite(S1, HIGH);
-                    usleep(3000);
-                    digitalWrite(S1,LOW);
-                    usleep(3000);
+            while(1){
+                if(digitalRead(P3) == 1){
+                    while(1){
+                        digitalWrite(S1, HIGH);
+                        usleep(800);
+                        digitalWrite(S1,LOW);
+                        usleep(800);
+                    }
                 }
             }
 
         case 4:
-            sleep(1);
-            if(digitalRead(P4) == 1){
-                while(1){
-                    digitalWrite(S1, HIGH);
-                    usleep(3000);
-                    digitalWrite(S1,LOW);
-                    usleep(3000);
+            pullUpDnControl(P4,PUD_DOWN);
+            sleep(1);:
+            while(1){
+                if(digitalRead(P4) == 1){
+                    while(1){
+                        digitalWrite(S1, HIGH);
+                        usleep(800);
+                        digitalWrite(S1,LOW);
+                        usleep(800);
+                    }
                 }
             }
 
         case 5:
+            pullUpDnControl(P5,PUD_DOWN);
             sleep(1);
-            if(digitalRead(P5) == 1){
-                while(1){
-                    digitalWrite(S1, HIGH);
-                    usleep(3000);
-                    digitalWrite(S1,LOW);
-                    usleep(3000);
+            while(1){
+                if(digitalRead(P5) == 1){
+                    while(1){
+                        digitalWrite(S1, HIGH);
+                        usleep(800);
+                        digitalWrite(S1,LOW);
+                        usleep(800);
+                    }
                 }
             }
 
