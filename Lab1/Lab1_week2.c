@@ -6,6 +6,7 @@
 #define __KERNEL__
 #endif
 
+#include <asm/io.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
 
@@ -14,7 +15,7 @@ MODULE_LICENSE("GPL");
 int init_module(void)
 {
 	unsigned long *basePtr, *set, *sel;
-	basePtr = (unsigned long*) ioremap(0x3F200000,4096);
+	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240;
 	*set = *basePtr + (0x001C/4);
 
@@ -28,7 +29,7 @@ int init_module(void)
 void cleanup_module(void)
 {
 	unsigned long *basePtr, *set, *sel;
-	basePtr = (unsigned long*) ioremap(0x3F200000,4096);
+	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240;
 	*set = *basePtr + (0x0020/4);
 
