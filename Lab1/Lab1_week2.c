@@ -14,12 +14,13 @@ MODULE_LICENSE("GPL");
 
 int init_module(void)
 {
+	printk("Installed");
 	unsigned long *basePtr, *set, *sel;
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240;
 	*set = *basePtr + (0x001C/4);
 	*set = 0x00;
-	printk("Installed");
+	
 	
 //                      00000111100  ==  0x3C
 
@@ -30,12 +31,12 @@ int init_module(void)
 
 void cleanup_module(void)
 {
+	printk("Removed");
 	unsigned long *basePtr, *set, *sel;
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240;
 	*set = *basePtr + (0x0020/4);
 	*set = 0x3C;
-	printk("Removed");
 	
 }
 
