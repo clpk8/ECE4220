@@ -20,7 +20,7 @@ int init_module(void)
 	*set = *basePtr + (0x001C/4);
 	*set = 0x00;
 	printk("Installed");
-	
+
 //                      00000111100  ==  0x3C
 
 	return 0;
@@ -36,7 +36,7 @@ void cleanup_module(void)
 	*set = *basePtr + (0x0020/4);
 	*set = 0x3C;
 	printk("Removed");
-	
+
 }
 
 
