@@ -36,7 +36,6 @@ void cleanup_module(void)
 	unsigned long *basePtr, *set, *sel;
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240;
-	*clr = *basePtr + (0x0028/4); //clear the pins
 	*set = *basePtr + (0x001C/4);
 	printk("Removed");
 
