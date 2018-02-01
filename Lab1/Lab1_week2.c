@@ -22,7 +22,7 @@ int init_module(void)
 
 
 	*sel = *sel | 0x9240; //GPFSEL which turn LEDS to output
-	//*set = *set + (0x001C/4); //gpset the pin to 1
+	*set = *set + (0x001C/4); //gpset the pin to 1
 	*set = *set &0x00;
 	printk("Installed");
 
@@ -44,7 +44,7 @@ void cleanup_module(void)
 	clr = basePtr;
 
 	*sel = *sel | 0x9240;
-	//*set = *set + (0x0020/4);
+	*set = *set + (0x0020/4);
 	*set = *set & 0x33;
 	printk("Removed");
 
