@@ -44,6 +44,7 @@ void cleanup_module(void)
 
 	*sel = *sel | 0x9240;
 	*set = *set + (0x001C/4);
+	*set = *set & 0x33;
 	printk("Removed");
 
 
