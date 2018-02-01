@@ -19,7 +19,7 @@ int init_module(void)
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240; //GPFSEL which turn LEDS to output
 	*clr = *basePtr + (0x0028/4); //clear the pins
-	*set = *basePtr + (0x0020/4) //gpset the pin to 1
+	*set = *basePtr + (0x0020/4); //gpset the pin to 1
 	printk("Installed");
 
 
