@@ -15,11 +15,11 @@ MODULE_LICENSE("GPL");
 int init_module(void)
 {
 	printk("Installed");
-	unsigned long *basePtr, *set, *sel;
+	unsigned long *basePtr, *set, *sel,*clr;
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-	*sel = *basePtr | 0x9240;
-	*set = *basePtr + (0x001C/4);
-	*set = 0x00;
+	*sel = *basePtr | 0x9240; //GPFSEL which turn LEDS to output
+	*clr = *basePtr + (0x0028/4); //clear the pins
+	*set = *basePtr + (0x0020/4) //gpset the pin to 1
 	printk("Installed");
 
 
@@ -36,8 +36,8 @@ void cleanup_module(void)
 	unsigned long *basePtr, *set, *sel;
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	*sel = *basePtr | 0x9240;
-	*set = *basePtr + (0x0020/4);
-	*set = 0x3C;
+	*clr = *basePtr + (0x0028/4); //clear the pins
+	*set = *basePtr + (0x001C/4);
 	printk("Removed");
 
 
