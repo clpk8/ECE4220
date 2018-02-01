@@ -19,11 +19,9 @@ int init_module(void)
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	sel = basePtr;
 	set = basePtr;
-	clr = basePtr;
 
 
 	*sel = *sel | 0x9240; //GPFSEL which turn LEDS to output
-	*clr = *clr + (0x0028/4); //clear the pins
 	*set = *set + (0x0020/4); //gpset the pin to 1
 	printk("Installed");
 
@@ -38,10 +36,11 @@ int init_module(void)
 void cleanup_module(void)
 {
 	printk("Removed");
-	unsigned long *basePtr, *set, *sel;
+	unsigned long *basePtr, *set, *sel,*clr;
 	basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 	sel = basePtr;
 	set = basePtr;
+	clr = basePtr;
 
 	*sel = *sel | 0x9240;
 	*set = *set + (0x001C/4);
