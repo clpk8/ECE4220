@@ -26,7 +26,8 @@ int init_module(void)
 
     //GPFSEL to set bit 2,3,4,5 as output
 	*sel = *sel | 0x9240; //GPFSEL which turn LEDS to output
-	*set = *set + (0x001C/4); //gpset the pin to 0
+	*set = *set + (0x0020/4); //gpset the pin to 1
+    *set = *set & 0x3C; //set 4 leds to 1
 	printk("Installed");
 
 
@@ -52,9 +53,9 @@ void cleanup_module(void)
 	*sel = *sel | 0x9240;
 
     //GPSET1 register
-	*set = *set + (0x0020/4);
+	*set = *set + (0x001C/4);//gpset the pin to 0
     //set 4 led to 1
-	*set = *set & 0x33;
+	*set = *set & ~(0x3C);
 	printk("Removed");
 
 
