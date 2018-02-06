@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     pinMode(LED2, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED3, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
     pinMode(LED4, OUTPUT);    // Configure GPIO2, which is the one connected to the red LED.
-    pinMode(P1, INPUT);
+    pinMode(P1, INPUT);       //set pushbutton 1 as output
 
 
 
