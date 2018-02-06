@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 
 
 
+    //Turn the LEDS off
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
@@ -40,12 +41,13 @@ int main(int argc, char **argv)
 
 
 	while(1){
+		//toggle the LEDs in a while loop to blink
 		digitalWrite(LED1, HIGH);
 		sleep(1);
-	    digitalWrite(LED1, LOW);
+	    	digitalWrite(LED1, LOW);
 		digitalWrite(LED2, HIGH);
 		sleep(1);
-	    digitalWrite(LED2, LOW);
+		digitalWrite(LED2, LOW);
 
 	}
 
