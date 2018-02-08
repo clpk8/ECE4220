@@ -11,14 +11,130 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <time.h>
 
 typedef struct Data{
     int row;
     int col;
     int total;
-    int matrix[100][100];
     int result;
+    int count;
+    int tid;
 }data;
+
+int tempmatrix[100][100];
+clock_t start, end;
+double runTime;
+
+
+void oneThreadSearch(void* ptr){
+    data* data1;
+    data1 = (data*)ptr;
+    data1->count = 0;
+    for(int i = 0; i < data1->col; i++){
+        for(int j = 0; j < data1->row; j ++){
+            if(tempmatrix[i][j] == data1->result){
+                data1->count++;
+            }
+        }
+    }
+    pthread_exit((void*)(data1));
+}
+void oneThread(data data1){
+    pthread_t tid;
+    start = clock();
+    pthread_create(&tid, NULL, (void *)&oneThreadSearch, (void *)&data1);
+    pthread_join(tid, (void**)&data1);
+    end = clock();
+    runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
+    
+    printf("The number of time %d is found is %d, the time used is %f\n",data1.result,data1.count,runTime);
+    
+}
+//search per row;
+void oneThreadPerRowSearch(void* ptr){
+    data* data1;
+    data1 = (data*)ptr;
+    for(int i = 0;i < data1->col; i++){
+        if((data1->result) == (tempmatrix[i][data1->tid])){
+            data1->count++;
+        }
+    }
+    pthread_exit((void*)data1);
+}
+
+void oneThreadPerRow(data data1){
+    data temp[data1.row];
+    for(int i = 0; i < data1.row; i ++){
+        temp[i].result = data1.result;
+        temp[i].count = 0;
+        temp[i].tid = i;
+        temp[i].col = data1.col;
+        temp[i].row = data1.row;
+    }
+    pthread_t tid[data1.row];
+    start = clock();
+    for(int i = 0; i < data1.row; i++){
+        pthread_create(&tid[i], NULL, (void *)&oneThreadPerRowSearch, (void *)&temp[i]);
+    }
+    int total = 0;
+    for(int i = 0; i < data1.row; i++){
+        
+        pthread_join(tid[i], (void**)&temp[i]);
+        total += temp[i].count;
+    }
+    
+    
+    end = clock();
+    runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
+    
+    printf("Search by Row : The number of time %d is found is %d, the time used is %f\n",data1.result,total,runTime);
+    
+    
+}
+
+//search per column
+void oneThreadPerColSearch(void* ptr){
+    data* data1;
+    data1 = (data*)ptr;
+    for(int i = 0;i < data1->row; i++){
+        if((data1->result) == (tempmatrix[data1->tid][i])){
+            data1->count++;
+        }
+    }
+    pthread_exit((void*)data1);
+}
+void oneThreadPerCol(data data1){
+    data temp[data1.col];
+    for(int i = 0; i < data1.col; i ++){
+        temp[i].result = data1.result;
+        temp[i].count = 0;
+        temp[i].tid = i;
+        temp[i].col = data1.col;
+        temp[i].row = data1.row;
+    }
+    pthread_t tid[data1.col];
+    start = clock();
+    for(int i = 0; i < data1.col; i++){
+        pthread_create(&tid[i], NULL, (void *)&oneThreadPerColSearch, (void *)&temp[i]);
+    }
+    int total = 0;
+    for(int i = 0; i < data1.col; i++){
+        
+        pthread_join(tid[i], (void**)&temp[i]);
+        total += temp[i].count;
+    }
+    
+    
+    end = clock();
+    runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
+    
+    printf("Search by column : The number of time %d is found is %d, the time used is %f\n",data1.result,total,runTime);
+    
+    
+}
+
+
 
 int main(int argc, const char * argv[]) {
     
@@ -42,48 +158,26 @@ int main(int argc, const char * argv[]) {
         for(int j = 0; j < data1.row; j++){
             int temp;
             fscanf(fp, "%d", &temp);
-            data1.matrix[i][j] = temp;
+            tempmatrix[i][j] = temp;
         }
     }
     
     for(int i = 0; i < data1.col; i++){
         for(int j = 0; j < data1.row; j++){
-            printf("%d ",data1.matrix[i][j]);
+            printf("%d ",tempmatrix[i][j]);
         }
         printf("\n");
     }
     
     printf("Please enter what number you want to search");
     scanf("%d",&data1.result);
-    while(!isdigit(data1.result)){
-        printf("Please reenter\n");
-        scanf("%d",&data1.result);
-    }
 
+
+    oneThreadPerRow(data1);
+    oneThreadPerCol(data1);
+    oneThread(data1);
     
-    int choice;
-    printf("Enter 1 for One thread to search the entire matrix");
-    printf("Enter 2 for One thread for searching each row of the matrix");
-    printf("Enter 3 for One thread for searching each column of the matrix");
-    printf("Enter 4 for One thread for each elemtn of the matrix");
     
-    switch (choice) {
-        case 1:
-            printf("1");
-            break;
-        case 2:
-            printf("2");
-            break;
-        case 3:
-            printf("3");
-            break;
-        case 4:
-            printf("4");
-            break;
-        default:
-            printf("null");
-            break;
-    }
 
 
     
