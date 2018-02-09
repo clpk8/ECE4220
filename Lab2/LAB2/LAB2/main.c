@@ -28,6 +28,7 @@ typedef struct Data{
 int tempmatrix[100][100];
 clock_t start, end;
 double runTime;
+enum returnValue{returnResult,returnTime};
 
 
 void oneThreadSearch(void* ptr){
@@ -43,16 +44,20 @@ void oneThreadSearch(void* ptr){
     }
     pthread_exit((void*)(data1));
 }
-double oneThread(data data1){
+double oneThread(data data1, enum returnValue x){
     pthread_t tid;
     pthread_create(&tid, NULL, (void *)&oneThreadSearch, (void *)&data1);
     pthread_join(tid, (void**)&data1);
     end = clock();
     runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
     
-    printf("The number of time %d is found is %d, the time used is %f\n\n",data1.result,data1.count,runTime);
-    return runTime;
-    
+//    printf("The number of time %d is found is %d, the time used is %f\n\n",data1.result,data1.count,runTime);
+    if(x == returnTime){
+        return runTime;
+    }
+    else{
+        return data1.count;
+    }
 }
 //search per row;
 void oneThreadPerRowSearch(void* ptr){
@@ -65,7 +70,7 @@ void oneThreadPerRowSearch(void* ptr){
     }
     pthread_exit((void*)data1);
 }
-double oneThreadPerRow(data data1){
+double oneThreadPerRow(data data1, enum returnValue x){
     data temp[data1.row];
     for(int i = 0; i < data1.row; i ++){
         temp[i].result = data1.result;
@@ -89,8 +94,13 @@ double oneThreadPerRow(data data1){
     end = clock();
     runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
     
-    printf("Search by Row : The number of time %d is found is %d, the time used is %f\n\n",data1.result,total,runTime);
-    return runTime;
+//    printf("Search by Row : The number of time %d is found is %d, the time used is %f\n\n",data1.result,total,runTime);
+    if(x == returnTime){
+        return runTime;
+    }
+    else{
+        return total;
+    }
     
     
 }
@@ -106,7 +116,7 @@ void oneThreadPerColSearch(void* ptr){
     }
     pthread_exit((void*)data1);
 }
-double oneThreadPerCol(data data1){
+double oneThreadPerCol(data data1, enum returnValue x){
     data temp[data1.col];
     for(int i = 0; i < data1.col; i ++){
         temp[i].result = data1.result;
@@ -131,8 +141,13 @@ double oneThreadPerCol(data data1){
     end = clock();
     runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
     
-    printf("Search by column : The number of time %d is found is %d, the time used is %f\n\n",data1.result,total,runTime);
-    return runTime;
+  //  printf("Search by column : The number of time %d is found is %d, the time used is %f\n\n",data1.result,total,runTime);
+    if(x == returnTime){
+        return runTime;
+    }
+    else{
+        return total;
+    }
     
     
 }
@@ -150,7 +165,7 @@ void oneThreadPerNumberSearch(void* ptr){
     pthread_exit((void*)data1);
 }
 
-double oneThreadPerNumber(data data1){
+double oneThreadPerNumber(data data1, enum returnValue x){
     //create a 2D array of thread, and a tempeotry data array
     pthread_t tid[data1.col][data1.row];
     data temp[data1.col][data1.row];
@@ -189,8 +204,13 @@ double oneThreadPerNumber(data data1){
     //end the clock, and calculate time
     end = clock();
     runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
-    printf("Search by each number : The number of time %d is found is %d, the time used is %f\n\n",data1.result,total,runTime);
-    return runTime;
+ //   printf("Search by each number : The number of time %d is found is %d, the time used is %f\n\n",data1.result,total,runTime);
+    if(x == returnTime){
+        return runTime;
+    }
+    else{
+        return total;
+    }
 }
 
 
@@ -232,11 +252,14 @@ int main(int argc, const char * argv[]) {
     scanf("%d",&data1.result);
 
     
+    int oneThreadResult = 0, oneThreadPerRowResult = 0, oneThreadPerColResult = 0, oneThreadPerNumberResult = 0;
+    oneThreadResult = (int)oneThread(data1,returnResult);
+    
+    printf("The value %d is found %d time\n",data1.result,oneThreadResult);
     double oneThreadTime = 0, oneThreadPerRowTime = 0, oneThreadPerColTime = 0, oneThreadPerNumberTime = 0;
 
-    
     for(int i = 0; i < 10; i ++){
-        oneThreadTime += oneThread(data1);
+        oneThreadTime += oneThread(data1,returnTime);
         oneThreadPerRowTime += oneThreadPerRow(data1);
         oneThreadPerColTime += oneThreadPerCol(data1);
         oneThreadPerNumberTime += oneThreadPerNumber(data1);
@@ -247,6 +270,7 @@ int main(int argc, const char * argv[]) {
     oneThreadPerColTime /=10;
     oneThreadPerNumberTime /=10;
 
+    
     printf("Time used for one thread is %lf\n",oneThreadTime);
     printf("Time used for one thread per Column is is %lf\n",oneThreadPerColTime);
     printf("Time used for one thread per Row is  %lf\n",oneThreadPerRowTime);
