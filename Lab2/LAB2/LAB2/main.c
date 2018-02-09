@@ -165,9 +165,6 @@ void oneThreadPerNumber(data data1){
     //start on the clock
     start = clock();
     //creating 2D array of threads
-    
-    pthread_create(&tid[1][1], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[1][1]);
-
     printf("#of col:%d",data1.col);
     for(int i = 0; i < data1.col; i++){
 
