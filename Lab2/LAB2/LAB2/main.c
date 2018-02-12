@@ -46,6 +46,7 @@ void oneThreadSearch(void* ptr){
 }
 double oneThread(data data1, enum returnValue x){
     pthread_t tid;
+    start = clock();
     pthread_create(&tid, NULL, (void *)&oneThreadSearch, (void *)&data1);
     pthread_join(tid, (void**)&data1);
     end = clock();
@@ -241,12 +242,12 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    for(int i = 0; i < data1.col; i++){
-        for(int j = 0; j < data1.row; j++){
-            printf("%d ",tempmatrix[i][j]);
-        }
-        printf("\n");
-    }
+//    for(int i = 0; i < data1.col; i++){
+//        for(int j = 0; j < data1.row; j++){
+//            printf("%d ",tempmatrix[i][j]);
+//        }
+//        printf("\n");
+//    }
     
     printf("Please enter what number you want to search");
     scanf("%d",&data1.result);
@@ -254,15 +255,22 @@ int main(int argc, const char * argv[]) {
     
     int oneThreadResult = 0, oneThreadPerRowResult = 0, oneThreadPerColResult = 0, oneThreadPerNumberResult = 0;
     oneThreadResult = (int)oneThread(data1,returnResult);
+    oneThreadPerRowResult = (int)oneThread(data1,returnResult);
+    oneThreadPerColResult = (int)oneThread(data1,returnResult);
+    oneThreadPerNumberResult = (int)oneThread(data1,returnResult);
     
-    printf("The value %d is found %d time\n",data1.result,oneThreadResult);
+    printf("One Thread:                     The value %d is found %d time\n",data1.result,oneThreadResult);
+    printf("One Thread Per Column:          The value %d is found %d time\n",data1.result,oneThreadPerColResult);
+    printf("One Thread Per Row:             The value %d is found %d time\n",data1.result,oneThreadPerRowResult);
+    printf("One Thread Per Number:          The value %d is found %d time\n",data1.result,oneThreadPerNumberResult);
+    
     double oneThreadTime = 0, oneThreadPerRowTime = 0, oneThreadPerColTime = 0, oneThreadPerNumberTime = 0;
 
     for(int i = 0; i < 10; i ++){
+        oneThreadPerRowTime += oneThreadPerRow(data1,returnTime);
+        oneThreadPerColTime += oneThreadPerCol(data1,returnTime);
+        oneThreadPerNumberTime += oneThreadPerNumber(data1,returnTime);
         oneThreadTime += oneThread(data1,returnTime);
-        oneThreadPerRowTime += oneThreadPerRow(data1);
-        oneThreadPerColTime += oneThreadPerCol(data1);
-        oneThreadPerNumberTime += oneThreadPerNumber(data1);
     }
 
     oneThreadTime /= 10;
