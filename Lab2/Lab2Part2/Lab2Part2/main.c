@@ -18,41 +18,136 @@
 #include <time.h>
 #include <string.h>
 
+#define MY_PRIORITY 51 //about kernel
+
 char commonBuffer[255];
-void readFile(void* ptr){
+char *stringArray[20];
+typedef struct Info{
     char *filename;
-    int quit = EXIT_FAILURE;
-    filename = (char*)ptr;
-    printf("\n\nfilename:%s\n\n",filename);
-    printf("1");
+    int timeInNanoSecond;
+}info;
+
+void writrArray(void* ptr){
+    //elevate priority
+    struct sched_param param;
+    param.sched_priority = MY_PRIORITY;
+    int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
+    
+    if(check < 0){
+        printf("Scheduler error");
+        exit(-1);
+    }
+    
+    info* temp;
+    temp = (info*)ptr;
+    
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = 0;        // check the data type
+    //try 1000
+    itval.it_interval.tv_nsec = 500;    // check the data type
+    
+    itval.it_value.tv_sec = 0;
+    itval.it_value.tv_nsec = temp->timeInNanoSecond;
+    
+    for(int i = 0; i < 20; i++){
+        strcpy(stringArray[i], commonBuffer);
+        uint64_t num_periods = 0;
+        long check = read(timer_fd, &num_periods, sizeof(num_periods));
+        if(check < 0){
+            printf("Readfile");
+            exit(-1);
+        }
+        
+        if(num_periods > 1){
+            puts("MISSED WINDOW");
+            exit(-1);
+        }
+    }
+    pthread_exit(0);
+
     
     
-    FILE*fp = fopen(filename,"r");
+    
+}
+void readFile(void* ptr){
+    //elevate priority
+    struct sched_param param;
+    param.sched_priority = MY_PRIORITY;
+    int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
+    
+    if(check < 0){
+        printf("Scheduler error");
+        exit(-1);
+    }
+    //open file
+    info* temp;
+    temp = (info*)ptr;
+    FILE*fp = fopen(temp->filename,"r");
     if(fp == NULL){
         printf("file is not correct");
-        pthread_exit((void*)quit);
+        exit(-1);
     }
+    
+    //create timer
+    int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
+    if(timer_fd < 0){
+        printf("Create timer error");
+        exit(-1);
+    }
+    
+    //set timer
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = 0;        // check the data type
+    //try 1000
+    itval.it_interval.tv_nsec = 1000;    // check the data type
+    
+    itval.it_value.tv_sec = 0;
+    itval.it_value.tv_nsec = temp->timeInNanoSecond;
+    
     int i = 0;
     
-    fscanf(fp, "%s", commonBuffer);
+    
+    while(fgets(commonBuffer, 255, fp)){
+        printf("1");
+        uint64_t num_periods = 0;
+        long check = read(timer_fd, &num_periods, sizeof(num_periods));
+        if(check < 0){
+            printf("Readfile");
+            exit(-1);
+        }
+        
+        if(num_periods > 1){
+            puts("MISSED WINDOW");
+            exit(-1);
+        }
+    }
+    fclose(fp);
+    pthread_exit(0);
     
 }
 int main(int argc, const char * argv[]) {
-    char *f1 = "first.txt";
-    char *f2 = "second.txt";
+    info f1,f2,f3;
+    
+    f1.filename = "first.txt";
+    f2.filename = "second.txt";
+    f1.timeInNanoSecond = 100;
+    f2.timeInNanoSecond = 1600;
+    f3.timeInNanoSecond = 1100;
+    
     
 
     
     pthread_t p1,p2,p3;
     
-    pthread_create(&p1, NULL, (void *)&readFile, (void*)f1);
- //   pthread_create(&p2, NULL, (void *)&readFile, (void*)f2);
+    pthread_create(&p1, NULL, (void *)&readFile, (void * )&f1);
+    
+    pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
     
     pthread_join(p1, NULL);
- //   pthread_join(p2, NULL);
+    pthread_join(p2, NULL);
     
     for(int i = 0; i < 20; i ++){
-        printf("%c",commonBuffer[i]);
+        printf("%s",stringArray[i]);
     }
     
     return 0;
