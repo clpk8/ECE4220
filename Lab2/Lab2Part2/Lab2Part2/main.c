@@ -167,8 +167,8 @@ int main(int argc, const char * argv[]) {
     f1.filename = "first.txt";
     f2.filename = "second.txt";
     f1.timeInNanoSecond = 100;
-    f2.timeInNanoSecond = 1600;
-    f3.timeInNanoSecond = 1100;
+    f2.timeInNanoSecond = 600;
+    f3.timeInNanoSecond = 350;
 
 
 
@@ -179,9 +179,9 @@ int main(int argc, const char * argv[]) {
     pthread_create(&p3, NULL, (void *)&writeArray, (void * )&f3);
     pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
 
-//    pthread_join(p1, NULL);
-//    pthread_join(p3, NULL);
-//    pthread_join(p2, NULL);
+    pthread_join(p1, NULL);
+    pthread_join(p3, NULL);
+    pthread_join(p2, NULL);
     printf("1");
     int i;
     for(i = 0; i < 20; i ++){
