@@ -27,7 +27,7 @@ typedef struct Info{
 }info;
 
 void writeArray(void* ptr){
-    printf("inside of writeArray");
+    printf("inside of writeArray\n");
     //elevate priority
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
@@ -110,7 +110,7 @@ void readFile(void* ptr){
         printf("file is not correct\n");
         exit(-1);
     }
-    printf("%s",temp->filename);
+    printf("%s\n",temp->filename);
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
