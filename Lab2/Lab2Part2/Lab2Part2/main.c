@@ -33,7 +33,7 @@ void writrArray(void* ptr){
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
 
     if(check < 0){
-        printf("Scheduler error");
+        printf("Scheduler error\n");
         exit(-1);
     }
 
@@ -43,7 +43,7 @@ void writrArray(void* ptr){
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
-        printf("Create timer error");
+        printf("Create timer error\n");
         exit(-1);
     }
 
@@ -58,18 +58,30 @@ void writrArray(void* ptr){
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
 
+    uint64_t num_periods = 0;
+    long check = read(timer_fd, &num_periods, sizeof(num_periods));
+    if(check < 0){
+        printf("Readfile\n");
+        exit(-1);
+    }
+    
+    if(num_periods > 1){
+        puts("MISSED WINDOW\n");
+        exit(-1);
+    }
+    
     int i;
     for(i = 0; i < 20; i++){
         strcpy(stringArray[i], commonBuffer);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
-            printf("Readfile");
+            printf("Readfile\n");
             exit(-1);
         }
 
         if(num_periods > 1){
-            puts("MISSED WINDOW");
+            puts("MISSED WINDOW\n");
             exit(-1);
         }
     }
@@ -86,7 +98,7 @@ void readFile(void* ptr){
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
 
     if(check < 0){
-        printf("Scheduler error");
+        printf("Scheduler error\n");
         exit(-1);
     }
     //open file
@@ -94,14 +106,14 @@ void readFile(void* ptr){
     temp = (info*)ptr;
     FILE*fp = fopen(temp->filename,"r");
     if(fp == NULL){
-        printf("file is not correct");
+        printf("file is not correct\n");
         exit(-1);
     }
-
+    printf("%s",temp->filename);
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
-        printf("Create timer error");
+        printf("Create timer error\n");
         exit(-1);
     }
 
@@ -118,17 +130,29 @@ void readFile(void* ptr){
     int i = 0;
 
 
+    uint64_t num_periods = 0;
+    long check = read(timer_fd, &num_periods, sizeof(num_periods));
+    if(check < 0){
+        printf("Readfile\n");
+        exit(-1);
+    }
+    
+    if(num_periods > 1){
+        puts("MISSED WINDOW\n");
+        exit(-1);
+    }
+    
     while(fgets(commonBuffer, 255, fp)){
         printf("1");
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
-            printf("Readfile");
+            printf("Readfile\n");
             exit(-1);
         }
 
         if(num_periods > 1){
-            puts("MISSED WINDOW");
+            puts("MISSED WINDOW\n");
             exit(-1);
         }
     }
@@ -160,7 +184,7 @@ int main(int argc, const char * argv[]) {
 
     int i;
     for(i = 0; i < 20; i ++){
-        printf("%s",stringArray[i]);
+        printf("%s\n",stringArray[i]);
     }
 
     return 0;
