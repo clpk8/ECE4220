@@ -7,7 +7,6 @@
 //
 
 #include <stdio.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sched.h>
@@ -59,7 +58,8 @@ void writrArray(void* ptr){
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
 
-    for(int i = 0; i < 20; i++){
+    int i;
+    for(i = 0; i < 20; i++){
         strcpy(stringArray[i], commonBuffer);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
@@ -155,9 +155,11 @@ int main(int argc, const char * argv[]) {
     pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
 
     pthread_join(p1, NULL);
+    pthread_join(p3, NULL);
     pthread_join(p2, NULL);
 
-    for(int i = 0; i < 20; i ++){
+    int i;
+    for(i = 0; i < 20; i ++){
         printf("%s",stringArray[i]);
     }
 
