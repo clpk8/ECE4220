@@ -144,7 +144,7 @@ void readFile(void* ptr){
     }
     
     while(fgets(commonBuffer, 255, fp)){
-        printf("1");
+        //printf("1");
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
