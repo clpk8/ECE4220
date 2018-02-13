@@ -26,7 +26,8 @@ typedef struct Info{
     int timeInNanoSecond;
 }info;
 
-void writrArray(void* ptr){
+void writeArray(void* ptr){
+    printf("inside of writeArray");
     //elevate priority
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
@@ -51,7 +52,7 @@ void writrArray(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
-    itval.it_interval.tv_nsec = 500;    // check the data type
+    itval.it_interval.tv_nsec = 5000;    // check the data type
 
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
@@ -121,7 +122,7 @@ void readFile(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
-    itval.it_interval.tv_nsec = 1000;    // check the data type
+    itval.it_interval.tv_nsec = 10000;    // check the data type
 
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
@@ -166,8 +167,8 @@ int main(int argc, const char * argv[]) {
     f1.filename = "first.txt";
     f2.filename = "second.txt";
     f1.timeInNanoSecond = 1000;
-    f2.timeInNanoSecond = 2000;
-    f3.timeInNanoSecond = 2500;
+    f2.timeInNanoSecond = 2500;
+    f3.timeInNanoSecond = 2000;
 
 
 
@@ -175,7 +176,7 @@ int main(int argc, const char * argv[]) {
     pthread_t p1,p2,p3;
 
     pthread_create(&p1, NULL, (void *)&readFile, (void * )&f1);
-    pthread_create(&p3, NULL, (void *)&writrArray, (void * )&f3);
+    pthread_create(&p3, NULL, (void *)&writeArray, (void * )&f3);
     pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
 
     pthread_join(p1, NULL);
