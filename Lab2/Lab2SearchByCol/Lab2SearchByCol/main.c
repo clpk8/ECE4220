@@ -26,8 +26,10 @@ clock_t start, end;
 double runTime;
 
 void oneThreadPerNumberSearch(void* ptr){
+    //get and dereference the struc
     data* data1;
     data1 = (data*)ptr;
+    //search
     for(int i = 0;i < data1->col; i++){
         for(int j = 0; i < data1->row; j++){
             if((data1->result) == (tempmatrix[i][j])){
@@ -35,18 +37,15 @@ void oneThreadPerNumberSearch(void* ptr){
             }
         }
     }
-    printf("The count in tid%d is %d\n",data1->tid,data1->count);
+    //return the struct
     pthread_exit((void*)data1);
 }
 
 void oneThreadPerNumber(data data1){
-    
-    
-    
-    
-    printf("coo:%d, row:%d",data1.col,data1.row);
+    //create a 2D array of thread, and a tempeotry data array
     pthread_t tid[data1.col][data1.row];
     data temp[data1.col][data1.row];
+    //initilize some information of the temp
     for(int i = 0; i < data1.col; i ++){
         for(int j = 0; j < data1.row; j++){
             temp[i][j].result = data1.result;
@@ -56,25 +55,35 @@ void oneThreadPerNumber(data data1){
             temp[i][j].row = data1.row;
         }
     }
+    //start on the clock
     start = clock();
-    int c=0;
+    //creating 2D array of threads
+    
+    pthread_create(&tid[1][1], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[1][1]);
+    
+    printf("#of col:%d",data1.col);
+    for(int i = 0; i < data1.col; i++){
+        // pthread_create(&tid[0][1], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[0][1]);
+        // pthread_create(&tid[1][5], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[1][5]);
+        //     pthread_create(&tid[][15], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[3][15]);
+        //        for(int j = 0; j < data1.row; j++){
+        //            //each have unique ID made up of ij.
+        //            pthread_create(&tid[i][j], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[i][j]);
+        //        }
+    }
+    int total = 0;
+    //sums the total found in each inividual threads.
     for(int i = 0; i < data1.col; i++){
         for(int j = 0; j < data1.row; j++){
-            c++;
-            pthread_create(&tid[i][j], NULL, (void *)&oneThreadPerNumberSearch, (void *)&temp[i][j]);
+            pthread_join(tid[i][j],(void**)&temp[i][j]);
+            total += temp[i][j].count;
         }
     }
-//    int total = 0;
-//    for(int i = 0; i < data1.col; i++){
-//        for(int j = 0; j < data1.row; j++){
-//            pthread_join(tid[i][j],(void**)&temp[i][j]);
-//            total += temp[i][j].count;
-//        }
-//    }
-//
+    
+    //end the clock, and calculate time
     end = clock();
     runTime = (((double) (end - start)) / CLOCKS_PER_SEC) * 1000;
-//    printf("Search by each number : The number of time %d is found is %d, the time used is %f\n",data1.result,total,runTime);
+    printf("Search by each number : The number of time %d is found is %d, the time used is %f\n",data1.result,total,runTime);
 }
 
 
