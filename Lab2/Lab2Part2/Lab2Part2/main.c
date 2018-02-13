@@ -59,7 +59,7 @@ void writrArray(void* ptr){
     timerfd_settime(timer_fd, 0, &itval, NULL);
 
     uint64_t num_periods = 0;
-    long check = read(timer_fd, &num_periods, sizeof(num_periods));
+    check = read(timer_fd, &num_periods, sizeof(num_periods));
     if(check < 0){
         printf("Readfile\n");
         exit(-1);
@@ -131,7 +131,7 @@ void readFile(void* ptr){
 
 
     uint64_t num_periods = 0;
-    long check = read(timer_fd, &num_periods, sizeof(num_periods));
+    check = read(timer_fd, &num_periods, sizeof(num_periods));
     if(check < 0){
         printf("Readfile\n");
         exit(-1);
