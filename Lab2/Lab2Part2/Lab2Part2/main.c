@@ -39,7 +39,7 @@ void writrArray(void* ptr){
 
     info* temp;
     temp = (info*)ptr;
-    
+
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
@@ -55,7 +55,7 @@ void writrArray(void* ptr){
 
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
-    
+
     timerfd_settime(timer_fd, 0, &itval, NULL);
 
     uint64_t num_periods = 0;
@@ -181,7 +181,7 @@ int main(int argc, const char * argv[]) {
     pthread_join(p1, NULL);
     pthread_join(p3, NULL);
     pthread_join(p2, NULL);
-
+    printf("1");
     int i;
     for(i = 0; i < 20; i ++){
         printf("%s\n",stringArray[i]);
