@@ -165,9 +165,9 @@ int main(int argc, const char * argv[]) {
 
     f1.filename = "first.txt";
     f2.filename = "second.txt";
-    f1.timeInNanoSecond = 100;
-    f2.timeInNanoSecond = 1600;
-    f3.timeInNanoSecond = 1100;
+    f1.timeInNanoSecond = 1000;
+    f2.timeInNanoSecond = 2000;
+    f3.timeInNanoSecond = 2500;
 
 
 
