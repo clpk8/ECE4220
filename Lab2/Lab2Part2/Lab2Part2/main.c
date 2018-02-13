@@ -40,7 +40,15 @@ void writrArray(void* ptr){
 
     info* temp;
     temp = (info*)ptr;
+    
+    //create timer
+    int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
+    if(timer_fd < 0){
+        printf("Create timer error");
+        exit(-1);
+    }
 
+//  set timmer
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
@@ -48,6 +56,8 @@ void writrArray(void* ptr){
 
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
+    
+    timerfd_settime(timer_fd, 0, &itval, NULL);
 
     for(int i = 0; i < 20; i++){
         strcpy(stringArray[i], commonBuffer);
@@ -104,6 +114,7 @@ void readFile(void* ptr){
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
 
+    timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
 
 
