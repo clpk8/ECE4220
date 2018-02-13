@@ -68,7 +68,7 @@ void writeArray(void* ptr){
     
     if(num_periods > 1){
         puts("MISSED WINDOW\n");
-        exit(-1);
+     //   exit(-1);
     }
     
     int i;
@@ -83,7 +83,7 @@ void writeArray(void* ptr){
 
         if(num_periods > 1){
             puts("MISSED WINDOW\n");
-            exit(-1);
+       //    exit(-1);
         }
     }
     pthread_exit(0);
@@ -140,7 +140,7 @@ void readFile(void* ptr){
     
     if(num_periods > 1){
         puts("MISSED WINDOW\n");
-        exit(-1);
+     //   exit(-1);
     }
     
     while(fgets(commonBuffer, 255, fp)){
@@ -154,7 +154,7 @@ void readFile(void* ptr){
 
         if(num_periods > 1){
             puts("MISSED WINDOW\n");
-            exit(-1);
+         //   exit(-1);
         }
     }
     fclose(fp);
@@ -179,6 +179,9 @@ int main(int argc, const char * argv[]) {
     pthread_create(&p3, NULL, (void *)&writeArray, (void * )&f3);
     pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
 
+//    pthread_join(p1, NULL);
+//    pthread_join(p3, NULL);
+//    pthread_join(p2, NULL);
     printf("1");
     int i;
     for(i = 0; i < 20; i ++){
