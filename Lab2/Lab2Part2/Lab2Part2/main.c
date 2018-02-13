@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <pthread.h>
-//#include <sys/timerfd.h>
+#include <sys/timerfd.h>
 #include <time.h>
 #include <string.h>
 
@@ -32,23 +32,23 @@ void writrArray(void* ptr){
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
-    
+
     if(check < 0){
         printf("Scheduler error");
         exit(-1);
     }
-    
+
     info* temp;
     temp = (info*)ptr;
-    
+
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
     itval.it_interval.tv_nsec = 500;    // check the data type
-    
+
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
-    
+
     for(int i = 0; i < 20; i++){
         strcpy(stringArray[i], commonBuffer);
         uint64_t num_periods = 0;
@@ -57,7 +57,7 @@ void writrArray(void* ptr){
             printf("Readfile");
             exit(-1);
         }
-        
+
         if(num_periods > 1){
             puts("MISSED WINDOW");
             exit(-1);
@@ -65,16 +65,16 @@ void writrArray(void* ptr){
     }
     pthread_exit(0);
 
-    
-    
-    
+
+
+
 }
 void readFile(void* ptr){
     //elevate priority
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
-    
+
     if(check < 0){
         printf("Scheduler error");
         exit(-1);
@@ -87,26 +87,26 @@ void readFile(void* ptr){
         printf("file is not correct");
         exit(-1);
     }
-    
+
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
         printf("Create timer error");
         exit(-1);
     }
-    
+
     //set timer
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
     itval.it_interval.tv_nsec = 1000;    // check the data type
-    
+
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
-    
+
     int i = 0;
-    
-    
+
+
     while(fgets(commonBuffer, 255, fp)){
         printf("1");
         uint64_t num_periods = 0;
@@ -115,7 +115,7 @@ void readFile(void* ptr){
             printf("Readfile");
             exit(-1);
         }
-        
+
         if(num_periods > 1){
             puts("MISSED WINDOW");
             exit(-1);
@@ -123,32 +123,32 @@ void readFile(void* ptr){
     }
     fclose(fp);
     pthread_exit(0);
-    
+
 }
 int main(int argc, const char * argv[]) {
     info f1,f2,f3;
-    
+
     f1.filename = "first.txt";
     f2.filename = "second.txt";
     f1.timeInNanoSecond = 100;
     f2.timeInNanoSecond = 1600;
     f3.timeInNanoSecond = 1100;
-    
-    
 
-    
+
+
+
     pthread_t p1,p2,p3;
-    
+
     pthread_create(&p1, NULL, (void *)&readFile, (void * )&f1);
-    
+
     pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
-    
+
     pthread_join(p1, NULL);
     pthread_join(p2, NULL);
-    
+
     for(int i = 0; i < 20; i ++){
         printf("%s",stringArray[i]);
     }
-    
+
     return 0;
 }
