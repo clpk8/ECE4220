@@ -52,7 +52,7 @@ void writeArray(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
-    itval.it_interval.tv_nsec = 5000;    // check the data type
+    itval.it_interval.tv_nsec = 500000;    // check the data type
 
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
@@ -122,7 +122,7 @@ void readFile(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
-    itval.it_interval.tv_nsec = 10000;    // check the data type
+    itval.it_interval.tv_nsec = 1000000;    // check the data type
 
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = temp->timeInNanoSecond;
@@ -167,9 +167,9 @@ int main(int argc, const char * argv[]) {
     f1.filename = "first.txt";
     f2.filename = "second.txt";
     //sending thread different initial time in ns
-    f1.timeInNanoSecond = 1000;
-    f2.timeInNanoSecond = 6000;
-    f3.timeInNanoSecond = 3500;
+    f1.timeInNanoSecond = 100;
+    f2.timeInNanoSecond = 250100;
+    f3.timeInNanoSecond = 500100;
 
 
 
