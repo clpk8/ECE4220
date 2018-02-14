@@ -27,7 +27,6 @@ typedef struct Info{
 }info;
 
 void writeArray(void* ptr){
-    printf("inside of writeArray\n");
     //elevate priority
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
@@ -73,6 +72,7 @@ void writeArray(void* ptr){
     
     int i;
     for(i = 0; i < 20; i++){
+        printf("inside of writeArray\n");
         strcpy(stringArray[i], commonBuffer);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
@@ -187,8 +187,8 @@ int main(int argc, const char * argv[]) {
         printf("%s\n",stringArray[i]);
     }
 
-    pthread_join(p1, NULL);
-    pthread_join(p3, NULL);
-    pthread_join(p2, NULL);
+//    pthread_join(p1, NULL);
+//    pthread_join(p3, NULL);
+//    pthread_join(p2, NULL);
     return 0;
 }
