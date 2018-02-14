@@ -168,8 +168,8 @@ int main(int argc, const char * argv[]) {
     f2.filename = "second.txt";
     //sending thread different initial time in ns
     f1.timeInNanoSecond = 1000;
-    f2.timeInNanoSecond = 2501000;
-    f3.timeInNanoSecond = 5001000;
+    f2.timeInNanoSecond = 5001000;
+    f3.timeInNanoSecond = 2001000;
 
 
 
