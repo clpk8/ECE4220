@@ -167,9 +167,9 @@ int main(int argc, const char * argv[]) {
     f1.filename = "first.txt";
     f2.filename = "second.txt";
     //sending thread different initial time in ns
-    f1.timeInNanoSecond = 100;
-    f2.timeInNanoSecond = 5100;
-    f3.timeInNanoSecond = 2510;
+    f1.timeInNanoSecond = 1000;
+    f2.timeInNanoSecond = 6000;
+    f3.timeInNanoSecond = 3500;
 
 
 
