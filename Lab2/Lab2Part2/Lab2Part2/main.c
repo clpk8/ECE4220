@@ -137,11 +137,11 @@ void readFile(void* ptr){
 //        printf("Readfile\n");
 //        exit(-1);
 //    }
-//    
-    if(num_periods > 1){
-        puts("MISSED WINDOW\n");
-     //   exit(-1);
-    }
+//
+//    if(num_periods > 1){
+//        puts("MISSED WINDOW\n");
+//     //   exit(-1);
+//    }
     
     while(fgets(commonBuffer, 50, fp)){
         printf("%s\n",commonBuffer);
