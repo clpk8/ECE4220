@@ -23,7 +23,7 @@ char commonBuffer[50];
 char *stringArray[20];
 typedef struct Info{
     char *filename;
-    int timeInNanoSecond;
+    long timeInNanoSecond;
 }info;
 
 void writeArray(void* ptr){
