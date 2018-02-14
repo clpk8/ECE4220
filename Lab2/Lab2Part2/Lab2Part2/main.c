@@ -92,7 +92,7 @@ void readFile1(void* ptr){
     //open file
     info* temp;
     temp = (info*)ptr;
-    printf("reading TIME is %lf\n",temp->timeInNanoSecond);
+   // printf("reading TIME is %lf\n",temp->timeInNanoSecond);
     FILE*fp = fopen(temp->filename,"r");
     if(fp == NULL){
         printf("file is not correct\n");
