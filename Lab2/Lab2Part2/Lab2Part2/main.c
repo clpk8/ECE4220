@@ -178,6 +178,11 @@ int main(int argc, const char * argv[]) {
 
     pthread_t p1,p2,p3;
 
+    printf("%lf",f1.timeInNanoSecond);
+    printf("%lf",f2.timeInNanoSecond);
+
+    printf("%lf",f3.timeInNanoSecond);
+
     pthread_create(&p1, NULL, (void *)&readFile, (void * )&f1);
     pthread_create(&p3, NULL, (void *)&writeArray, (void * )&f3);
     pthread_create(&p2, NULL, (void *)&readFile, (void * )&f2);
