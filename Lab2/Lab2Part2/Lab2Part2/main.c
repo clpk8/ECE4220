@@ -40,6 +40,7 @@ void writeArray(void* ptr){
     info* temp;
     temp = (info*)ptr;
 
+    printf("TIME is %lf",temp->timeInNanoSecond);
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
@@ -72,8 +73,8 @@ void writeArray(void* ptr){
     
     int i;
     for(i = 0; i < 20; i++){
-        printf("inside of writeArray\n");
         strcpy(stringArray[i], commonBuffer);
+        printf("%s\n",stringArray[i]);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
@@ -105,6 +106,7 @@ void readFile(void* ptr){
     //open file
     info* temp;
     temp = (info*)ptr;
+    printf("TIME is %lf",temp->timeInNanoSecond);
     FILE*fp = fopen(temp->filename,"r");
     if(fp == NULL){
         printf("file is not correct\n");
