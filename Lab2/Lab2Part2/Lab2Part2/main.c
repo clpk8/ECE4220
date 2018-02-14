@@ -40,7 +40,7 @@ void writeArray(void* ptr){
     info* temp;
     temp = (info*)ptr;
 
- //   printf("TIME is %lf",temp->timeInNanoSecond);
+    printf("Writing TIME is %lf\n",temp->timeInNanoSecond);
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
@@ -59,17 +59,17 @@ void writeArray(void* ptr){
 
     timerfd_settime(timer_fd, 0, &itval, NULL);
 
-    uint64_t num_periods = 0;
-    check = read(timer_fd, &num_periods, sizeof(num_periods));
-    if(check < 0){
-        printf("Readfile\n");
-        exit(-1);
-    }
-
-    if(num_periods > 1){
-        puts("MISSED WINDOW\n");
-     //   exit(-1);
-    }
+//    uint64_t num_periods = 0;
+//    check = read(timer_fd, &num_periods, sizeof(num_periods));
+//    if(check < 0){
+//        printf("Readfile\n");
+//        exit(-1);
+//    }
+//
+//    if(num_periods > 1){
+//        puts("MISSED WINDOW\n");
+//     //   exit(-1);
+//    }
     
     int i;
     for(i = 0; i < 20; i++){
@@ -106,7 +106,7 @@ void readFile(void* ptr){
     //open file
     info* temp;
     temp = (info*)ptr;
-   // printf("TIME is %lf",temp->timeInNanoSecond);
+    printf("reading TIME is %lf\n",temp->timeInNanoSecond);
     FILE*fp = fopen(temp->filename,"r");
     if(fp == NULL){
         printf("file is not correct\n");
@@ -132,19 +132,19 @@ void readFile(void* ptr){
     timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
 
-
-    uint64_t num_periods = 0;
-    check = read(timer_fd, &num_periods, sizeof(num_periods));
-    if(check < 0){
-        printf("Readfile\n");
-        exit(-1);
-    }
-
-    if(num_periods > 1){
-        puts("MISSED WINDOW\n");
-     //   exit(-1);
-    }
-    
+//
+//    uint64_t num_periods = 0;
+//    check = read(timer_fd, &num_periods, sizeof(num_periods));
+//    if(check < 0){
+//        printf("Readfile\n");
+//        exit(-1);
+//    }
+//
+//    if(num_periods > 1){
+//        puts("MISSED WINDOW\n");
+//     //   exit(-1);
+//    }
+//
     while(fgets(commonBuffer, 50, fp)){
         printf("%s\n",commonBuffer);
         uint64_t num_periods = 0;
