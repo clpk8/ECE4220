@@ -19,7 +19,7 @@
 
 #define MY_PRIORITY 51 //about kernel
 
-char commonBuffer[255];
+char commonBuffer[50];
 char *stringArray[20];
 typedef struct Info{
     char *filename;
@@ -110,7 +110,7 @@ void readFile(void* ptr){
         printf("file is not correct\n");
         exit(-1);
     }
-    printf("%s\n",temp->filename);
+  //  printf("%s\n",temp->filename);
     //create timer
     int timer_fd = timerfd_create(CLOCK_MONOTONIC, 0);
     if(timer_fd < 0){
@@ -143,8 +143,8 @@ void readFile(void* ptr){
      //   exit(-1);
     }
     
-    while(fgets(commonBuffer, 255, fp)){
-        printf("%s\n",commonBuffer);
+    while(fgets(commonBuffer, 50, fp)){
+     //   printf("%s\n",commonBuffer);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
