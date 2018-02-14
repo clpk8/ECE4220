@@ -58,17 +58,17 @@ void writeArray(void* ptr){
 
     timerfd_settime(timer_fd, 0, &itval, NULL);
 
-    uint64_t num_periods = 0;
-    check = read(timer_fd, &num_periods, sizeof(num_periods));
-    if(check < 0){
-        printf("Readfile\n");
-        exit(-1);
-    }
-    
-    if(num_periods > 1){
-        puts("MISSED WINDOW\n");
-     //   exit(-1);
-    }
+//    uint64_t num_periods = 0;
+//    check = read(timer_fd, &num_periods, sizeof(num_periods));
+//    if(check < 0){
+//        printf("Readfile\n");
+//        exit(-1);
+//    }
+//
+//    if(num_periods > 1){
+//        puts("MISSED WINDOW\n");
+//     //   exit(-1);
+//    }
     
     int i;
     for(i = 0; i < 20; i++){
@@ -130,21 +130,21 @@ void readFile(void* ptr){
     timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
 
-
-    uint64_t num_periods = 0;
-    check = read(timer_fd, &num_periods, sizeof(num_periods));
-    if(check < 0){
-        printf("Readfile\n");
-        exit(-1);
-    }
-    
+//
+//    uint64_t num_periods = 0;
+//    check = read(timer_fd, &num_periods, sizeof(num_periods));
+//    if(check < 0){
+//        printf("Readfile\n");
+//        exit(-1);
+//    }
+//    
     if(num_periods > 1){
         puts("MISSED WINDOW\n");
      //   exit(-1);
     }
     
     while(fgets(commonBuffer, 50, fp)){
-     //   printf("%s\n",commonBuffer);
+        printf("%s\n",commonBuffer);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
