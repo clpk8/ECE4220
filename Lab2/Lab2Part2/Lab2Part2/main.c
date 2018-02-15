@@ -53,7 +53,7 @@ void writeArray(void* ptr){
     itval.it_interval.tv_nsec = 500000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 251000;
+    itval.it_value.tv_nsec = temp->timeInNanoSecond;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     uint64_t num_periods = 0;
@@ -120,7 +120,7 @@ void readFile1(void* ptr){
     itval.it_interval.tv_nsec = 1000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 1000;
+    itval.it_value.tv_nsec = temp->timeInNanoSecond;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     uint64_t num_periods = 0;
@@ -184,7 +184,7 @@ void readFile2(void* ptr){
     itval.it_interval.tv_nsec = 1000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 501000;
+    itval.it_value.tv_nsec = temp->timeInNanoSecond;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
@@ -223,7 +223,9 @@ int main(int argc, const char * argv[]) {
     f1.filename = "first.txt";
     f2.filename = "second.txt";
     
-    
+    f1.timeInNanoSecond = 1000;
+    f2.timeInNanoSecond = 501000;
+    f3.timeInNanoSecond = 251000;
     
     pthread_t p1,p2,p3;
     
