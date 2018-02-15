@@ -234,14 +234,15 @@ int main(int argc, const char * argv[]) {
     pthread_create(&p2, NULL, (void *)&readFile2, (void * )&f2);
     
     
+    
+    pthread_join(p1, NULL);
+    pthread_join(p3, NULL);
+    pthread_join(p2, NULL);
+    
     printf("1");
     int i;
     for(i = 0; i < 20; i ++){
         printf("%s\n",stringArray[i]);
     }
-    
-    pthread_join(p1, NULL);
-    pthread_join(p3, NULL);
-    pthread_join(p2, NULL);
     return 0;
 }
