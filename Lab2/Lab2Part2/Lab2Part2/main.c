@@ -69,7 +69,7 @@ void writeArray(void* ptr){
     int i;
     for(i = 0; i < 20; i++){
         strcpy(stringArray[i], commonBuffer);
-        printf("%s\n",stringArray[i]);
+        //printf("%s\n",stringArray[i]);
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
             printf("Readfile\n");
