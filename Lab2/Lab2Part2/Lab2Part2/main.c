@@ -50,10 +50,10 @@ void writeArray(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try
-    itval.it_interval.tv_nsec = 50000000;    // check the data type
+    itval.it_interval.tv_nsec = 5000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 25001000;
+    itval.it_value.tv_nsec = 2501000;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     uint64_t num_periods = 0;
@@ -117,7 +117,7 @@ void readFile1(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try
-    itval.it_interval.tv_nsec = 100000000;    // check the data type
+    itval.it_interval.tv_nsec = 10000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = 1000;
@@ -181,10 +181,10 @@ void readFile2(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
-    itval.it_interval.tv_nsec = 100000000;    // check the data type
+    itval.it_interval.tv_nsec = 10000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 50001000;
+    itval.it_value.tv_nsec = 5001000;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
@@ -239,7 +239,7 @@ int main(int argc, const char * argv[]) {
     pthread_join(p3, NULL);
     pthread_join(p2, NULL);
     
-    printf("1");
+   // printf("1");
     int i;
     for(i = 0; i < 20; i ++){
         printf("%s\n",stringArray[i]);
