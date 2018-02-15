@@ -200,7 +200,7 @@ void readFile2(void* ptr){
     }
     
     while(fgets(commonBuffer, 50, fp)){
-        printf("%s\n",commonBuffer);
+       // printf("%s\n",commonBuffer);
         uint64_t num_periods = 0;
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
