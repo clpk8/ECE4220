@@ -189,6 +189,16 @@ void readFile2(void* ptr){
     timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
     
+    uint64_t num_periods = 0;
+    long check1 = read(timer_fd, &num_periods, sizeof(num_periods));
+    if(check1 < 0){
+        printf("Readfile\n");
+    }
+    
+    if(num_periods > 1){
+        puts("MISSED WINDOW\n");
+    }
+    
     while(fgets(commonBuffer, 50, fp)){
         printf("%s\n",commonBuffer);
         uint64_t num_periods = 0;
