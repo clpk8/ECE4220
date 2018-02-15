@@ -50,10 +50,10 @@ void writeArray(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try
-    itval.it_interval.tv_nsec = 5000000;    // check the data type
+    itval.it_interval.tv_nsec = 500000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 2501000;
+    itval.it_value.tv_nsec = 251000;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     uint64_t num_periods = 0;
@@ -69,7 +69,7 @@ void writeArray(void* ptr){
     int i;
     for(i = 0; i < 20; i++){
         strcpy(stringArray[i], commonBuffer);
-        printf("%s\n",stringArray[i]);
+     //   printf("%s\n",stringArray[i]);
         long check = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check < 0){
             printf("Readfile\n");
@@ -117,7 +117,7 @@ void readFile1(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try
-    itval.it_interval.tv_nsec = 10000000;    // check the data type
+    itval.it_interval.tv_nsec = 1000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
     itval.it_value.tv_nsec = 1000;
@@ -181,10 +181,10 @@ void readFile2(void* ptr){
     struct itimerspec itval;
     itval.it_interval.tv_sec = 0;        // check the data type
     //try 1000
-    itval.it_interval.tv_nsec = 10000000;    // check the data type
+    itval.it_interval.tv_nsec = 1000000;    // check the data type
     
     itval.it_value.tv_sec = 0;
-    itval.it_value.tv_nsec = 5001000;
+    itval.it_value.tv_nsec = 501000;
     
     timerfd_settime(timer_fd, 0, &itval, NULL);
     int i = 0;
