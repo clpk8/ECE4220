@@ -233,7 +233,7 @@ int main(int argc, const char * argv[]) {
 
     pthread_create(&p1, NULL, (void *)&readFile1, (void * )&f1);
     pthread_create(&p3, NULL, (void *)&writeArray, (void * )&f3);
-    pthread_create(&p2, NULL, (void *)&readFile2, (void * )&f2);
+    pthread_create(&p2, NULL, (void *)&readFile1, (void * )&f2);
 
 
 
