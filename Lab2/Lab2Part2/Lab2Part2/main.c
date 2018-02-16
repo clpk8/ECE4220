@@ -158,9 +158,9 @@ int main(int argc, const char * argv[]) {
     f1.filename = "first.txt";
     f2.filename = "second.txt";
 
-    f1.timeInNanoSecond = 1000;
-    f2.timeInNanoSecond = 1126000;
-    f3.timeInNanoSecond = 563500;
+    f1.timeInNanoSecond = 500;
+    f2.timeInNanoSecond = 1125500;
+    f3.timeInNanoSecond = 563000;
 
 
     pthread_t p1,p2,p3;
