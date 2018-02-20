@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <unistd.h>        // standard symbolic constants and types (e.g. NULL); usleep
 #include <wiringPi.h>    // needed for the wiringPi functions
+#include <sched.h>
+
 
 
 #define LED1  8        // wiringPi number corresponding to GPIO2.
