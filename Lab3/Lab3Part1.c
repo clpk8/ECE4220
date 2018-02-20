@@ -13,26 +13,27 @@
 #include <unistd.h>
 #include <sched.h>
 #include <fcntl.h>
-#include <ece4220lab3.h>
+#include "ece4220lab3.h"
 
 
 
-#define MY_PRIORITY 51 //above kernel
-#define LED1  8        // wiringPi number corresponding to GPIO2.
+#define P1    27 //pushbutton 1
+#define LED1  8 //red
 #define LED2  9 //yellow
 #define LED3  7 //green
-#define P1    27 //pushbutton 1
-
+#define LED4  21//blue
+#define MY_PRIORITY 51
 int main(int argc, char **argv)
 {
     wiringPiSetup();    // wiringPiSetupGpio() could be used. The numbers for the ports would
     // need to match the RPi GPIO pinout.
-    
+
     pinMode(LED1, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(LED2, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(LED3, OUTPUT);    // Configure GPIO2, which is the one connected LED.
+    pinMode(LED4, OUTPUT); //set it because i want blue to be shutdown
     pinMode(P1, INPUT);       //set pushbutton 1 as output
-    
+
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
@@ -44,6 +45,7 @@ int main(int argc, char **argv)
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
+    digitalWrite(LED4, LOW);
     while(1){
         digitalWrite(LED2, HIGH);
         sleep(2);
@@ -51,22 +53,22 @@ int main(int argc, char **argv)
         digitalWrite(LED3, HIGH);
         sleep(2);
         digitalWrite(LED3, LOW);
-        if(check_button(void)){
+        if(check_button()){
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
-            clear_button(void);
+            clear_button();
         }
 
 
 
-        
 
-        
+
+
     }
-    
 
-    
-    
-    
+
+
+
+
 }
