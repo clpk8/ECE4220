@@ -170,8 +170,8 @@ int main(int argc, const char * argv[]) {
 
     //different initial time for different thread
     f1.timeInNanoSecond = 1000;
-    f2.timeInNanoSecond = 1063500;
-    f3.timeInNanoSecond = 532250;
+    f2.timeInNanoSecond = 1126000;
+    f3.timeInNanoSecond = 563500;
 
     //declear the thread
     pthread_t p1,p2,p3;
