@@ -255,9 +255,9 @@ int main(int argc, const char * argv[]) {
     
     int oneThreadResult = 0, oneThreadPerRowResult = 0, oneThreadPerColResult = 0, oneThreadPerNumberResult = 0;
     oneThreadResult = (int)oneThread(data1,returnResult);
-    oneThreadPerRowResult = (int)oneThread(data1,returnResult);
-    oneThreadPerColResult = (int)oneThread(data1,returnResult);
-    oneThreadPerNumberResult = (int)oneThread(data1,returnResult);
+    oneThreadPerRowResult = (int)oneThreadPerRow(data1,returnResult);
+    oneThreadPerColResult = (int)oneThreadPerCol(data1,returnResult);
+    oneThreadPerNumberResult = (int)oneThreadPerNumber(data1,returnResult);
     
     printf("One Thread:                     The value %d is found %d time\n",data1.result,oneThreadResult);
     printf("One Thread Per Column:          The value %d is found %d time\n",data1.result,oneThreadPerColResult);
