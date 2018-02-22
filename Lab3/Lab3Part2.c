@@ -14,7 +14,7 @@
 #include <sched.h>
 #include <fcntl.h>
 #include "ece4220lab3.h"
-#include <semaphores.h>
+#include <semaphore.h>
 
 
 #define MY_PRIORITY 51 //above kernel
@@ -39,7 +39,7 @@ void yellowLightThread(void* ptr){
     }
     sem_wait(&mutex);
     digitalWrite(LED2, HIGH);
-    sleep(2); 
+    sleep(2);
     digitalWrite(LED2, LOW);
     sem_post(&mutex);
 }
@@ -55,19 +55,19 @@ int main(int argc, char **argv)
     int p1 = atoi(argv[2]);
     int p2 = atoi(argv[3]);
     int p3 = atoi(argv[4]);
-    
+
     printf("My priority if P1 is:%d, P2 is:%d, P3 is:%d\n",p1,p2,p3);
-    
+
     sem_init(&mutex, 0, 1);
     wiringPiSetup();    // wiringPiSetupGpio() could be used. The numbers for the ports would
     // need to match the RPi GPIO pinout.
-    
+
     pinMode(LED1, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(LED2, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(LED3, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(LED4, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(P1, INPUT);       //set pushbutton 1 as output
-    
+
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
@@ -93,12 +93,12 @@ int main(int argc, char **argv)
             digitalWrite(LED1, LOW);
             clear_button(void);
         }
- 
+
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 }
 
