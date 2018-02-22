@@ -24,12 +24,13 @@
 #define LED4  21 //green
 #define P1    27 //pushbutton 1
 
+//define semaphore
 sem_t mutex;
 void yellowLightThread(void* ptr){
     int* time;
     time = (int*)ptr;
     struct sched_param param;
-    param.sched_priority = *time;
+    param.sched_priority = time;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
     //check error
     if(check < 0){
@@ -42,14 +43,21 @@ void yellowLightThread(void* ptr){
     digitalWrite(LED2, LOW);
     sem_post(&mutex);
 }
-void yellowLight(int priority){
-
-    
-    
-    
-}
 int main(int argc, char **argv)
 {
+    //first get the priority
+    //sequence is sudo ./lab p1 p2 p3
+    if(argc != 5){
+        printf("Please enter the correct format\n");
+        printf("sudo ./Lab3Paer2 priorityOfP1 priorityOfP1 priorityOfP1");
+        return EXIT_FAILURE;
+    }
+    int p1 = atoi(argv[2]);
+    int p2 = atoi(argv[3]);
+    int p3 = atoi(argv[4]);
+    
+    printf("My priority if P1 is:%d, P2 is:%d, P3 is:%d\n",p1,p2,p3);
+    
     sem_init(&mutex, 0, 1);
     wiringPiSetup();    // wiringPiSetupGpio() could be used. The numbers for the ports would
     // need to match the RPi GPIO pinout.
@@ -85,12 +93,7 @@ int main(int argc, char **argv)
             digitalWrite(LED1, LOW);
             clear_button(void);
         }
-        
-        
-        
-        
-        
-        
+ 
     }
     
     
