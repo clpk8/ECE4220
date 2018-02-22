@@ -88,8 +88,8 @@ void redLightThread(void* ptr){
     }
     while(1){
         sem_wait(&mutex);
-        printf("red\n");
         if(check_button()){
+            printf("red\n");
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
