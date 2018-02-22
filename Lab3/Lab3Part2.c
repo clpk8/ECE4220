@@ -28,7 +28,7 @@
 sem_t mutex;
 void yellowLightThread(void* ptr){
     int* priority;
-    time = (int*)ptr;
+    priority = (int*)ptr;
     struct sched_param param;
     printf("my time is%d\n",*priority);
     param.sched_priority = *priority;
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     pinMode(P1, INPUT);       //set pushbutton 1 as output
 
     pthread_t yellow, green, red;
-    pthread_create(&yellow, NULL, (void)&yellowLightThread, (void*)&p1);
+    pthread_create(&yellow, NULL, (void*)&yellowLightThread, (void*)&p1);
     
     
     
