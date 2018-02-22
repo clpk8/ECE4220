@@ -47,7 +47,7 @@ void yellowLightThread(void* ptr){
         sem_post(&mutex);
     }
     pthread_exit(0);
-    
+
 }
 void greenLightThread(void* ptr){
     int* priority;
@@ -70,7 +70,7 @@ void greenLightThread(void* ptr){
         sem_post(&mutex);
     }
     pthread_exit(0);
-    
+
 }
 void redLightThread(void* ptr){
     int* priority;
@@ -95,7 +95,7 @@ void redLightThread(void* ptr){
         sem_post(&mutex);
     }
     pthread_exit(0);
-    
+
 }
 
 int main(int argc, char **argv)
@@ -129,10 +129,10 @@ int main(int argc, char **argv)
 
     pthread_t yellow, green, red;
     pthread_create(&yellow, NULL, (void*)&yellowLightThread, (void*)&p1);
-    pthread_create(&green, NULL, (void*)&greenwLightThread, (void*)&p1);
+    pthread_create(&green, NULL, (void*)&greenLightThread, (void*)&p1);
     pthread_create(&red, NULL, (void*)&redLightThread, (void*)&p1);
-    
-    
+
+
     pthread_join(yellow,NULL);
 
 
