@@ -49,6 +49,55 @@ void yellowLightThread(void* ptr){
     pthread_exit(0);
     
 }
+void greenLightThread(void* ptr){
+    int* priority;
+    priority = (int*)ptr;
+    struct sched_param param;
+    printf("my time is%d\n",*priority);
+    param.sched_priority = *priority;
+    int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
+    //check error
+    if(check < 0){
+        printf("Scheduler error\n");
+        exit(-1);
+    }
+    while(1){
+        sem_wait(&mutex);
+        digitalWrite(LED3, HIGH);
+        sleep(2);
+        digitalWrite(LED3, LOW);
+        sleep(2);
+        sem_post(&mutex);
+    }
+    pthread_exit(0);
+    
+}
+void redLightThread(void* ptr){
+    int* priority;
+    priority = (int*)ptr;
+    struct sched_param param;
+    printf("my time is%d\n",*priority);
+    param.sched_priority = *priority;
+    int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
+    //check error
+    if(check < 0){
+        printf("Scheduler error\n");
+        exit(-1);
+    }
+    while(1){
+        sem_wait(&mutex);
+        if(check_button()){
+            digitalWrite(LED1, HIGH);
+            sleep(2);
+            digitalWrite(LED1, LOW);
+            clear_button();
+        }
+        sem_post(&mutex);
+    }
+    pthread_exit(0);
+    
+}
+
 int main(int argc, char **argv)
 {
     //first get the priority
@@ -73,10 +122,15 @@ int main(int argc, char **argv)
     pinMode(LED3, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(LED4, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(P1, INPUT);       //set pushbutton 1 as output
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
+    digitalWrite(LED4, LOW);
 
     pthread_t yellow, green, red;
     pthread_create(&yellow, NULL, (void*)&yellowLightThread, (void*)&p1);
-    
+    pthread_create(&green, NULL, (void*)&greenwLightThread, (void*)&p1);
+    pthread_create(&red, NULL, (void*)&redLightThread, (void*)&p1);
     
     
     pthread_join(yellow,NULL);
