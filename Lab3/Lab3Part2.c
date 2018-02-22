@@ -90,6 +90,7 @@ void redLightThread(void* ptr){
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
+            sleep(2);
             clear_button();
         }
         sem_post(&mutex);
@@ -129,8 +130,8 @@ int main(int argc, char **argv)
 
     pthread_t yellow, green, red;
     pthread_create(&yellow, NULL, (void*)&yellowLightThread, (void*)&p1);
-    pthread_create(&green, NULL, (void*)&greenLightThread, (void*)&p1);
-    pthread_create(&red, NULL, (void*)&redLightThread, (void*)&p1);
+    pthread_create(&green, NULL, (void*)&greenLightThread, (void*)&p2);
+    pthread_create(&red, NULL, (void*)&redLightThread, (void*)&p3);
 
 
     pthread_join(yellow,NULL);
