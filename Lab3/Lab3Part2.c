@@ -47,14 +47,14 @@ int main(int argc, char **argv)
 {
     //first get the priority
     //sequence is sudo ./lab p1 p2 p3
-    if(argc != 5){
+    if(argc != 4){
         printf("Please enter the correct format\n");
         printf("sudo ./Lab3Paer2 priorityOfP1 priorityOfP1 priorityOfP1");
         return EXIT_FAILURE;
     }
-    int p1 = atoi(argv[2]);
-    int p2 = atoi(argv[3]);
-    int p3 = atoi(argv[4]);
+    int p1 = atoi(argv[1]);
+    int p2 = atoi(argv[2]);
+    int p3 = atoi(argv[3]);
 
     printf("My priority if P1 is:%d, P2 is:%d, P3 is:%d\n",p1,p2,p3);
 
