@@ -30,7 +30,7 @@ void yellowLightThread(void* ptr){
     int* time;
     time = (int*)ptr;
     struct sched_param param;
-    param.sched_priority = time;
+    param.sched_priority = *time;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
     //check error
     if(check < 0){
@@ -87,11 +87,11 @@ int main(int argc, char **argv)
         digitalWrite(LED3, HIGH);
         sleep(2);
         digitalWrite(LED3, LOW);
-        if(check_button(void)){
+        if(check_button()){
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
-            clear_button(void);
+            clear_button();
         }
 
     }
