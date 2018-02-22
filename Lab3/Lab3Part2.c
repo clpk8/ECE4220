@@ -39,6 +39,7 @@ void yellowLightThread(void* ptr){
         exit(-1);
     }
     while(1){
+        printf("yellow\n");
         sem_wait(&mutex);
         digitalWrite(LED2, HIGH);
         sleep(2);
@@ -62,6 +63,7 @@ void greenLightThread(void* ptr){
         exit(-1);
     }
     while(1){
+        printf("green\n");
         sem_wait(&mutex);
         digitalWrite(LED3, HIGH);
         sleep(2);
@@ -86,6 +88,7 @@ void redLightThread(void* ptr){
     }
     while(1){
         sem_wait(&mutex);
+        printf("red\n");
         if(check_button()){
             digitalWrite(LED1, HIGH);
             sleep(2);
@@ -137,6 +140,8 @@ int main(int argc, char **argv)
     pthread_join(yellow,NULL);
     pthread_join(green,NULL);
     pthread_join(red,NULL);
+    
+    sem_destroy(&mutex);
 
 
 
