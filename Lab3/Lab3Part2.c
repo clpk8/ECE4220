@@ -43,6 +43,7 @@ void yellowLightThread(void* ptr){
         digitalWrite(LED2, HIGH);
         sleep(2);
         digitalWrite(LED2, LOW);
+        sleep(2);
         sem_post(&mutex);
     }
     pthread_exit(0);
