@@ -27,21 +27,26 @@
 //define semaphore
 sem_t mutex;
 void yellowLightThread(void* ptr){
-    int* time;
+    int* priority;
     time = (int*)ptr;
     struct sched_param param;
-    param.sched_priority = *time;
+    printf("my time is%d\n",*priority);
+    param.sched_priority = *priority;
     int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
     //check error
     if(check < 0){
         printf("Scheduler error\n");
         exit(-1);
     }
-    sem_wait(&mutex);
-    digitalWrite(LED2, HIGH);
-    sleep(2);
-    digitalWrite(LED2, LOW);
-    sem_post(&mutex);
+    while(1){
+        sem_wait(&mutex);
+        digitalWrite(LED2, HIGH);
+        sleep(2);
+        digitalWrite(LED2, LOW);
+        sem_post(&mutex);
+    }
+    pthread_exit(0);
+    
 }
 int main(int argc, char **argv)
 {
@@ -68,33 +73,12 @@ int main(int argc, char **argv)
     pinMode(LED4, OUTPUT);    // Configure GPIO2, which is the one connected LED.
     pinMode(P1, INPUT);       //set pushbutton 1 as output
 
-    struct sched_param param;
-    param.sched_priority = MY_PRIORITY;
-    int check = sched_setscheduler(0, SCHED_FIFO, &param); //using FIFO
-    //check error
-    if(check < 0){
-        printf("Scheduler error\n");
-        exit(-1);
-    }
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, LOW);
-    digitalWrite(LED3, LOW);
-    digitalWrite(LED4, LOW);
-    while(1){
-        digitalWrite(LED2, HIGH);
-        sleep(2);
-        digitalWrite(LED2, LOW);
-        digitalWrite(LED3, HIGH);
-        sleep(2);
-        digitalWrite(LED3, LOW);
-        if(check_button()){
-            digitalWrite(LED1, HIGH);
-            sleep(2);
-            digitalWrite(LED1, LOW);
-            clear_button();
-        }
-
-    }
+    pthread_t yellow, green, red;
+    pthread_create(&yellow, NULL, (void)&yellowLightThread, (void*)&p1);
+    
+    
+    
+    pthread_join(yellow,NULL);
 
 
 
