@@ -134,6 +134,9 @@ int main(int argc, char **argv)
 
 
     pthread_join(yellow,NULL);
+    pthread_join(green,NULL);
+    pthread_join(red,NULL);
+
 
 
 
