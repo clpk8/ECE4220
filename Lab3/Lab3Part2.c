@@ -109,6 +109,7 @@ void redLightThread(void* ptr){
     pthread_exit(0);
 
 }
+}
 
 int main(int argc, char **argv)
 {
