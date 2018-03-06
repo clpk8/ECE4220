@@ -7,6 +7,10 @@
 //
 
 #include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
 int main(int argc, const char * argv[]) {
     int fd;
