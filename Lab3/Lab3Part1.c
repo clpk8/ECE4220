@@ -42,33 +42,26 @@ int main(int argc, char **argv)
         printf("Scheduler error\n");
         exit(-1);
     }
+    //turn all the light off
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
     while(1){
+        //alternating
         digitalWrite(LED2, HIGH);
         sleep(2);
         digitalWrite(LED2, LOW);
         digitalWrite(LED3, HIGH);
         sleep(2);
         digitalWrite(LED3, LOW);
-        if(check_button()){
+        if(check_button()){//if button press, it will return true
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
-            clear_button();
+            clear_button();//clear it after light is off
         }
 
-
-
-
-
-
     }
-
-
-
-
 
 }

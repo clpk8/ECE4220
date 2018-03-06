@@ -21,12 +21,13 @@
 #define LED1  8        // wiringPi number corresponding to GPIO2.
 #define LED2  9 //yellow
 #define LED3  7 //green
-#define LED4  21 //green
+#define LED4  21 //blue
 #define P1    27 //pushbutton 1
 
 //define semaphore
 sem_t mutex;
 void yellowLightThread(void* ptr){
+    //derefernece pointer
     int* priority;
     priority = (int*)ptr;
     struct sched_param param;
@@ -40,17 +41,18 @@ void yellowLightThread(void* ptr){
     }
     while(1){
         printf("yellow\n");
-        sem_wait(&mutex);
+        sem_wait(&mutex);//protect
         digitalWrite(LED2, HIGH);
         sleep(2);
         digitalWrite(LED2, LOW);
         sleep(2);
-        sem_post(&mutex);
+        sem_post(&mutex);//release
     }
     pthread_exit(0);
 
 }
 void greenLightThread(void* ptr){
+    //dereference pointer
     int* priority;
     priority = (int*)ptr;
     struct sched_param param;
@@ -64,17 +66,18 @@ void greenLightThread(void* ptr){
     }
     while(1){
         printf("green\n");
-        sem_wait(&mutex);
+        sem_wait(&mutex);//protect
         digitalWrite(LED3, HIGH);
         sleep(2);
         digitalWrite(LED3, LOW);
         sleep(2);
-        sem_post(&mutex);
+        sem_post(&mutex);//release
     }
     pthread_exit(0);
 
 }
 void redLightThread(void* ptr){
+    //derefence pointer
     int* priority;
     priority = (int*)ptr;
     struct sched_param param;
@@ -87,16 +90,16 @@ void redLightThread(void* ptr){
         exit(-1);
     }
     while(1){
-        sem_wait(&mutex);
-        if(check_button()){
+        sem_wait(&mutex);//protect
+        if(check_button()){//if button pressed, this will be true
             printf("red\n");
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
             sleep(2);
-            clear_button();
+            clear_button();//clear the button
         }
-        sem_post(&mutex);
+        sem_post(&mutex);//release
     }
     pthread_exit(0);
 
@@ -111,13 +114,15 @@ int main(int argc, char **argv)
         printf("sudo ./Lab3Paer2 priorityOfP1 priorityOfP1 priorityOfP1");
         return EXIT_FAILURE;
     }
+    
+    //take argv as priority
     int p1 = atoi(argv[1]);
     int p2 = atoi(argv[2]);
     int p3 = atoi(argv[3]);
 
     printf("My priority if P1 is:%d, P2 is:%d, P3 is:%d\n",p1,p2,p3);
 
-    sem_init(&mutex, 0, 1);
+    sem_init(&mutex, 0, 1);//initilize sem
     wiringPiSetup();    // wiringPiSetupGpio() could be used. The numbers for the ports would
     // need to match the RPi GPIO pinout.
 
@@ -131,22 +136,23 @@ int main(int argc, char **argv)
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
 
+    //create threads
     pthread_t yellow, green, red;
     pthread_create(&yellow, NULL, (void*)&yellowLightThread, (void*)&p1);
     pthread_create(&green, NULL, (void*)&greenLightThread, (void*)&p2);
     pthread_create(&red, NULL, (void*)&redLightThread, (void*)&p3);
 
 
+    //join threads
     pthread_join(yellow,NULL);
     pthread_join(green,NULL);
     pthread_join(red,NULL);
     
+    //destry sem
     sem_destroy(&mutex);
 
 
-
-
-
+}
 
 }
 
