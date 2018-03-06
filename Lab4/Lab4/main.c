@@ -21,6 +21,7 @@ int main(int argc, const char * argv[]) {
     }
     
     while(1){
+        usleep(250);
         if(read(fd, &temp, sizeof(temp)) < 0){
             printf("read N_pipe1 error");
         }
