@@ -45,8 +45,13 @@ void yellowLightThread(void* ptr){
         digitalWrite(LED2, HIGH);
         sleep(2);
         digitalWrite(LED2, LOW);
+<<<<<<< HEAD
         sleep(2);
         sem_post(&mutex);//release
+=======
+        sem_post(&mutex);
+        usleep(1000);
+>>>>>>> 044d531c99b2d7be199ed09edfe70e9187bf513e
     }
     pthread_exit(0);
 
@@ -70,8 +75,13 @@ void greenLightThread(void* ptr){
         digitalWrite(LED3, HIGH);
         sleep(2);
         digitalWrite(LED3, LOW);
+<<<<<<< HEAD
         sleep(2);
         sem_post(&mutex);//release
+=======
+        sem_post(&mutex);
+        usleep(1000);
+>>>>>>> 044d531c99b2d7be199ed09edfe70e9187bf513e
     }
     pthread_exit(0);
 
@@ -96,8 +106,13 @@ void redLightThread(void* ptr){
             digitalWrite(LED1, HIGH);
             sleep(2);
             digitalWrite(LED1, LOW);
+<<<<<<< HEAD
             sleep(2);
             clear_button();//clear the button
+=======
+            clear_button();
+            usleep(1000);
+>>>>>>> 044d531c99b2d7be199ed09edfe70e9187bf513e
         }
         sem_post(&mutex);//release
     }
@@ -111,7 +126,7 @@ int main(int argc, char **argv)
     //sequence is sudo ./lab p1 p2 p3
     if(argc != 4){
         printf("Please enter the correct format\n");
-        printf("sudo ./Lab3Paer2 priorityOfP1 priorityOfP1 priorityOfP1");
+        printf("sudo ./Lab3Part2 priorityOfP1 priorityOfP2 priorityOfP3");
         return EXIT_FAILURE;
     }
     
@@ -147,8 +162,12 @@ int main(int argc, char **argv)
     pthread_join(yellow,NULL);
     pthread_join(green,NULL);
     pthread_join(red,NULL);
+<<<<<<< HEAD
     
     //destry sem
+=======
+
+>>>>>>> 044d531c99b2d7be199ed09edfe70e9187bf513e
     sem_destroy(&mutex);
 
 
