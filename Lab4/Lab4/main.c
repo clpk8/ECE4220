@@ -25,7 +25,7 @@ int main(int argc, const char * argv[]) {
             printf("read N_pipe1 error");
         }
         
-        printf("%c",temp);
+        printf("%uc",temp);
     }
     return 0;
 }
