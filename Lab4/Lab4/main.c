@@ -9,7 +9,19 @@
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+    int fd;
+    unsigned char temp;
+    if((fd = open("/tmp/N_pipe1", O_RDONLY)) < 0){
+        printf("pipe N_pipe1 error");
+        return EXIT_FAILURE;
+    }
+    
+    while(1){
+        if(read(fd, &temp, sizeof(temp)) < 0){
+            printf("read N_pipe1 error");
+        }
+        
+        printf("%c",temp);
+    }
     return 0;
 }
