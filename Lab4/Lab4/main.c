@@ -17,6 +17,7 @@
 typedef struct Buffer{
     unsigned char GPAdata;
     struct timeval GPStime;
+    struct timeval buttonPressTime;
 }buffer;
 buffer globel;
 sem_t mutex;
@@ -25,9 +26,23 @@ void writeToBuffer(void* ptr){
     buffer* print;
     print = (buffer*)ptr;
     //protect and write to buffer
+
+    //get from realtime task
+    buffer temp;
+    int pipe_N_pipe2;
+    if((pipe_N_pipe2 = open("N_pipe2",O_RDONLY)) < 0){
+        printf("N_pipe2 error");
+        exit(-1);
+    }
     while(1){
+        usleep(250);
+        if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
+            printf("N_pipe2 reating error\n");
+            exit(-1);
+        }
         sem_wait(&mutex);
         printf("GPS valie:%uc, time in second:%ld, time in microsecond:%d\n\n",print->GPAdata,print->GPStime.tv_sec,print->GPStime.tv_usec);
+        printf("time from real time task in second:%ld, time in microsecond:%d\n\n",temp.buttonPressTime.tv_sec,temp.buttonPressTime.tv_usec);
         sem_post(&mutex);
     }
     
