@@ -19,6 +19,8 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/timerfd.h>
+#include <stdint.h>
+#include <pthread.h>
 
 
 #define MY_PRIORITY 51 //above kernel
