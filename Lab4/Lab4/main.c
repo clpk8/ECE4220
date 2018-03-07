@@ -29,7 +29,6 @@ void childThread(void* ptr){
     info = (buffer*)ptr;
     
     
-    sem_wait(&mutex);
     //interpolation
     
     float x2_x1 = (info->buttonPressTime.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->buttonPressTime.tv_usec - info->GPStimeB4.tv_usec);
