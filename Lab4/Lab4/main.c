@@ -66,7 +66,7 @@ int main(int argc, const char * argv[]) {
             printf("read N_pipe1 error");
         }
         gettimeofday(&GPStime, NULL);
-        printf("%uc",temp);
+      //  printf("%uc",temp);
         sem_wait(&mutex);
         globel.GPAdata = temp;
         globel.GPStime.tv_sec = GPStime.tv_sec;
