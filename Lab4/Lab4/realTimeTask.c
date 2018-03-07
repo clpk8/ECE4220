@@ -27,9 +27,12 @@
 #define P1    27 //pushbutton 1
 
 typedef struct Buffer{
-    unsigned char GPAdata;
-    struct timeval GPStime;
+    unsigned char GPSdataB4;
+    struct timeval GPStimeB4;
     struct timeval buttonPressTime;
+    unsigned char GPSdataAfter;
+    unsigned char GPSdataRealTime;
+    struct timeval GPStimeAfter;
 }buffer;
 buffer globel;
 
