@@ -92,6 +92,7 @@ int main(int argc, char **argv)
     
     while(1){
         //check button
+        usleep(250);
         if(check_button()){
             printf("x\n");
             gettimeofday(&buttonPressTime, NULL);
