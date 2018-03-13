@@ -25,8 +25,20 @@ typedef struct Buffer{
 buffer globel;
 sem_t mutex;
 void childThread(void* ptr){
-    buffer* info;
+    buffer* info,* parentInfo;
     info = (buffer*)ptr;
+    
+    
+    while(1){
+        parentInfo = (buffer*)ptr;
+        if(parentInfo->GPStimeB4.tv_usec != info->GPStimeB4.tv_usec){
+            break;
+        }
+    }
+    info->GPSdataAfter = parentInfo->GPSdataB4;
+    info->GPStimeAfter.tv_sec = parentInfo->GPStimeB4.tv_sec;
+    info->GPStimeAfter.tv_usec = parentInfo->GPStimeB4.tv_usec;
+
     
     
     //interpolation
@@ -40,6 +52,7 @@ void childThread(void* ptr){
     info->GPSdataRealTime = (unsigned char)y2;
     
     while(1){
+        
         sem_wait(&mutex);
         printf("GPS before:%u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataB4,info->GPStimeB4.tv_sec,info->GPStimeB4.tv_usec);
         printf("GPS during event:%u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataRealTime,info->buttonPressTime.tv_sec,info->buttonPressTime.tv_usec);
@@ -64,9 +77,8 @@ void writeToBuffer(void* ptr){
         exit(-1);
     }
     
-    pthread_t child;
-    pthread_create(&child,NULL,(void*)& childThread, (void*)&print);
-    
+    pthread_t child[3];
+    int i = 0;
     while(1){
         usleep(250);
         sem_wait(&mutex);
@@ -74,15 +86,18 @@ void writeToBuffer(void* ptr){
             printf("N_pipe2 reating error\n");
             exit(-1);
         }
+        //create each thread after read
+        pthread_create(&child[i],NULL,(void*)& childThread, (void*)&print);
 //        printf("GPS valie:%uc, time in second:%ld, time in microsecond:%d\n\n",print->GPSdataB4,print->GPStimeB4.tv_sec,print->GPStimeB4.tv_usec);
 //        printf("time from real time task in second:%ld, time in microsecond:%d\n\n",temp.buttonPressTime.tv_sec,temp.buttonPressTime.tv_usec);
-        sem_post(&mutex);
+      //  sem_post(&mutex);
+        i++;
     }
     
     
 }
 int main(int argc, const char * argv[]) {
-    sem_init(&mutex, 0, 1);
+    sem_init(&mutex, 0, 0);
     int fd;
     struct timeval GPStime;
     unsigned char temp = 's';
@@ -96,20 +111,15 @@ int main(int argc, const char * argv[]) {
     gettimeofday(&GPStime, NULL);
     while(1){
         usleep(250);
-        globel.GPSdataB4 = temp;
-        globel.GPStimeB4.tv_sec = GPStime.tv_sec;
-        globel.GPStimeB4.tv_usec = GPStime.tv_usec;
+        //sem_wait(&mutex);
         if(read(fd, &temp, sizeof(temp)) < 0){
             printf("read N_pipe1 error");
         }
         gettimeofday(&GPStime, NULL);
-      //  printf("%uc",temp);
-        sem_wait(&mutex);
-        globel.GPSdataAfter = temp;
-        globel.GPStimeAfter.tv_sec = GPStime.tv_sec;
-        globel.GPStimeAfter.tv_usec = GPStime.tv_usec;
+        globel.GPSdataB4 = temp;
+        globel.GPStimeB4.tv_sec = GPStime.tv_sec;
+        globel.GPStimeB4.tv_usec = GPStime.tv_usec;
         sem_post(&mutex);
-    //    sem_wait(&mutex);
 
         
     }
