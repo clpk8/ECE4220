@@ -39,6 +39,7 @@ buffer globel;
 
 int main(int argc, char **argv)
 {
+    clear_button();
     //elevate priority
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
