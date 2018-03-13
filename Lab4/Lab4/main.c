@@ -33,6 +33,7 @@ void childThread(void* ptr){
     info.buttonPressTime.tv_usec = globel.buttonPressTime.tv_usec;
 
     while(1){
+        usleep(250);
         if(info.GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
             break;
         }
