@@ -23,7 +23,7 @@ typedef struct Buffer{
     struct timeval GPStimeAfter;
 }buffer;
 buffer globel;
-sem_t mutex;
+sem_t mutex, mutex2;
 void childThread(void* ptr){
     buffer info;
     info.GPSdataB4 = globel.GPSdataB4;
@@ -58,7 +58,7 @@ void childThread(void* ptr){
         printf("GPS before:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
         printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
         printf("GPS after:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
-      //  sem_post(&mutex);
+        sem_post(&mutex2);
 
 
     
@@ -93,6 +93,7 @@ void writeToBuffer(void* ptr){
         //globel is has all the info
         //create each thread after read
         pthread_create(&child[i],NULL,(void*)& childThread, NULL);
+        sem_wait(&mutex2);
 //        printf("GPS valie:%uc, time in second:%ld, time in microsecond:%d\n\n",print->GPSdataB4,print->GPStimeB4.tv_sec,print->GPStimeB4.tv_usec);
 //        printf("time from real time task in second:%ld, time in microsecond:%d\n\n",temp.buttonPressTime.tv_sec,temp.buttonPressTime.tv_usec);
       //  sem_post(&mutex);
@@ -103,6 +104,7 @@ void writeToBuffer(void* ptr){
 }
 int main(int argc, const char * argv[]) {
     sem_init(&mutex, 0, 0);
+    sem_init(&mutex2, 0, 0);
     int fd;
     struct timeval GPStime;
     unsigned char temp;
