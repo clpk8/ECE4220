@@ -101,6 +101,7 @@ int main(int argc, char **argv)
             gettimeofday(&buttonPressTime, NULL);
             globel.buttonPressTime.tv_sec = buttonPressTime.tv_sec;
             globel.buttonPressTime.tv_usec = buttonPressTime.tv_usec;
+            printf("Time transfered in second:%ld and in usec:%d",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
             if(write(pipe_N_pipe2,&globel,sizeof(globel)) != sizeof(globel)){
                 printf("N_pipe2 writing error\n");
                 exit(-1);

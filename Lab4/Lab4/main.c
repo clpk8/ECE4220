@@ -84,6 +84,8 @@ void writeToBuffer(void* ptr){
         globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
         globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
         
+        printf("Time received in second:%ld and in usec:%d",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
+        
         //globel is has all the info
         //create each thread after read
         pthread_create(&child[i],NULL,(void*)& childThread, NULL);
