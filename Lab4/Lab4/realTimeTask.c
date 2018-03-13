@@ -31,7 +31,7 @@ typedef struct Buffer{
     struct timeval GPStimeB4;
     struct timeval buttonPressTime;
     unsigned char GPSdataAfter;
-    unsigned char GPSdataRealTime;
+    float GPSdataRealTime;
     struct timeval GPStimeAfter;
 }buffer;
 buffer globel;

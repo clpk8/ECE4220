@@ -80,9 +80,11 @@ void writeToBuffer(void* ptr){
         usleep(250);
         sem_wait(&mutex);
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
-            printf("N_pipe2 reating error\n");
+            printf("N_pipe2 reading error\n");
             exit(-1);
         }
+        
+        
         globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
         globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
         
