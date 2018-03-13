@@ -19,7 +19,7 @@ typedef struct Buffer{
     struct timeval GPStimeB4;
     struct timeval buttonPressTime;
     unsigned char GPSdataAfter;
-    unsigned char GPSdataRealTime;
+    float GPSdataRealTime;
     struct timeval GPStimeAfter;
 }buffer;
 buffer globel;
@@ -51,12 +51,12 @@ void childThread(void* ptr){
     
     float y2 = (x2_x1 * y3_y1)/x3_x1 + (float)(info.GPSdataB4);
     
-    info.GPSdataRealTime = (unsigned char)y2;
+    info.GPSdataRealTime = y2;
     
         
      //   sem_wait(&mutex);
         printf("GPS before:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
-        printf("GPS during event:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
+        printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
         printf("GPS after:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
       //  sem_post(&mutex);
 
@@ -86,7 +86,7 @@ void writeToBuffer(void* ptr){
         globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
         globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
         
-        printf("Time received in second:%ld and in usec:%d",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
+        printf("Time received in second:%ld and in usec:%d\n\n",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
         
         //globel is has all the info
         //create each thread after read
