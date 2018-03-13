@@ -29,6 +29,8 @@ void childThread(void* ptr){
     info.GPSdataB4 = globel.GPSdataB4;
     info.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
     info.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
+    info.buttonPressTime.tv_sec = globel.buttonPressTime.tv_sec;
+    info.buttonPressTime.tv_usec = globel.buttonPressTime.tv_usec;
 
     while(1){
         if(info.GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
