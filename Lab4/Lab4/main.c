@@ -75,7 +75,7 @@ void writeToBuffer(void* ptr){
         exit(-1);
     }
     
-    pthread_t child[20];
+    pthread_t child[1000];
     int i = 0;
     while(1){
         usleep(250);
