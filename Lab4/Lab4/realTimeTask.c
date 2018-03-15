@@ -39,7 +39,6 @@ buffer globel;
 
 int main(int argc, char **argv)
 {
-    clear_button();
     //elevate priority
     struct sched_param param;
     param.sched_priority = MY_PRIORITY;
@@ -96,6 +95,14 @@ int main(int argc, char **argv)
     
     while(1){
         //check button
+        long check1 = read(timer_fd, &num_periods, sizeof(num_periods));
+        if(check1 < 0){
+            printf("Readfile\n");
+        }
+        
+        if(num_periods > 1){
+            puts("MISSED WINDOW\n");
+        }
         usleep(250);
         if(check_button()){
             printf("x\n");
