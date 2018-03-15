@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     }
     
     if(num_periods > 1){
-        puts("MISSED WINDOW\n");
+        puts("MISSED WINDOW1\n");
     }
     
     //set up button
@@ -95,15 +95,15 @@ int main(int argc, char **argv)
     
     while(1){
         //check button
+        usleep(250);
         long check1 = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check1 < 0){
             printf("Readfile\n");
         }
         
         if(num_periods > 1){
-            puts("MISSED WINDOW\n");
+            puts("MISSED WINDOW2\n");
         }
-        usleep(250);
         if(check_button()){
             printf("x\n");
             gettimeofday(&buttonPressTime, NULL);
@@ -114,8 +114,8 @@ int main(int argc, char **argv)
                 printf("N_pipe2 writing error\n");
                 exit(-1);
             }
+            clear_button();
         }
-        clear_button();
     }
 
 

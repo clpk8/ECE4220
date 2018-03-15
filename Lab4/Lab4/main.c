@@ -56,9 +56,9 @@ void childThread(void* ptr){
     
         
      //   sem_wait(&mutex);
-        printf("GPS before:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
+        printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
         printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
-        printf("GPS after:%u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
+        printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
         sem_post(&mutex2);
 
 
@@ -89,7 +89,7 @@ void writeToBuffer(void* ptr){
         globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
         globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
         
-        printf("Time received in second:%ld and in usec:%d\n\n",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
+       // printf("Time received in second:%ld and in usec:%d\n\n",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
         
         //globel is has all the info
         //create each thread after read
