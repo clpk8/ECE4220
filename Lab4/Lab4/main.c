@@ -81,8 +81,8 @@ void writeToBuffer(void* ptr){
         usleep(250);
         sem_wait(&mutex);
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
-            printf("N_pipe2 reading error\n");
-            exit(-1);
+            printf("N_pipe2 reading1 error\n");
+           // exit(-1);
         }
         
         
