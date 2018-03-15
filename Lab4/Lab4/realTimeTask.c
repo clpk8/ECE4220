@@ -94,6 +94,7 @@ int main(int argc, char **argv)
     }
     
     while(1){
+        clear_button();
         //check button
         usleep(250);
         long check1 = read(timer_fd, &num_periods, sizeof(num_periods));
@@ -114,7 +115,6 @@ int main(int argc, char **argv)
                 printf("N_pipe2 writing error\n");
                 exit(-1);
             }
-            clear_button();
         }
     }
 
