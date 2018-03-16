@@ -52,7 +52,6 @@ void childThread(void* ptr){
         
         //interpolation
         
-        if(info.buttonPressTime.tv_usec != temp->buttonPressTime.tv_usec){
             sem_wait(&mutex2);
             info.buttonPressTime.tv_sec = temp->buttonPressTime.tv_sec;
             info.buttonPressTime.tv_usec = temp->buttonPressTime.tv_usec;
@@ -72,7 +71,6 @@ void childThread(void* ptr){
             printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
             //     sem_post(&mutex2);
             
-        }
         
     }
  
