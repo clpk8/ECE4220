@@ -69,8 +69,8 @@ void childThread(void* ptr){
             printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
             printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
             printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
-            //     sem_post(&mutex2);
-            
+            sem_post(&mutex2);
+        
         
     }
  
@@ -117,7 +117,7 @@ void writeToBuffer(void* ptr){
 }
 int main(int argc, const char * argv[]) {
     sem_init(&mutex, 0, 0);
-    sem_init(&mutex2, 0, 0);
+    sem_init(&mutex2, 0, 1);
     int fd;
     struct timeval GPStime;
     unsigned char temp;
