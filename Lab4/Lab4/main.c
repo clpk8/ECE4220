@@ -53,7 +53,7 @@ void childThread(void* ptr){
         //interpolation
         
         if(info.buttonPressTime.tv_usec != temp->buttonPressTime.tv_usec){
-            
+            sem_wait(&mutex2);
             info.buttonPressTime.tv_sec = temp->buttonPressTime.tv_sec;
             info.buttonPressTime.tv_usec = temp->buttonPressTime.tv_usec;
             
@@ -107,7 +107,7 @@ void writeToBuffer(void* ptr){
         
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
             printf("N_pipe2 reading1 error\n");
-            // exit(-1);
+            sem_post(&mutex2);
         }
 
         
