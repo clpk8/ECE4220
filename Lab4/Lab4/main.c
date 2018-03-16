@@ -45,7 +45,9 @@ void childThread(void* ptr){
             info.GPStimeAfter.tv_usec = globel.GPStimeB4.tv_usec;
             
             
-            
+        }
+        
+        if(info.buttonPressTime.tv_usec != globel.buttonPressTime.tv_usec){
             //interpolation
             
             float x2_x1 = (info.buttonPressTime.tv_sec - info.GPStimeB4.tv_sec)*1000000+(info.buttonPressTime.tv_usec - info.GPStimeB4.tv_usec);
@@ -62,16 +64,15 @@ void childThread(void* ptr){
             printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
             printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
             //     sem_post(&mutex2);
-
+            
             
         }
+
     
         
     }
- 
-
-    
 }
+
 void writeToBuffer(void* ptr){
     //protect and write to buffer
 
