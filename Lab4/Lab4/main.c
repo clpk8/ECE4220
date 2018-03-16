@@ -105,8 +105,8 @@ void writeToBuffer(void* ptr){
         
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
             printf("N_pipe2 reading1 error\n");
-            sem_post(&mutex2);
         }
+         sem_post(&mutex2);
 
         
     }
