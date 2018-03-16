@@ -84,17 +84,18 @@ void writeToBuffer(void* ptr){
     int i = 0;
     while(1){
      //   usleep(250);
-        sem_wait(&mutex);
         //everytime pushbutton come
-        if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
-            printf("N_pipe2 reading1 error\n");
-           // exit(-1);
-        }
-        
-        
-        globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
-        globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
+
         for(i = 0; i < 4; i++){
+            sem_wait(&mutex);
+
+            if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
+                printf("N_pipe2 reading1 error\n");
+                // exit(-1);
+            }
+            
+            globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
+            globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
             pthread_create(&child[i],NULL,(void*)& childThread, NULL);
         }
         for(i = 0; i < 4; i++){
