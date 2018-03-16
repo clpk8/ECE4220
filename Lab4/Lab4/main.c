@@ -39,15 +39,14 @@ void childThread(void* ptr){
         info.buttonPressTime.tv_usec = globel.buttonPressTime.tv_usec;
         
         
-        if(info.GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
+        
+        if(info.buttonPressTime.tv_usec != globel.buttonPressTime.tv_usec && info.GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){
+            
             info.GPSdataAfter = globel.GPSdataB4;
             info.GPStimeAfter.tv_sec = globel.GPStimeB4.tv_sec;
             info.GPStimeAfter.tv_usec = globel.GPStimeB4.tv_usec;
             
             
-        }
-        
-        if(info.buttonPressTime.tv_usec != globel.buttonPressTime.tv_usec){
             //interpolation
             
             float x2_x1 = (info.buttonPressTime.tv_sec - info.GPStimeB4.tv_sec)*1000000+(info.buttonPressTime.tv_usec - info.GPStimeB4.tv_usec);
