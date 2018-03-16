@@ -128,7 +128,6 @@ int main(int argc, const char * argv[]) {
     pthread_create(&thread0,NULL,(void*)& writeToBuffer, NULL);
     gettimeofday(&GPStime, NULL);
     while(1){
-        usleep(250);
         //sem_wait(&mutex);
         if(read(fd, &temp, sizeof(temp)) < 0){
             printf("read N_pipe1 error");

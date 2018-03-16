@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     while(1){
         clear_button();
         //check button
-       // usleep(250);
+        usleep(250);
         long check1 = read(timer_fd, &num_periods, sizeof(num_periods));
         if(check1 < 0){
             printf("Readfile\n");
