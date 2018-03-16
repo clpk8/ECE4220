@@ -28,10 +28,10 @@ typedef struct Buffer{
 buffer globel;
 sem_t mutex, mutex2;
 void childThread(void* ptr){
-    buffer* temp = (buffer*)ptr;
     
     buffer info;
     while(1){
+        sem_wait(&mutex2);
         info.GPSdataB4 = globel.GPSdataB4;
         info.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
         info.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
@@ -51,10 +51,6 @@ void childThread(void* ptr){
         
         
         //interpolation
-        
-            sem_wait(&mutex2);
-            info.buttonPressTime.tv_sec = temp->buttonPressTime.tv_sec;
-            info.buttonPressTime.tv_usec = temp->buttonPressTime.tv_usec;
             
             float x2_x1 = (info.buttonPressTime.tv_sec - info.GPStimeB4.tv_sec)*1000000+(info.buttonPressTime.tv_usec - info.GPStimeB4.tv_usec);
             float y3_y1 = (float)(info.GPSdataAfter) - (float)(info.GPSdataB4);
@@ -69,7 +65,6 @@ void childThread(void* ptr){
             printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
             printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
             printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
-          //  sem_post(&mutex2);
         
         
     }
@@ -95,9 +90,8 @@ void writeToBuffer(void* ptr){
      //   usleep(250);
         //everytime pushbutton come
         for(i = 0; i < 4; i++){
-            pthread_create(&child[i],NULL,(void*)& childThread, (void*) &temp);
-            globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
-            globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
+            pthread_create(&child[i],NULL,(void*)& childThread, NULL);
+
         }
     
     while(1){
@@ -106,7 +100,9 @@ void writeToBuffer(void* ptr){
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
             printf("N_pipe2 reading1 error\n");
         }
-         sem_post(&mutex2);
+        globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
+        globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
+        sem_post(&mutex2);
 
         
     }
