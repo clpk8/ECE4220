@@ -107,7 +107,6 @@ void writeToBuffer(void* ptr){
             globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
             globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
             sem_post(&mutex2);
-            sem_post(&mutex);
         }
  
 
@@ -120,7 +119,7 @@ void writeToBuffer(void* ptr){
     
 }
 int main(int argc, const char * argv[]) {
-    sem_init(&mutex, 0, 1);
+    sem_init(&mutex, 0, 0);
     sem_init(&mutex2, 0, 0);
     sem_init(&mutex3, 0, 1);
 
@@ -138,7 +137,7 @@ int main(int argc, const char * argv[]) {
     pthread_create(&thread0,NULL,(void*)& writeToBuffer, NULL);
     gettimeofday(&GPStime, NULL);
     while(1){
-        sem_wait(&mutex);
+     //   sem_wait(&mutex);
         if(read(fd, &temp, sizeof(temp)) < 0){
             printf("read N_pipe1 error");
         }
