@@ -65,7 +65,8 @@ void childThread(void* ptr){
             printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
             printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
             printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
-        
+            pthread_exit(0);
+
         
     }
  
@@ -89,16 +90,17 @@ void writeToBuffer(void* ptr){
     int i = 0;
      //   usleep(250);
         //everytime pushbutton come
-        for(i = 0; i < 4; i++){
-            pthread_create(&child[i],NULL,(void*)& childThread, NULL);
 
-        }
     
     while(1){
         sem_wait(&mutex);
         
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
             printf("N_pipe2 reading1 error\n");
+        }
+        for(i = 0; i < 4; i++){
+            pthread_create(&child[i],NULL,(void*)& childThread, NULL);
+            
         }
         globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
         globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
