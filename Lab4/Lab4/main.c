@@ -97,22 +97,25 @@ void writeToBuffer(void* ptr){
 
     
     while(1){
-        sem_wait(&mutex);
-        
-        if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
-            printf("N_pipe2 reading1 error\n");
-        }
         for(i = 0; i < 4; i++){
+            sem_wait(&mutex);
+            
+            if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
+                printf("N_pipe2 reading1 error\n");
+            }
+            
             pthread_create(&child[i],NULL,(void*)& childThread, NULL);
             globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
             globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
             sem_post(&mutex2);
         }
+        
+    }
+        
  
 
 
-        
-    }
+    
 
 
     
