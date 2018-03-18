@@ -104,8 +104,9 @@ void writeToBuffer(void* ptr){
             temp.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
             temp.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
 
-        
+        printf("Button time going to the child:%d\n",temp.buttonPressTime.tv_usec);
         printf("whats going to the child:%d\nAnd the i is %d\n\n\n",temp.GPStimeB4.tv_usec,i);
+        
             pthread_create(&child[i],NULL,(void*)& childThread, (void*)&temp);
          //   sem_post(&mutex2);
         
