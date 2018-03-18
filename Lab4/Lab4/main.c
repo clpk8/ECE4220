@@ -24,9 +24,25 @@ typedef struct Buffer{
     struct timeval GPStimeAfter;
 }buffer;
 
+int pipe_print[2];
+
+
 //globel valiarble
 buffer globel;
 sem_t mutex, mutex2,mutex3;
+void print(void* ptr){
+    buffer info;
+    if(read(pipe_print[0], &info, sizeof(info)) != sizeof(info)){
+        printf("reading print error\n");
+        exit(-1);
+    }
+    
+    printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
+    printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
+    printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
+    
+    
+}
 void childThread(void* ptr){
     
     buffer info;
@@ -62,9 +78,11 @@ void childThread(void* ptr){
         
         
         sem_wait(&mutex3);
-        printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
-        printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
-        printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
+        
+        if(write(pipe_print[1], &info, sizeof(info)) != sizeof(info)){
+            printf("pipe error");
+            exit(-1);
+        }
         sem_post(&mutex3);
         
     }
@@ -73,6 +91,13 @@ void childThread(void* ptr){
     
 }
 void writeToBuffer(void* ptr){
+    
+    if(pipe(pipe_print) < 0){
+        printf("pipe creation error");
+        exit(-1);
+    }
+    
+    
     //protect and write to buffer
     
     //get from realtime task
@@ -95,7 +120,6 @@ void writeToBuffer(void* ptr){
     }
     
     while(1){
-       // sem_wait(&mutex);
         
         if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
             printf("N_pipe2 reading1 error\n");
@@ -112,9 +136,9 @@ void writeToBuffer(void* ptr){
     
 }
 int main(int argc, const char * argv[]) {
-    sem_init(&mutex, 0, 0);
     sem_init(&mutex2, 0, 0);
     sem_init(&mutex3, 0, 1);
+
 
     int fd;
     struct timeval GPStime;
@@ -126,11 +150,12 @@ int main(int argc, const char * argv[]) {
     }
     
     //create thread 0
-    pthread_t thread0;
+    pthread_t thread0,thread1;
     pthread_create(&thread0,NULL,(void*)& writeToBuffer, NULL);
+    pthread_create(&thread1,NULL,(void*)& print, NULL);
+
     gettimeofday(&GPStime, NULL);
     while(1){
-        //sem_wait(&mutex);
         if(read(fd, &temp, sizeof(temp)) < 0){
             printf("read N_pipe1 error");
         }
@@ -139,7 +164,6 @@ int main(int argc, const char * argv[]) {
         globel.GPSdataB4 = temp;
         globel.GPStimeB4.tv_sec = GPStime.tv_sec;
         globel.GPStimeB4.tv_usec = GPStime.tv_usec;
-      //  sem_post(&mutex);
         
         
     }
