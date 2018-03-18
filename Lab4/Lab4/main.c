@@ -114,7 +114,7 @@ void writeToBuffer(void* ptr){
 int main(int argc, const char * argv[]) {
     sem_init(&mutex, 0, 0);
     sem_init(&mutex2, 0, 0);
-    sem_init(&mutex2, 0, 1);
+    sem_init(&mutex3, 0, 1);
 
     int fd;
     struct timeval GPStime;
