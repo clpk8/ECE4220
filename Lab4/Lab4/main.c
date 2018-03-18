@@ -26,56 +26,55 @@ typedef struct Buffer{
 
 //globel valiarble
 buffer globel;
-sem_t mutex, mutex2, mutex3;
+sem_t mutex, mutex2;
 void childThread(void* ptr){
     
-    
-    buffer *info;
-    info = (buffer*) ptr;
-    
+    buffer info;
     while(1){
-     //   sem_wait(&mutex2);
-            //   usleep(250);
-            if(info->GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
-                
-                info->GPSdataAfter = globel.GPSdataB4;
-                info->GPStimeAfter.tv_sec = globel.GPStimeB4.tv_sec;
-                info->GPStimeAfter.tv_usec = globel.GPStimeB4.tv_usec;
-                
-                
-                
-                //interpolation
-                
-                float x2_x1 = (info->buttonPressTime.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->buttonPressTime.tv_usec - info->GPStimeB4.tv_usec);
-                float y3_y1 = (float)(info->GPSdataAfter) - (float)(info->GPSdataB4);
-                float x3_x1 = (info->GPStimeAfter.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->GPStimeAfter.tv_usec - info->GPStimeB4.tv_usec);
-                
-                float y2 = (x2_x1 * y3_y1)/x3_x1 + (float)(info->GPSdataB4);
-                
-                info->GPSdataRealTime = y2;
-                
-                sem_wait(&mutex3);
-
-                printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataB4,info->GPStimeB4.tv_sec,info->GPStimeB4.tv_usec);
-                printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataRealTime,info->buttonPressTime.tv_sec,info->buttonPressTime.tv_usec);
-                printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataAfter,info->GPStimeAfter.tv_sec,info->GPStimeAfter.tv_usec);
-                
-                sem_post(&mutex3);
-                
-                pthread_exit(0);
-    
-        }
+        sem_wait(&mutex2);
+        info.GPSdataB4 = globel.GPSdataB4;
+        info.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
+        info.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
+        info.buttonPressTime.tv_sec = globel.buttonPressTime.tv_sec;
+        info.buttonPressTime.tv_usec = globel.buttonPressTime.tv_usec;
         
-
+        while(1){
+            //   usleep(250);
+            if(info.GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
+                break;
+            }
+        }
+        info.GPSdataAfter = globel.GPSdataB4;
+        info.GPStimeAfter.tv_sec = globel.GPStimeB4.tv_sec;
+        info.GPStimeAfter.tv_usec = globel.GPStimeB4.tv_usec;
+        
+        
+        
+        //interpolation
+        
+        float x2_x1 = (info.buttonPressTime.tv_sec - info.GPStimeB4.tv_sec)*1000000+(info.buttonPressTime.tv_usec - info.GPStimeB4.tv_usec);
+        float y3_y1 = (float)(info.GPSdataAfter) - (float)(info.GPSdataB4);
+        float x3_x1 = (info.GPStimeAfter.tv_sec - info.GPStimeB4.tv_sec)*1000000+(info.GPStimeAfter.tv_usec - info.GPStimeB4.tv_usec);
+        
+        float y2 = (x2_x1 * y3_y1)/x3_x1 + (float)(info.GPSdataB4);
+        
+        info.GPSdataRealTime = y2;
+        
+        
+        //   sem_wait(&mutex);
+        printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
+        printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
+        printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
+        
         
     }
- 
-
+    
+    
     
 }
 void writeToBuffer(void* ptr){
     //protect and write to buffer
-
+    
     //get from realtime task
     buffer temp;
     int pipe_N_pipe2;
@@ -88,46 +87,33 @@ void writeToBuffer(void* ptr){
     
     pthread_t child[4];
     int i = 0;
-     //   usleep(250);
-        //everytime pushbutton come
-
-    
-    while(1){
-        
-        sem_wait(&mutex);
-            if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
-                printf("N_pipe2 reading1 error\n");
-                exit(-1);
-            }
-        sem_wait(&mutex2);
-
-            temp.GPSdataB4 = globel.GPSdataB4;
-            temp.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
-            temp.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
-
-        printf("Button time going to the child:%d\n",temp.buttonPressTime.tv_usec);
-        printf("whats going to the child:%d\nAnd the i is %d\n\n\n",temp.GPStimeB4.tv_usec,i);
-        
-            pthread_create(&child[i],NULL,(void*)& childThread, (void*)&temp);
-            sem_post(&mutex2);
-        
-        if(i == 3){
-            i = 0;
-        }
-        else{
-            i++;
-        }
+    //   usleep(250);
+    //everytime pushbutton come
+    for(i = 0; i < 4; i++){
+        pthread_create(&child[i],NULL,(void*)& childThread, NULL);
         
     }
+    
+    while(1){
+        sem_wait(&mutex);
         
- 
+        if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
+            printf("N_pipe2 reading1 error\n");
+        }
+        globel.buttonPressTime.tv_sec = temp.buttonPressTime.tv_sec;
+        globel.buttonPressTime.tv_usec = temp.buttonPressTime.tv_usec;
+        sem_post(&mutex2);
+        
+        
+    }
+    
+    
+    
     
 }
 int main(int argc, const char * argv[]) {
     sem_init(&mutex, 0, 0);
-    sem_init(&mutex2, 0, 1);
-    sem_init(&mutex3, 0, 1);
-
+    sem_init(&mutex2, 0, 0);
     int fd;
     struct timeval GPStime;
     unsigned char temp;
@@ -142,7 +128,7 @@ int main(int argc, const char * argv[]) {
     pthread_create(&thread0,NULL,(void*)& writeToBuffer, NULL);
     gettimeofday(&GPStime, NULL);
     while(1){
-     //   sem_wait(&mutex);
+        //sem_wait(&mutex);
         if(read(fd, &temp, sizeof(temp)) < 0){
             printf("read N_pipe1 error");
         }
@@ -152,7 +138,7 @@ int main(int argc, const char * argv[]) {
         globel.GPStimeB4.tv_sec = GPStime.tv_sec;
         globel.GPStimeB4.tv_usec = GPStime.tv_usec;
         sem_post(&mutex);
-
+        
         
     }
     
