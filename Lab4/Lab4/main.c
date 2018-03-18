@@ -109,7 +109,7 @@ void writeToBuffer(void* ptr){
         printf("whats going to the child:%d\nAnd the i is %d\n\n\n",temp.GPStimeB4.tv_usec,i);
         
             pthread_create(&child[i],NULL,(void*)& childThread, (void*)&temp);
-            sem_wait(&mutex2);
+            sem_post(&mutex2);
         
         if(i == 3){
             i = 0;
