@@ -36,37 +36,37 @@ void childThread(void* ptr){
     while(1){
      //   sem_wait(&mutex2);
         sem_wait(&mutex3);
-        while(1){
             //   usleep(250);
             if(info->GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
-                break;
-            }
+                
+                info->GPSdataAfter = globel.GPSdataB4;
+                info->GPStimeAfter.tv_sec = globel.GPStimeB4.tv_sec;
+                info->GPStimeAfter.tv_usec = globel.GPStimeB4.tv_usec;
+                
+                
+                
+                //interpolation
+                
+                float x2_x1 = (info->buttonPressTime.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->buttonPressTime.tv_usec - info->GPStimeB4.tv_usec);
+                float y3_y1 = (float)(info->GPSdataAfter) - (float)(info->GPSdataB4);
+                float x3_x1 = (info->GPStimeAfter.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->GPStimeAfter.tv_usec - info->GPStimeB4.tv_usec);
+                
+                float y2 = (x2_x1 * y3_y1)/x3_x1 + (float)(info->GPSdataB4);
+                
+                info->GPSdataRealTime = y2;
+                
+                
+                //   sem_wait(&mutex);
+                printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataB4,info->GPStimeB4.tv_sec,info->GPStimeB4.tv_usec);
+                printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataRealTime,info->buttonPressTime.tv_sec,info->buttonPressTime.tv_usec);
+                printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataAfter,info->GPStimeAfter.tv_sec,info->GPStimeAfter.tv_usec);
+                
+                sem_post(&mutex3);
+                
+                pthread_exit(0);
+    
         }
-        info->GPSdataAfter = globel.GPSdataB4;
-        info->GPStimeAfter.tv_sec = globel.GPStimeB4.tv_sec;
-        info->GPStimeAfter.tv_usec = globel.GPStimeB4.tv_usec;
         
-        
-        
-        //interpolation
-            
-            float x2_x1 = (info->buttonPressTime.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->buttonPressTime.tv_usec - info->GPStimeB4.tv_usec);
-            float y3_y1 = (float)(info->GPSdataAfter) - (float)(info->GPSdataB4);
-            float x3_x1 = (info->GPStimeAfter.tv_sec - info->GPStimeB4.tv_sec)*1000000+(info->GPStimeAfter.tv_usec - info->GPStimeB4.tv_usec);
-            
-            float y2 = (x2_x1 * y3_y1)/x3_x1 + (float)(info->GPSdataB4);
-            
-            info->GPSdataRealTime = y2;
-            
-            
-            //   sem_wait(&mutex);
-            printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataB4,info->GPStimeB4.tv_sec,info->GPStimeB4.tv_usec);
-            printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataRealTime,info->buttonPressTime.tv_sec,info->buttonPressTime.tv_usec);
-            printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info->GPSdataAfter,info->GPStimeAfter.tv_sec,info->GPStimeAfter.tv_usec);
-        
-            sem_post(&mutex3);
-
-            pthread_exit(0);
 
         
     }
