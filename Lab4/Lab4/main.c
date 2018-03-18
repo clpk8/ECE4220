@@ -99,10 +99,13 @@ void writeToBuffer(void* ptr){
                 printf("N_pipe2 reading1 error\n");
                 exit(-1);
             }
+        
             temp.GPSdataB4 = globel.GPSdataB4;
             temp.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
             temp.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
 
+        
+        printf("whats going to the child:%d\nAnd the i is %d\n\n\n",temp.GPStimeB4.tv_usec,i);
             pthread_create(&child[i],NULL,(void*)& childThread, (void*)&temp);
          //   sem_post(&mutex2);
         
@@ -116,12 +119,6 @@ void writeToBuffer(void* ptr){
     }
         
  
-
-
-    
-
-
-    
     
 }
 int main(int argc, const char * argv[]) {
