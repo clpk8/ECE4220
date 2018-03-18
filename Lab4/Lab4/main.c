@@ -36,6 +36,7 @@ void childThread(void* ptr){
     while(1){
      //   sem_wait(&mutex2);
             //   usleep(250);
+        sem_post(&mutex2);
             if(info->GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
                 
                 info->GPSdataAfter = globel.GPSdataB4;
@@ -108,7 +109,7 @@ void writeToBuffer(void* ptr){
         printf("whats going to the child:%d\nAnd the i is %d\n\n\n",temp.GPStimeB4.tv_usec,i);
         
             pthread_create(&child[i],NULL,(void*)& childThread, (void*)&temp);
-         //   sem_post(&mutex2);
+            sem_wait(&mutex2);
         
         if(i == 3){
             i = 0;
