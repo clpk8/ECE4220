@@ -34,7 +34,7 @@ void childThread(void* ptr){
     info = (buffer*) ptr;
     
     while(1){
-      //  sem_wait(&mutex2);
+     //   sem_wait(&mutex2);
         sem_wait(&mutex3);
         while(1){
             //   usleep(250);
@@ -95,9 +95,6 @@ void writeToBuffer(void* ptr){
     
     while(1){
         
-        for(i = 0; i < 4; i++){
-         //   sem_wait(&mutex);
-            
             if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
                 printf("N_pipe2 reading1 error\n");
                 exit(-1);
@@ -107,6 +104,13 @@ void writeToBuffer(void* ptr){
             temp.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
 
             pthread_create(&child[i],NULL,(void*)& childThread, (void*)&temp);
+         //   sem_post(&mutex2);
+        
+        if(i == 3){
+            i = 0;
+        }
+        else{
+            i++;
         }
         
     }
