@@ -95,6 +95,7 @@ void writeToBuffer(void* ptr){
     
     while(1){
         
+        sem_wait(&mutex);
             if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
                 printf("N_pipe2 reading1 error\n");
                 exit(-1);
@@ -152,7 +153,7 @@ int main(int argc, const char * argv[]) {
         globel.GPSdataB4 = temp;
         globel.GPStimeB4.tv_sec = GPStime.tv_sec;
         globel.GPStimeB4.tv_usec = GPStime.tv_usec;
-       // sem_post(&mutex);
+        sem_post(&mutex);
 
         
     }
