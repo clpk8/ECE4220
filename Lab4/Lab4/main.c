@@ -36,7 +36,6 @@ void childThread(void* ptr){
     while(1){
      //   sem_wait(&mutex2);
             //   usleep(250);
-        sem_post(&mutex2);
             if(info->GPStimeB4.tv_usec != globel.GPStimeB4.tv_usec){//when different
                 
                 info->GPSdataAfter = globel.GPSdataB4;
@@ -100,7 +99,8 @@ void writeToBuffer(void* ptr){
                 printf("N_pipe2 reading1 error\n");
                 exit(-1);
             }
-        
+        sem_wait(&mutex2);
+
             temp.GPSdataB4 = globel.GPSdataB4;
             temp.GPStimeB4.tv_sec = globel.GPStimeB4.tv_sec;
             temp.GPStimeB4.tv_usec = globel.GPStimeB4.tv_usec;
@@ -125,7 +125,7 @@ void writeToBuffer(void* ptr){
 }
 int main(int argc, const char * argv[]) {
     sem_init(&mutex, 0, 0);
-    sem_init(&mutex2, 0, 0);
+    sem_init(&mutex2, 0, 1);
     sem_init(&mutex3, 0, 1);
 
     int fd;
