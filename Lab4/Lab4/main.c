@@ -32,14 +32,17 @@ buffer globel;
 sem_t mutex, mutex2,mutex3;
 void print(void* ptr){
     buffer info;
-    if(read(pipe_print[0], &info, sizeof(info)) != sizeof(info)){
-        printf("reading print error\n");
-        exit(-1);
+    while(1){
+        if(read(pipe_print[0], &info, sizeof(info)) != sizeof(info)){
+            printf("reading print error\n");
+            exit(-1);
+        }
+        
+        printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
+        printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
+        printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
     }
-    
-    printf("GPS before:      %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataB4,info.GPStimeB4.tv_sec,info.GPStimeB4.tv_usec);
-    printf("GPS during event:%lf, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataRealTime,info.buttonPressTime.tv_sec,info.buttonPressTime.tv_usec);
-    printf("GPS after:       %u, time in second:%ld, time in microsecond:%d\n\n",info.GPSdataAfter,info.GPStimeAfter.tv_sec,info.GPStimeAfter.tv_usec);
+
     
     
 }
