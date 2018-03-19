@@ -122,13 +122,13 @@ void writeToBuffer(void* ptr){
     
     while(1){
         
-        
-        if(read(pipe_N_pipe2,&temp,sizeof(temp)) != sizeof(temp)){
-            printf("N_pipe2 reading1 error\n");
-        }
-        
+
         for(i = 0; i < 4; i++){
             
+            
+            if(read(pipe_N_pipe2,&temp[i],sizeof(temp[i])) != sizeof(temp[i])){
+                printf("N_pipe2 reading1 error\n");
+            }
             
             globel.buttonPressTime.tv_sec = temp[i].buttonPressTime.tv_sec;
             globel.buttonPressTime.tv_usec = temp[i].buttonPressTime.tv_usec;
