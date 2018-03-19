@@ -84,6 +84,7 @@ void childThread(void* ptr){
             exit(-1);
         }
         sem_post(&mutex3);
+        pthread_exit(0);
         
     }
     
@@ -113,16 +114,10 @@ void writeToBuffer(void* ptr){
     pthread_t child[4];
     
     int i = 0;
-    //   usleep(250);
     //everytime pushbutton come
-    for(i = 0; i < 4; i++){
-        pthread_create(&child[i],NULL,(void*)& childThread, NULL);
-        
-    }
     
     while(1){
-        
-
+    
         for(i = 0; i < 4; i++){
             
             
