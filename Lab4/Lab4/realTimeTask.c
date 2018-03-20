@@ -106,11 +106,15 @@ int main(int argc, char **argv)
             puts("MISSED WINDOW2\n");
         }
         if(check_button()){
+            //print x to indicate
             printf("x\n");
+            
+            //get the time, and transfer the struct
             gettimeofday(&buttonPressTime, NULL);
             globel.buttonPressTime.tv_sec = buttonPressTime.tv_sec;
             globel.buttonPressTime.tv_usec = buttonPressTime.tv_usec;
             printf("Time transfered in second:%ld and in usec:%d\n\n",globel.buttonPressTime.tv_sec, globel.buttonPressTime.tv_usec);
+            //write to pipe
             if(write(pipe_N_pipe2,&globel,sizeof(globel)) != sizeof(globel)){
                 printf("N_pipe2 writing error\n");
                 exit(-1);
