@@ -69,11 +69,11 @@ int main(int argc, const char * argv[]) {
 
     /*Accessing network interface information by
      passing address using ioctl.*/
-//    ioctl(sock, SIOCGIFADDR, &ifr);
+    ioctl(sock, SIOCGIFADDR, &ifr);
 
-  //  strcpy(ip_address,inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+    strcpy(ip_address,inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 
-  //  printf("System IP Address is: %s\n",ip_address);
+    printf("System IP Address is: %s\n",ip_address);
 
 
     printf("1");
