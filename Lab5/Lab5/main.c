@@ -71,7 +71,7 @@ int main(int argc, const char * argv[]) {
     printf("System IP Address is: %s\n",ip_address);
 
 
-
+    printf("1");
 
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
