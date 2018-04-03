@@ -35,9 +35,9 @@ int main(int argc, const char * argv[]) {
 
     /*AF_INET - to define IPv4 Address type.*/
     ifr.ifr_addr.sa_family = AF_INET;
-    /*eth0 - define the ifr_name - port name
+    /*wlan0 - define the ifr_name - port name
      where network attached.*/
-    memcpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);
+    memcpy(ifr.ifr_name, "wlan0", IFNAMSIZ-1);
     
     
     if(argc < 2){
@@ -71,6 +71,8 @@ int main(int argc, const char * argv[]) {
     printf("System IP Address is: %s\n",ip_address);
     
     
+    
+    
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
         error("binding");
@@ -84,7 +86,18 @@ int main(int argc, const char * argv[]) {
 
     fromlen = sizeof(struct sockaddr_in);    // size of structure
 
-    
+    while(1){
+        
+        bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
+        n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&clint, &fromlen);
+        if (n < 0)
+            error("recvfrom");
+        
+        printf("Message received is %s", buf);
+        
+        
+        
+    }
     
     
     
