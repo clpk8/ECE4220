@@ -19,6 +19,11 @@
 #include <arpa/inet.h>
 
 #define MSG_SIZE 40            // message size
+void error(const char *msg)
+{
+    perror(msg);
+    exit(0);
+}
 
 
 int main(int argc, const char * argv[]) {
