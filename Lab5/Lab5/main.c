@@ -109,25 +109,25 @@ int main(int argc, const char * argv[]) {
                 n = sendto(sock, word, 17, 0, (struct sockaddr *)&clint, fromlen);
                 if (n  < 0)
                     error("sendto");
-                
+
             }
         }
-        
+
         else if(strcmp(buf,"VOTE") == 0){
             int num = rand() % 10;
-            
+
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s",buf);
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-            
+
             n = sendto(sock, buf, 32, 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
-            
+
             do{
                 n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
-                
-                if(buf[0] == '#'){
+
+                if(buf[0] == '#'){
                     printf("Message received is %s", buf);
                     const char s[2] = "-";
                     char* token = strtok(buf,s);
@@ -137,15 +137,15 @@ int main(int argc, const char * argv[]) {
                     printf("Token test %s\n",token);
                 }
             }while(n > 0);
-            
-            
+
+
             printf("END test\n");
-            
+
         }
 
-        
-        
-        
+
+
+
 
 
 
