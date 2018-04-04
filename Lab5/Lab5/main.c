@@ -37,10 +37,7 @@ int main(int argc, const char * argv[]) {
     struct ifreq ifr;
 
     char ip_address[13];
-    char vote[4];
-    char whois[5];
-    strcpy(vote,"VOTE");
-    strcpy(whois,"WHOIS");
+
     /*AF_INET - to define IPv4 Address type.*/
     ifr.ifr_addr.sa_family = AF_INET;
     /*wlan0 - define the ifr_name - port name
@@ -101,7 +98,7 @@ int main(int argc, const char * argv[]) {
             error("recvfrom");
 
         printf("Message received is %s", buf);
-        if (strcmp(buf,whois) == 0){
+        if (strcmp(buf,"WHOIS\n") == 0){
             if(masterFlag == 1){
                 char name[9], word[10];
                 strcpy(name,"ChunBin: ");
@@ -120,7 +117,7 @@ int main(int argc, const char * argv[]) {
             
         }
 
-        else if(strcmp(buf,vote) == 0){
+        else if(strcmp(buf,"VOTE\n") == 0){
             int num = rand() % 10;
 
             sprintf(buf, "# %s %d",ip_address,num);
