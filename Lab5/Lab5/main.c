@@ -124,7 +124,7 @@ int main(int argc, const char * argv[]) {
             printf("String Send to broad cast is %s",buf);
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
 
-            n = sendto(sock, buf, 32, 0,(struct sockaddr *)&broadcast, fromlen);
+            n = sendto(sock, buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
 
