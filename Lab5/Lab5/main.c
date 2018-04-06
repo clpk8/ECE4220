@@ -93,8 +93,10 @@ int main(int argc, const char * argv[]) {
     token = strtok(temp, s);
     printf("IP token test %s\n",token);
     myMachine = atoi(token);
+    char tempIP[13];
+    strcpy(tempIP, ip_address);
     
-    
+    printf("MY ip is %s",ip_address);
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
         //        error("binding");
@@ -121,8 +123,6 @@ int main(int argc, const char * argv[]) {
                 char name[9], word[10];
                 strcpy(name,"ChunBin: ");
                 strcpy(word," is master");
-                char tempIP[13];
-                strcpy(tempIP, ip_address);
                 strcat(name, tempIP);
                 strcat(name, word);
                 n = sendto(sock, &name, strlen(name), 0, (struct sockaddr *)&clint, fromlen);
