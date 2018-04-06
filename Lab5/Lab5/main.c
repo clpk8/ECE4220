@@ -172,7 +172,7 @@ int main(int argc, const char * argv[]) {
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
-
+                token = strtok(temp, s);
                 printf("Token test2 %s\n",token);
                 int machineNum = atoi(token);
                 
