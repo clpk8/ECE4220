@@ -166,13 +166,12 @@ int main(int argc, const char * argv[]) {
                 token = strtok(NULL,s);
                 printf("Token test1 %s\n",token);
                 int ranNum = atoi(token);
-                strcpy(temp, buf);
+              //  strcpy(temp, buf);
 
                 token = strtok(temp,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
-                token = strtok(c, s);
                 printf("Token test2 %s\n",token);
                 int machineNum = atoi(token);
                 
