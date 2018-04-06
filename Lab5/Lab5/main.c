@@ -18,6 +18,8 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 int masterFlag = 0;
+int num;
+int myMachine;
 #define MSG_SIZE 40            // message size
 void error(const char *msg)
 {
@@ -79,7 +81,13 @@ int main(int argc, const char * argv[]) {
     strcpy(ip_address,inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 
     printf("System IP Address is: %s\n",ip_address);
-
+    const char c[2] = ".";
+    char* token = strtok(buf,c);
+    token = strtok(NULL,c);
+    token = strtok(NULL,c);
+    token = strtok(NULL,c);
+    printf("IP token test\n %s\n",token);
+    myMachine = atoi(token);
 
     printf("1");
 
@@ -123,7 +131,7 @@ int main(int argc, const char * argv[]) {
         }
 
         else if(strcmp(buf,"VOTE\n") == 0){
-            int num = rand() % 10;
+            num = rand() % 10;
 
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s",buf);
@@ -143,14 +151,37 @@ int main(int argc, const char * argv[]) {
                 
                 n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
 
-                    printf("Message received is %s", buf);
-                    const char s[2] = " ";
-                    char* token = strtok(buf,s);
-                
-                    token = strtok(NULL,s);
-                    token = strtok(NULL,s);
+                printf("Message received is %s", buf);
+                const char s[2] = " ";
+                const char c[2] = ".";
 
-                    printf("Token test %s\n",token);
+                char* token = strtok(buf,s);
+                
+                token = strtok(NULL,s);
+                token = strtok(NULL,s);
+                printf("Token test1 %s\n",token);
+                int ranNum = atoi(token);
+                token = strtok(buf,c);
+                token = strtok(NULL,c);
+                token = strtok(NULL,c);
+                token = strtok(NULL,c);
+                printf("Token test2 %s\n",token);
+                int machineNum = atoi(token);
+                
+                if(ranNum < num){
+                    masterFlag = 1;
+                }
+                else{
+                    masterFlag = 0;
+                }
+                
+                if(ranNum == num){
+                    if(machineNum < myMachine)
+                        masterFlag = 1;
+                    else
+                        masterFlag = 0;
+                }
+                
                 }
                 printf("END test\n");
 
