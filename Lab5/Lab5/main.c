@@ -114,7 +114,7 @@ int main(int argc, const char * argv[]) {
             else{
                 printf("I'm not master\n");
             }
-            
+
         }
 
         else if(strcmp(buf,"VOTE\n") == 0){
@@ -124,12 +124,15 @@ int main(int argc, const char * argv[]) {
             printf("String Send to broad cast is %s",buf);
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
             broadcast.sin_family = AF_INET;
-            
+
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
 
+
+            printf("IM here1\n");
             do{
+                printf("IM here2\n");
                 n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
 
                 if(buf[0] == '#'){
