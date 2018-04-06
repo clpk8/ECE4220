@@ -82,7 +82,9 @@ int main(int argc, const char * argv[]) {
 
     printf("System IP Address is: %s\n",ip_address);
     const char c[2] = ".";
-    char* token = strtok(ip_address,c);
+    char temp[13];
+    strcpy(temp, ip_address);
+    char* token = strtok(temp,c);
     token = strtok(NULL,c);
     token = strtok(NULL,c);
     token = strtok(NULL,c);
