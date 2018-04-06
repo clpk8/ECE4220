@@ -193,7 +193,7 @@ int main(int argc, const char * argv[]) {
             }
             
         }
-        printf("END test\n");
+        printf("IP is:%s\n",ip_address);
         
         
         
