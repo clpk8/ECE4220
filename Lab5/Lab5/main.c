@@ -153,7 +153,7 @@ int main(int argc, const char * argv[]) {
             printf("IM here1\n");
         }
         else if(buf[0] == '#'){
-            bzero(buffer,MSG_SIZE);
+            bzero(buf,MSG_SIZE);
             n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
             
             char temp[MSG_SIZE];
