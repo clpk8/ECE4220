@@ -66,6 +66,11 @@ int main(int argc, const char * argv[]) {
     server.sin_addr.s_addr = INADDR_ANY;        // IP address of the machine on which
     // the server is running
     server.sin_port = htons(atoi(argv[1]));    // port number
+    
+    broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
+    broadcast.sin_family = AF_INET;
+    server.sin_port = htons(atoi(argv[1]));    // port number
+    
 
     /*Accessing network interface information by
      passing address using ioctl.*/
@@ -122,47 +127,32 @@ int main(int argc, const char * argv[]) {
 
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s",buf);
-            broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-            broadcast.sin_family = AF_INET;
-            server.sin_port = htons(atoi(argv[1]));    // port number
-
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
 
 
             printf("IM here1\n");
-            do{
-                printf("IM here2\n");
+        }
+            else if(buf[0] == '#'){
+                
                 n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
 
-                if(buf[0] == '#'){
                     printf("Message received is %s", buf);
-                    const char s[2] = "-";
+                    const char s[2] = " ";
                     char* token = strtok(buf,s);
-                    while(token != NULL){
-                        token = strtok(NULL,s);
-                    }
+                
+                    token = strtok(NULL,s);
+                    token = strtok(NULL,s);
+
                     printf("Token test %s\n",token);
                 }
-            }while(n > 0);
+                printf("END test\n");
 
-
-            printf("END test\n");
-
-        }
-
-
-
-
+        
 
 
 
     }
-
-
-
-
-
     return 0;
 }
