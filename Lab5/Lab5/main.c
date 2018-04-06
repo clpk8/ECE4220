@@ -117,6 +117,7 @@ int main(int argc, const char * argv[]) {
         printf("Message received is %s", buf);
         if (strcmp(buf,"WHOIS\n") == 0){
             if(masterFlag == 1){
+                printf("My IP inside is %s",ip_address);
                 char name[9], word[10];
                 strcpy(name,"ChunBin: ");
                 strcpy(word," is master");
@@ -124,7 +125,6 @@ int main(int argc, const char * argv[]) {
                 strcpy(tempIP, ip_address);
                 strcat(name, tempIP);
                 strcat(name, word);
-                printf("My IP inside is %s",ip_address);
                 n = sendto(sock, &name, strlen(name), 0, (struct sockaddr *)&clint, fromlen);
                 if (n  < 0)
                     error("sendto");
