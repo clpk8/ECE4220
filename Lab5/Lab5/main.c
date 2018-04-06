@@ -90,8 +90,8 @@ int main(int argc, const char * argv[]) {
         strcpy(temp, token);
         token = strtok(NULL,c);
     }
-    token = strtok(num, s);
-    printf("IP token test\n %s\n",token);
+    token = strtok(temp, s);
+    printf("IP token test %s\n",token);
     myMachine = atoi(token);
     
     //   printf("1");
