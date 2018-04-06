@@ -82,7 +82,8 @@ int main(int argc, const char * argv[]) {
 
     printf("System IP Address is: %s\n",ip_address);
     const char c[2] = ".";
-    char* token = strtok(buf,c);
+    char* token = strtok(ip_address,c);
+    token = strtok(NULL,c);
     token = strtok(NULL,c);
     token = strtok(NULL,c);
     printf("IP token test\n %s\n",token);
@@ -163,6 +164,8 @@ int main(int argc, const char * argv[]) {
                 token = strtok(buf,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
+                token = strtok(NULL,c);
+
                 printf("Token test2 %s\n",token);
                 int machineNum = atoi(token);
                 
