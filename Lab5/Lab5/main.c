@@ -135,6 +135,7 @@ int main(int argc, const char * argv[]) {
         }
         
         else if(strcmp(buf,"VOTE\n") == 0){
+            bzero(buf,MSG_SIZE);
             num = rand() % 10;
             
             sprintf(buf, "# %s %d",ip_address,num);
@@ -152,7 +153,7 @@ int main(int argc, const char * argv[]) {
             printf("IM here1\n");
         }
         else if(buf[0] == '#'){
-            
+            bzero(buffer,MSG_SIZE);
             n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
             
             char temp[MSG_SIZE];
