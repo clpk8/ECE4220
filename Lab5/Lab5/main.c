@@ -40,7 +40,7 @@ int main(int argc, const char * argv[]) {
     socklen_t fromlen;
     struct ifreq ifr;
     
-    char ip_address[13];
+    const char ip_address[13];
     
     /*AF_INET - to define IPv4 Address type.*/
     ifr.ifr_addr.sa_family = AF_INET;
@@ -148,7 +148,6 @@ int main(int argc, const char * argv[]) {
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
-            
             
             printf("IM here1\n");
         }
