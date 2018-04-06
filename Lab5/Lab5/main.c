@@ -40,7 +40,7 @@ int main(int argc, const char * argv[]) {
     socklen_t fromlen;
     struct ifreq ifr;
     
-    const char ip_address[13];
+    char ip_address[13];
     
     /*AF_INET - to define IPv4 Address type.*/
     ifr.ifr_addr.sa_family = AF_INET;
@@ -124,6 +124,7 @@ int main(int argc, const char * argv[]) {
                 strcpy(tempIP, ip_address);
                 strcat(name, tempIP);
                 strcat(name, word);
+                printf("My IP inside is %s",ip_address);
                 n = sendto(sock, &name, strlen(name), 0, (struct sockaddr *)&clint, fromlen);
                 if (n  < 0)
                     error("sendto");
