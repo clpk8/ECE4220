@@ -94,7 +94,6 @@ int main(int argc, const char * argv[]) {
     printf("IP token test %s\n",token);
     myMachine = atoi(token);
     
-    //   printf("1");
     
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
@@ -124,7 +123,7 @@ int main(int argc, const char * argv[]) {
                 
                 strcat(name, ip_address);
                 strcat(name, word);
-                n = sendto(sock, &word, strlen(word), 0, (struct sockaddr *)&clint, fromlen);
+                n = sendto(sock, &name, strlen(name), 0, (struct sockaddr *)&clint, fromlen);
                 if (n  < 0)
                     error("sendto");
                 
