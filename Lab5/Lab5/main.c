@@ -153,17 +153,22 @@ int main(int argc, const char * argv[]) {
                 
                 n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
 
+                char temp[MSG_SIZE];
+                strcpy(temp, buf);
+
                 printf("Message received is %s", buf);
                 const char s[2] = " ";
                 const char c[2] = ".";
 
-                char* token = strtok(buf,s);
+                char* token = strtok(temp,s);
                 
                 token = strtok(NULL,s);
                 token = strtok(NULL,s);
                 printf("Token test1 %s\n",token);
                 int ranNum = atoi(token);
-                token = strtok(buf,c);
+                strcpy(temp, buf);
+
+                token = strtok(temp,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
