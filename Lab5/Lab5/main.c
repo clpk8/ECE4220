@@ -120,8 +120,9 @@ int main(int argc, const char * argv[]) {
                 char name[9], word[10];
                 strcpy(name,"ChunBin: ");
                 strcpy(word," is master");
-                
-                strcat(name, ip_address);
+                char tempIP[13];
+                strcpy(tempIP, ip_address);
+                strcat(name, tempIP);
                 strcat(name, word);
                 n = sendto(sock, &name, strlen(name), 0, (struct sockaddr *)&clint, fromlen);
                 if (n  < 0)
