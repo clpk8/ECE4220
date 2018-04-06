@@ -123,7 +123,8 @@ int main(int argc, const char * argv[]) {
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s",buf);
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-
+            broadcast.sin_family = AF_INET;
+            
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
