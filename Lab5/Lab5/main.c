@@ -85,7 +85,6 @@ int main(int argc, const char * argv[]) {
     char* token = strtok(buf,c);
     token = strtok(NULL,c);
     token = strtok(NULL,c);
-    token = strtok(NULL,c);
     printf("IP token test\n %s\n",token);
     myMachine = atoi(token);
 
@@ -162,7 +161,6 @@ int main(int argc, const char * argv[]) {
                 printf("Token test1 %s\n",token);
                 int ranNum = atoi(token);
                 token = strtok(buf,c);
-                token = strtok(NULL,c);
                 token = strtok(NULL,c);
                 token = strtok(NULL,c);
                 printf("Token test2 %s\n",token);
