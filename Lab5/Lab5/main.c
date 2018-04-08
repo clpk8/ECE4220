@@ -129,6 +129,8 @@ int main(int argc, const char * argv[]) {
                 if (n  < 0)
                     error("sendto");
                 
+                bzero(name, sizeof(name));
+                
             }
             else{
                 printf("I'm not master\n");
@@ -155,6 +157,7 @@ int main(int argc, const char * argv[]) {
         }
         else if(buf[0] == '#'){
             bzero(buf,MSG_SIZE);
+            //test take next line off
             n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
             
             char temp[MSG_SIZE];
@@ -184,15 +187,17 @@ int main(int argc, const char * argv[]) {
                 masterFlag = 1;
             }
             else{
-                masterFlag = 0;
-            }
-            
-            if(ranNum == num){
-                if(machineNum < myMachine)
-                    masterFlag = 1;
+                if(ranNum == num){
+                    if(machineNum < myMachine)
+                        masterFlag = 1;
+                    else
+                        masterFlag = 0;
+                }
                 else
                     masterFlag = 0;
             }
+            
+            
             
         }
         printf("IP is:%s\n",ip_address);
