@@ -193,7 +193,7 @@ int main(int argc, const char * argv[]) {
             }
             else{
                 if(ranNum == num){
-                    if(machineNum <= myMachine){
+                    if(machineNum < myMachine){
                         masterFlag = 1;
                         printf("IM MASTER\n");
                     }
