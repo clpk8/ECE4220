@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include <net/if.h>
 #include <arpa/inet.h>
+#include <time.h>
 int masterFlag = 0;
 int num;
 int myMachine;
@@ -31,7 +32,7 @@ void error(const char *msg)
 
 
 int main(int argc, const char * argv[]) {
-    
+    srand(time(NULL));
     int sock, length, n;
     int boolval = 1; //use for socket option, to allow broadcast
     //receive should be empty, it will been fill up
@@ -143,7 +144,7 @@ int main(int argc, const char * argv[]) {
         
         else if(strcmp(buf,"VOTE\n") == 0){
             bzero(buf,MSG_SIZE);
-            num = rand() % 10;
+            num = 1 + rand() % 10;
             
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s\n",buf);
