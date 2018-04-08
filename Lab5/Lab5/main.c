@@ -94,9 +94,9 @@ int main(int argc, const char * argv[]) {
     printf("IP token test %s\n",token);
     myMachine = atoi(token);
     char tempIP[13];
-    char name[9], word[10];
-    strcpy(name,"ChunBin: ");
-    strcpy(word," is master");
+    const char *name = "ChunBin: ";
+    const char *word = " is master!";
+
     
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
@@ -125,7 +125,7 @@ int main(int argc, const char * argv[]) {
         if (strcmp(buf,"WHOIS\n") == 0){
             if(masterFlag == 1){
                 bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
-                printf("My IP inside is %s",ip_address);
+                printf("My IP inside is %s\n",ip_address);
                 strcat(buf,name);
                 strcat(buf, tempIP);
                 strcat(buf, word);
@@ -147,7 +147,7 @@ int main(int argc, const char * argv[]) {
             num = rand() % 10;
             
             sprintf(buf, "# %s %d",ip_address,num);
-            printf("String Send to broad cast is %s",buf);
+            printf("String Send to broad cast is %s\n",buf);
             
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
             broadcast.sin_family = AF_INET;
