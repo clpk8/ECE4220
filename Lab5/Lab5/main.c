@@ -72,7 +72,7 @@ int main(int argc, const char * argv[]) {
     // the server is running
     server.sin_port = htons(atoi(argv[1]));    // port number
     
-
+    
     
     /*Accessing network interface information by
      passing address using ioctl.*/
@@ -89,12 +89,11 @@ int main(int argc, const char * argv[]) {
         token = strtok(NULL,c);
     }
     token = strtok(temp, s);
-    printf("IP token test %s\n",token);
     myMachine = atoi(token);
     char tempIP[13];
     const char *name = "ChunBin: ";
     const char *word = " is master!";
-
+    
     
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
@@ -117,7 +116,7 @@ int main(int argc, const char * argv[]) {
     while(1){
         strcpy(tempIP, ip_address);
         
-        printf("MY ip is %s",ip_address);
+  //      printf("MY ip is %s",ip_address);
         
         
         bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
@@ -125,11 +124,11 @@ int main(int argc, const char * argv[]) {
         if (n < 0)
             error("recvfrom");
         
-        printf("Message received is %s", buf);
+        printf("Message received is %s\n", buf);
         if (strcmp(buf,"WHOIS\n") == 0){
             if(masterFlag == 1){
                 bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
-                printf("My IP inside is %s\n",ip_address);
+             //   printf("My IP inside is %s\n",ip_address);
                 strcat(buf,name);
                 strcat(buf, tempIP);
                 strcat(buf, word);
@@ -155,7 +154,7 @@ int main(int argc, const char * argv[]) {
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
             broadcast.sin_family = AF_INET;
             broadcast.sin_port = htons(atoi(argv[1]));    // port number
-
+            
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
@@ -167,7 +166,7 @@ int main(int argc, const char * argv[]) {
             char temp[MSG_SIZE];
             strcpy(temp, buf);
             
-            printf("Message received is %s", buf);
+         //   printf("Message received is %s\n", buf);
             char tempNum[20];
             char* token = strtok(temp,s);
             while(token != NULL){
@@ -189,31 +188,30 @@ int main(int argc, const char * argv[]) {
             
             if(ranNum < num){
                 masterFlag = 1;
-                printf("IM MASTER\n");
+             //   printf("IM MASTER\n");
             }
             else{
                 if(ranNum == num){
                     if(machineNum < myMachine){
                         masterFlag = 1;
-                        printf("IM MASTER\n");
+                    //    printf("IM MASTER\n");
                     }
-
+                    
                     else{
                         masterFlag = 0;
-
+                        
                     }
                 }
                 else{
                     masterFlag = 0;
-                    printf("second else!\n");
+                  //  printf("second else!\n");
                 }
-
+                
             }
             
             
             
         }
-        printf("IP is:%s\n",ip_address);
         
         
         
