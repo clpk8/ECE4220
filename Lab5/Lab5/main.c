@@ -133,7 +133,6 @@ int main(int argc, const char * argv[]) {
                 if (n  < 0)
                     error("sendto");
                 
-                bzero(name, sizeof(name));
                 
             }
             else{
