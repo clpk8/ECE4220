@@ -111,6 +111,12 @@ int main(int argc, const char * argv[]) {
         exit(-1);
     }
     
+    broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
+    broadcast.sin_family = AF_INET;
+    broadcast.sin_port = htons(atoi(argv[1]));    // port number
+    
+    
+    
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
         strcpy(tempIP, ip_address);
