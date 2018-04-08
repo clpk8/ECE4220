@@ -94,9 +94,10 @@ int main(int argc, const char * argv[]) {
     printf("IP token test %s\n",token);
     myMachine = atoi(token);
     char tempIP[13];
-    strcpy(tempIP, ip_address);
+    char name[9], word[10];
+    strcpy(name,"ChunBin: ");
+    strcpy(word," is master");
     
-    printf("MY ip is %s",ip_address);
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
         //        error("binding");
@@ -110,6 +111,10 @@ int main(int argc, const char * argv[]) {
     
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
+        strcpy(tempIP, ip_address);
+        
+        printf("MY ip is %s",ip_address);
+        
         
         bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
         n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&clint, &fromlen);
@@ -119,13 +124,12 @@ int main(int argc, const char * argv[]) {
         printf("Message received is %s", buf);
         if (strcmp(buf,"WHOIS\n") == 0){
             if(masterFlag == 1){
+                bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
                 printf("My IP inside is %s",ip_address);
-                char name[9], word[10];
-                strcpy(name,"ChunBin: ");
-                strcpy(word," is master");
-                strcat(name, tempIP);
-                strcat(name, word);
-                n = sendto(sock, &name, strlen(name), 0, (struct sockaddr *)&clint, fromlen);
+                strcat(buf,name);
+                strcat(buf, tempIP);
+                strcat(buf, word);
+                n = sendto(sock, &buf, MSG_SIZE, 0, (struct sockaddr *)&clint, fromlen);
                 if (n  < 0)
                     error("sendto");
                 
