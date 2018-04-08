@@ -74,8 +74,9 @@ int main(int argc, const char * argv[]) {
     
     broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
     broadcast.sin_family = AF_INET;
-    server.sin_port = htons(atoi(argv[1]));    // port number
+    broadcast.sin_port = htons(atoi(argv[1]));    // port number
     
+
     
     /*Accessing network interface information by
      passing address using ioctl.*/
@@ -118,7 +119,7 @@ int main(int argc, const char * argv[]) {
         
         
         bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
-        n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&clint, &fromlen);
+        n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&broadcast, &fromlen);
         if (n < 0)
             error("recvfrom");
         
@@ -149,9 +150,6 @@ int main(int argc, const char * argv[]) {
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s\n",buf);
             
-            broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-            broadcast.sin_family = AF_INET;
-            broadcast.sin_port = htons(atoi(argv[1]));    // port number
             
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
