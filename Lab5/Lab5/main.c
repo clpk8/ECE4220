@@ -72,10 +72,6 @@ int main(int argc, const char * argv[]) {
     // the server is running
     server.sin_port = htons(atoi(argv[1]));    // port number
     
-    broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-    broadcast.sin_family = AF_INET;
-    broadcast.sin_port = htons(atoi(argv[1]));    // port number
-    
 
     
     /*Accessing network interface information by
@@ -156,6 +152,9 @@ int main(int argc, const char * argv[]) {
             sprintf(buf, "# %s %d",ip_address,num);
             printf("String Send to broad cast is %s\n",buf);
             
+            broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
+            broadcast.sin_family = AF_INET;
+            broadcast.sin_port = htons(atoi(argv[1]));    // port number
             
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
