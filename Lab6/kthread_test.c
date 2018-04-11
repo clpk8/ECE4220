@@ -18,8 +18,14 @@
 #include <linux/time.h>		// for using jiffies 
 #include <linux/timer.h>
 #include <linux/delay.h>
+#include <asm/io.h>
 
 MODULE_LICENSE("GPL");
+//base pointer
+basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+sel = basePtr;
+set = basePtr;
+
 
 // structure for the kthread.
 static struct task_struct *kthread1;
@@ -46,12 +52,16 @@ int kthread_fn(void *ptr)
 	// and then leave.
 	while(1)
 	{
+        set = set + (0x001c / 4);    //GPIO Pin Output Set 0
+        *set = *set & 0x40;
 		msleep(1000);	// good for > 10 ms
 		//msleep_interruptible(1000); // good for > 10 ms
 		//udelay(unsigned long usecs);	// good for a few us (micro s)
 		//usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
 		
-		
+        set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
+        *set = *set & 0x40;
+        msleep(1000);
 		// In an infinite loop, you should check if the kthread_stop
 		// function has been called (e.g. in clean up module). If so,
 		// the kthread should exit. If this is not done, the thread
@@ -73,7 +83,13 @@ int thread_init(void)
 	char kthread_name[11]="my_kthread";	// try running  ps -ef | grep my_kthread
 										// when the thread is active.
 	printk("In init module\n");
-    	    
+    //declear pointers
+    unsigned long *basePtr, *set, *sel;
+    
+
+    
+    &sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
+
     kthread1 = kthread_create(kthread_fn, NULL, kthread_name);
 	
     if((kthread1))	// true if kthread creation is successful
