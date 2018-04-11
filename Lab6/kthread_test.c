@@ -23,10 +23,7 @@
 MODULE_LICENSE("GPL");
 //base pointer
 
-unsigned long *basePtr, *set, *sel;
-basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-sel = basePtr;
-set = basePtr;
+
 
 
 // structure for the kthread.
@@ -35,6 +32,12 @@ static struct task_struct *kthread1;
 // Function to be associated with the kthread; what the kthread executes.
 int kthread_fn(void *ptr)
 {
+    unsigned long *basePtr, *set, *sel;
+    basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+    sel = basePtr;
+    set = basePtr;
+    &sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
+
 	unsigned long j0, j1;
 	int count = 0;
 
@@ -85,12 +88,8 @@ int thread_init(void)
 	char kthread_name[11]="my_kthread";	// try running  ps -ef | grep my_kthread
 										// when the thread is active.
 	printk("In init module\n");
-    //declear pointers
-    unsigned long *basePtr, *set, *sel;
-    
 
     
-    &sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
 
     kthread1 = kthread_create(kthread_fn, NULL, kthread_name);
 	
