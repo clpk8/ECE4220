@@ -36,7 +36,7 @@ int kthread_fn(void *ptr)
     basePtr = (unsigned long*)ioremap(0x3F200000,4096);
     sel = basePtr;
     set = basePtr;
-    &sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
+    *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
 
 	unsigned long j0, j1;
 	int count = 0;
