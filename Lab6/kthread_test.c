@@ -22,6 +22,8 @@
 
 MODULE_LICENSE("GPL");
 //base pointer
+
+unsigned long *basePtr, *set, *sel;
 basePtr = (unsigned long*)ioremap(0x3F200000,4096);
 sel = basePtr;
 set = basePtr;
