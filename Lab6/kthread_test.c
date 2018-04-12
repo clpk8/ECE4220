@@ -59,7 +59,7 @@ int kthread_fn(void *ptr)
         *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
         set = set + (0x001c / 4);    //GPIO Pin Output Set 0
         *set = *set & 0x40;
-		msleep(1000);	// good for > 10 ms
+		msleep(1);	// good for > 10 ms
 		//msleep_interruptible(1000); // good for > 10 ms
 		//udelay(unsigned long usecs);	// good for a few us (micro s)
 		//usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
@@ -67,7 +67,7 @@ int kthread_fn(void *ptr)
         *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
         set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
         *set = *set & 0x40;
-        msleep(1000);
+        msleep(1);
 		// In an infinite loop, you should check if the kthread_stop
 		// function has been called (e.g. in clean up module). If so,
 		// the kthread should exit. If this is not done, the thread
@@ -90,7 +90,7 @@ int thread_init(void)
 										// when the thread is active.
 	printk("In init module\n");
 
-    
+
 
     kthread1 = kthread_create(kthread_fn, NULL, kthread_name);
 	
