@@ -56,7 +56,7 @@ int kthread_fn(void *ptr)
 	// and then leave.
 	while(1)
 	{
-        *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
+        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
         set = set + (0x001c / 4);    //GPIO Pin Output Set 0
         *set = *set & 0x40;
 		msleep(1);	// good for > 10 ms
@@ -64,7 +64,7 @@ int kthread_fn(void *ptr)
 		//udelay(unsigned long usecs);	// good for a few us (micro s)
 		//usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
         
-        *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
+        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
         set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
         *set = *set & 0x40;
         msleep(1);
