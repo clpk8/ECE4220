@@ -56,17 +56,28 @@ int kthread_fn(void *ptr)
 	// and then leave.
 	while(1)
 	{
-        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
-        set = set + (0x001c / 4);    //GPIO Pin Output Set 0
-        *set = *set & 0x40;
+//        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
+//        set = set + (0x001c / 4);    //GPIO Pin Output Set 0
+//        *set = *set & 0x40;
+        //test
+        *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
+        set = set + (0x0020/4); //gpset the pin to 1
+        *set = *set & 0x3C; //set 4 leds to 1        00x 0011 1100
+        
+        
 		msleep(1);	// good for > 10 ms
 		//msleep_interruptible(1000); // good for > 10 ms
 		//udelay(unsigned long usecs);	// good for a few us (micro s)
 		//usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
         
-        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
-        set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
-        *set = *set & 0x40;
+//        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
+//        set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
+//        *set = *set & 0x40;
+        
+        *ptr = *ptr | 0x9240;    //GPFSEL select 001001001001000000 -> 0x9240
+        ptr = ptr + (0x0028 / 4);    //GPIO Pin Output clear 0
+        *ptr = *ptr | 0x003c;    //set the Led pins to 1 -> ...00000111100
+        
         msleep(1);
 		// In an infinite loop, you should check if the kthread_stop
 		// function has been called (e.g. in clean up module). If so,
