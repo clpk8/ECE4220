@@ -33,10 +33,7 @@ static struct task_struct *kthread1;
 int kthread_fn(void *ptr)
 {
     unsigned long *basePtr, *set, *sel;
-    basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-    sel = basePtr;
-    set = basePtr;
-    *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
+
 
 
 	unsigned long j0, j1;
@@ -62,6 +59,10 @@ int kthread_fn(void *ptr)
 //        set = set + (0x001c / 4);    //GPIO Pin Output Set 0
 //        *set = *set & 0x40;
         //test
+        basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+        sel = basePtr;
+        set = basePtr;
+        *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
         set = set + (0x001c/4); //use GPSET1 register
         *set = *set & 0x3C; //set 4 leds to 1        00x 0011 1100
         
@@ -74,8 +75,10 @@ int kthread_fn(void *ptr)
 //        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
 //        set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
 //        *set = *set & 0x40;
-        
+        basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+        sel = basePtr;
         set = basePtr;
+        *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
         set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
         *set = *set | 0x003c;    //set the Led pins to 1 -> ...00000111100
         
