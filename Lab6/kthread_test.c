@@ -46,7 +46,7 @@ int kthread_fn(void *ptr)
 	printk("In kthread1\n");
 	j0 = jiffies;		// number of clock ticks since system started;
 						// current "time" in jiffies
-	j1 = j0 + 10*HZ;	// HZ is the number of ticks per second, that is
+	j1 = j0 + 1*HZ;	// HZ is the number of ticks per second, that is
 						// 1 HZ is 1 second in jiffies
 	
 	while(time_before(jiffies, j1))	// true when current "time" is less than j1
@@ -64,9 +64,19 @@ int kthread_fn(void *ptr)
 //        *set = *set & 0x40;
         //test
 
+        basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+        sel = basePtr;
+        set = basePtr;
+        
+        //set LED as output 0x 1001 0010 0100 0000 will set bit 2,3,4,5 as output
+        *sel = *sel | 0x9240;
+        
+        //GPSET1 register
         set = set + (0x001C/4);//gpset the pin to 0
+        //set 4 led to 1
         *set = *set & ~(0x3C);//complement of 3C
-
+      //  printk("Removed");
+        
         
 		msleep(1000);	// good for > 10 ms
 		//msleep_interruptible(1000); // good for > 10 ms
@@ -76,7 +86,12 @@ int kthread_fn(void *ptr)
 //        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
 //        set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
 //        *set = *set & 0x40;
+        basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+        sel = basePtr;
         set = basePtr;
+        
+        //GPFSEL to set bit 2,3,4,5 as output
+        *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
         set = set + (0x0020/4); //gpset the pin to 1
         *set = *set & 0x3C; //set 4 leds to 1        00x 0011 1100
 
