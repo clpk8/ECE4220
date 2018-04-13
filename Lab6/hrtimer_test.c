@@ -25,6 +25,23 @@ static int count = 0, dummy = 0;
 // Timer callback function: this executes when the timer expires
 enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
 {
+    unsigned long *basePtr, *set, *sel;
+    basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+    sel = basePtr;
+    set = basePtr;
+    *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
+
+    if(count % 2 == 0){
+        set = set + (0x001c/4); //gpset the pin to 0
+        *set = *set | 0x3C; //set 4 leds to 1        00x 0011 1100
+    }
+    else{
+        set = set + (0x0028/4);//gpset the pin to 0
+        *set = *set | 0x3C;//complement of 3C
+
+    }
+    set = basePtr;
+    
   	ktime_t currtime, interval;	// time type, in nanoseconds
 	unsigned long overruns = 0;
 	
