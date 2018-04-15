@@ -193,9 +193,12 @@ void timer_exit(void)
   	ret = hrtimer_cancel(&hr_timer);	// cancels the timer.
   	if(ret)
 		printk("The timer was still in use...\n");
-	else
-		printk("The timer was already canceled...\n");	// if not restarted or
-														// canceled before
+    else{
+        printk("The timer was already canceled...\n");    // if not restarted or
+        // canceled before
+            free_irq(79, &mydev_id);
+    }
+
 	
   	printk("HR Timer module uninstalling\n");
 	
