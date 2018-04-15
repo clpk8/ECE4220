@@ -606,6 +606,24 @@ deps_/home/pi/ECE4220/Lab6/kthread_test.o := \
     $(wildcard include/config/generic/iomap.h) \
     $(wildcard include/config/has/ioport/map.h) \
   include/linux/vmalloc.h \
+  include/linux/interrupt.h \
+    $(wildcard include/config/irq/forced/threading.h) \
+    $(wildcard include/config/generic/irq/probe.h) \
+  include/linux/irqreturn.h \
+  include/linux/irqnr.h \
+  include/uapi/linux/irqnr.h \
+  include/linux/hardirq.h \
+  include/linux/ftrace_irq.h \
+    $(wildcard include/config/ftrace/nmi/enter.h) \
+  include/linux/vtime.h \
+  include/linux/context_tracking_state.h \
+    $(wildcard include/config/context/tracking.h) \
+  include/linux/static_key.h \
+  arch/arm/include/asm/hardirq.h \
+  arch/arm/include/asm/irq.h \
+    $(wildcard include/config/sparse/irq.h) \
+    $(wildcard include/config/multi/irq/handler.h) \
+  include/linux/irq_cpustat.h \
 
 /home/pi/ECE4220/Lab6/kthread_test.o: $(deps_/home/pi/ECE4220/Lab6/kthread_test.o)
 

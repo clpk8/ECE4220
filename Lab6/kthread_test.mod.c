@@ -21,7 +21,10 @@ __attribute__((section("__versions"))) = {
 	{ 0x41e667b1, __VMLINUX_SYMBOL_STR(kthread_stop) },
 	{ 0xe4b112d9, __VMLINUX_SYMBOL_STR(wake_up_process) },
 	{ 0x251dd649, __VMLINUX_SYMBOL_STR(kthread_create_on_node) },
+	{ 0xd6b8e852, __VMLINUX_SYMBOL_STR(request_threaded_irq) },
 	{ 0x79c5a9f0, __VMLINUX_SYMBOL_STR(ioremap) },
+	{ 0xfcec0987, __VMLINUX_SYMBOL_STR(enable_irq) },
+	{ 0x27bbf221, __VMLINUX_SYMBOL_STR(disable_irq_nosync) },
 	{ 0x2e5810c6, __VMLINUX_SYMBOL_STR(__aeabi_unwind_cpp_pr1) },
 	{ 0x952664c5, __VMLINUX_SYMBOL_STR(do_exit) },
 	{ 0xb3f7646e, __VMLINUX_SYMBOL_STR(kthread_should_stop) },
@@ -36,4 +39,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "C5FA8D3D7F3483E8CC91903");
+MODULE_INFO(srcversion, "D7D4C83526097500131423E");
