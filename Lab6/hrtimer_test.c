@@ -36,13 +36,13 @@ static irqreturn_t button_isr(int irq, void *dev_id)
 {
     // In general, you want to disable the interrupt while handling it.
     disable_irq_nosync(79);
-    
+
     // This same handler will be called regardless of what button was pushed,
     // assuming that they were properly configured.
     // How can you determine which button was the one actually pushed?
-    
+
     // use event detect status registers to detect to pin associated to the pushbutton
-    
+
     // DO STUFF (whatever you need to do, based on the button that was pushed)
     printk("%lu\n",*event & setPb);
     if((*event & setPb) == 65536){//10000hex in decimal
@@ -54,40 +54,40 @@ static irqreturn_t button_isr(int irq, void *dev_id)
         //0 0010 0 0 0 0, 17th bit is PB2
         timer_interval_ns = 750000;
         printk("button 2 pushed\n");
-        
+
     }
     else if((*event & setPb) == 262144){//40000 in decimal
         //0 0100 0 0 0 0, 18th bit is pb3
         timer_interval_ns = 600000;
         printk("button 3 pushed\n");
-        
+
     }
     else if((*event & setPb) == 524288){//80000 in decimal
         //0 1000 0 0 0 0, 19th bit is pb4
         timer_interval_ns = 450000;
         printk("button 4 pushed\n");
-        
+
     }
     else if((*event & setPb) == 1048576){//100000 in decimal
         //0001 0 0 0 0 0 20th bit is pb5
         timer_interval_ns = 300000;
         printk("button 5 pushed\n");
-        
+
     }
-    
+
     // IMPORTANT: Clear the Event Detect status register before leaving.
     *event = *event | setPb;//clear it
-    
+
     printk("Interrupt handled\n");
     enable_irq(79);        // re-enable interrupt
-    
+
     return IRQ_HANDLED;
 }
 
 // Timer callback function: this executes when the timer expires
 enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
 {
-   
+
 
     
   	ktime_t currtime, interval;	// time type, in nanoseconds
@@ -113,8 +113,8 @@ enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
         count++;
 
     }
-    
-    
+
+
 
 
 	
@@ -134,25 +134,25 @@ int timer_init(void)
 	
 	// Attach callback function to the timer
 	hr_timer.function = &timer_callback;
-	
+
     int irqdummy = 0;
 
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
     printk("In init module\n");
-    
+
     bptr = (unsigned long *) ioremap(0x3F200000, 4096);
     sel = bptr;
     set = bptr + 0x1C/4; //point at gpset register
     clr = bptr + 0x28/4; //point at gpclr register
-    
+
     *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
-    
-    
-    
+
+
+
     //part 2
     event = bptr + 0x40/4; //even detect
-    
+
     //pull-down setting
     //1)
     Pdown = bptr + 0x94/4;//point at gppud register
@@ -168,16 +168,16 @@ int timer_init(void)
     *Pdown = *Pdown & ~(0x155);//remove the control signal, only apply to the bit we turn to 1 before
     //6)
     *Penable = *Penable & ~(setPb);//remove the clock, only to the bit associated to button
-    
-    
+
+
     // Enable (Async) Rising Edge detection for all 5 GPIO ports.
     edge = bptr + 0x4C/4;//point at rising edge detect enable 0
     *edge = *edge | setPb;
-    
+
     irqdummy = request_irq(79, button_isr, IRQF_SHARED, "Button_handler", &mydev_id);
 
-    
-    
+
+
     
 	// Start the timer
  	hrtimer_start(&hr_timer, ktime, HRTIMER_MODE_REL);
@@ -188,7 +188,7 @@ int timer_init(void)
 void timer_exit(void)
 {
 	int ret;
-    free_irq(79, &mydev_id);
+//    free_irq(79, &mydev_id);
 
   	ret = hrtimer_cancel(&hr_timer);	// cancels the timer.
   	if(ret)
