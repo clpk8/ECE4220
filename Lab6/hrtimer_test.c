@@ -112,8 +112,10 @@ enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
     }
     
     }
-	dummy = (dummy + 1)%1000;
-	
+
+    dummy += 1;
+    dymmy %= 1000;
+
 	
 	return HRTIMER_RESTART;	// Return this value to restart the timer.
 							// If you don't want/need a recurring timer, return
