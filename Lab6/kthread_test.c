@@ -78,7 +78,7 @@ int kthread_fn(void *ptr)
       //  printk("Removed");
         
         
-		msleep(1000);	// good for > 10 ms
+		msleep(5000);	// good for > 10 ms
 		//msleep_interruptible(1000); // good for > 10 ms
 		//udelay(unsigned long usecs);	// good for a few us (micro s)
 		//usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
@@ -95,7 +95,7 @@ int kthread_fn(void *ptr)
         set = set + (0x0020/4); //gpset the pin to 1
         *set = *set & 0x3C; //set 4 leds to 1        00x 0011 1100
 
-        msleep(1000);
+        msleep(5000);
 		// In an infinite loop, you should check if the kthread_stop
 		// function has been called (e.g. in clean up module). If so,
 		// the kthread should exit. If this is not done, the thread
