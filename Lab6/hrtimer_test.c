@@ -104,14 +104,17 @@ enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
 	
 	// The following printk only executes once every 1000 cycles.
 	if(dummy == 0){
-        ++count;
+        printk("count%d\n,",++count);
 	}
     if(count % 2 == 0){
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
+        printk("speaker on\n");
 
     }
     else{
         *clr = *clr | 0x40; //clear 6th bit to be 0, which is speaker
+        printk("speaker off\n");
+
         
     }
 	dummy = (dummy + 1)%1000;
