@@ -18,6 +18,8 @@
 #include <linux/time.h>        // for using jiffies
 #include <linux/timer.h>
 #include <linux/delay.h>
+#include <asm/io.h>
+
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
