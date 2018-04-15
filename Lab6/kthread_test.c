@@ -33,10 +33,10 @@ static struct task_struct *kthread1;
 int kthread_fn(void *ptr)
 {
     unsigned long *basePtr, *set, *sel;
-    basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-    sel = basePtr;
-    set = basePtr;
-    *sel = *sel | 0x9240;
+//    basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+//    sel = basePtr;
+//    set = basePtr;
+//    *sel = *sel | 0x9240;
 
 
 
