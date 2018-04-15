@@ -20,54 +20,29 @@
 #include <linux/delay.h>
 
 MODULE_LICENSE("GPL");
-
+unsigned long *bptr, *set,*sel,*clr;
 // structure for the kthread.
 static struct task_struct *kthread1;
 
 // Function to be associated with the kthread; what the kthread executes.
 int kthread_fn(void *ptr)
 {
-    unsigned long *bptr = (unsigned long *) ioremap(0x3F200000, 4096);
-    
-    unsigned long j0, j1;
-    int count = 0;
-    
-    printk("In kthread1\n");
-    j0 = jiffies;        // number of clock ticks since system started;
-    // current "time" in jiffies
-    j1 = j0 + 10*HZ;    // HZ is the number of ticks per second, that is
-    // 1 HZ is 1 second in jiffies
-    
-    while(time_before(jiffies, j1))    // true when current "time" is less than j1
-        schedule();        // voluntarily tell the scheduler that it can schedule
-    // some other process
-    
+   
     printk("Before loop\n");
-    
-    // The ktrhead does not need to run forever. It can execute something
-    // and then leave.
+
     while(1)
     {
-        //        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
-        //        set = set + (0x001c / 4);    //GPIO Pin Output Set 0
-        //        *set = *set & 0x40;
-        //test
-        
-        *bptr = *bptr | 0x9240;    //GPFSEL select 001001001001000000 -> 0x9240
-        bptr = bptr + (0x0028 / 4);    //GPIO Pin Output clear 0
-        *bptr = *bptr | 0x003c;    //set the Led pins to 1 -> ...00000111100
-        
-        udelay(75000);    // good for a few us (micro s)
+        *set = *set | 0x40;
+
+        udelay(1000);    // good for a few us (micro s)
         //msleep_interruptible(1000); // good for > 10 ms
         //udelay(unsigned long usecs);    // good for a few us (micro s)
         //usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
         
         
-        *bptr = *bptr | 0x9240;    //GPFSEL select 001001001001000000 -> 0x9240
-        bptr = bptr + (0x001c / 4);    //GPIO Pin Output Set 0
-        *bptr = *bptr | 0x003c;    //set the Led pins to 1 -> ...00000111100
+        *clr = *clr | 0x40;
         
-        udelay(75000);    // good for a few us (micro s)
+        udelay(1000);    // good for a few us (micro s)
         
         // In an infinite loop, you should check if the kthread_stop
         // function has been called (e.g. in clean up module). If so,
@@ -79,7 +54,6 @@ int kthread_fn(void *ptr)
         
         // comment out if your loop is going "fast". You don't want to
         // printk too often. Sporadically or every second or so, it's okay.
-        printk("Count: %d\n", ++count);
     }
     
     return 0;
@@ -87,9 +61,19 @@ int kthread_fn(void *ptr)
 
 int thread_init(void)
 {
+    
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
     printk("In init module\n");
+    
+    bptr = (unsigned long *) ioremap(0x3F200000, 4096);
+    sel = bptr;
+    set = bptr + 0x1C/4; //point at gpset register
+    clr = bptr + 0x28/4; //point at gpclr register
+    
+    *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
+
+    
     
     kthread1 = kthread_create(kthread_fn, NULL, kthread_name);
     
