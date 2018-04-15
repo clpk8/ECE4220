@@ -24,7 +24,7 @@
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
-int fqcyint,mydev_id;
+int fqcy,mydev_id,dummy = 0;
 
 //part2
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
@@ -45,29 +45,29 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     // use event detect status registers to detect to pin associated to the pushbutton
     
     // DO STUFF (whatever you need to do, based on the button that was pushed)
-    if(*event & setPb == 10000){
+    if((*event & setPb) == 10000){
         //0 0001 0 0 0 0, 16th bit is push button 1
         fqcy = 900;
     }
-    else if(*event & setPb == 20000){
+    else if((*event & setPb) == 20000){
         //0 0010 0 0 0 0, 17th bit is PB2
         fqcy = 750;
     }
-    else if(*event & setPb == 40000){
+    else if((*event & setPb) == 40000){
         //0 0100 0 0 0 0, 18th bit is pb3
         fqcy = 600;
     }
-    else if(*event & setPb == 80000){
+    else if((*event & setPb) == 80000){
         //0 1000 0 0 0 0, 19th bit is pb4
         fqcy = 450;
     }
-    else if(*event & setPb == 100000){
+    else if((*event & setPb) == 100000){
         //0001 0 0 0 0 0 20th bit is pb5
         fqcy = 300;
     }
 
     // IMPORTANT: Clear the Event Detect status register before leaving.
-    *event = *even | setPb;//clear it
+    *event = *event | setPb;//clear it
     
     printk("Interrupt handled\n");
     enable_irq(79);        // re-enable interrupt
@@ -126,19 +126,19 @@ int thread_init(void)
     
     
     //part 2
-    event = base + 0x40/4; //even detect
+    event = bptr + 0x40/4; //even detect
     
     //pull-down setting
     //1)
-    Pdown = base + 0x94/4;//point at gppud register
+    Pdown = bptr + 0x94/4;//point at gppud register
     *Pdown = *Pdown | 0x155; //0001 0101 0101 enable pud as pull down control
     //2)
     udelay(100); //wait 150 cycle
     //3)
-    Penable = base + 0x98/4;//point at gppudclk0 to enable clock
-    *Penable = *Penable | setPb//only set the pin corsponding to push button to asynchronous falling edge
+    Penable = bptr + 0x98/4;//point at gppudclk0 to enable clock
+    *Penable = *Penable | setPb;//only set the pin corsponding to push button to asynchronous falling edge
     //4)
-    delay(100); //wait 150 cycle
+    udelay(100); //wait 150 cycle
     //5)
     *Pdown = *Pdown & ~(0x155);//remove the control signal, only apply to the bit we turn to 1 before
     //6)
@@ -146,7 +146,7 @@ int thread_init(void)
     
     
     // Enable (Async) Rising Edge detection for all 5 GPIO ports.
-    edge = base + 0x4C/4;//point at rising edge detect enable 0
+    edge = bptr + 0x4C/4;//point at rising edge detect enable 0
     *edge = *edge | setPb;
     
     dummy = request_irq(79, button_isr, IRQF_SHARED, "Button_handler", &mydev_id);
