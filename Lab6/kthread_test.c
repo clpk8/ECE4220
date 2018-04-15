@@ -46,7 +46,7 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     
     // DO STUFF (whatever you need to do, based on the button that was pushed)
     printk("%lu\n",*event & setPb);
-    if((*event & setPb) == 65535){//10000hex in decimal
+    if((*event & setPb) == 65536){//10000hex in decimal
         //0 0001 0 0 0 0, 16th bit is push button 1
         fqcy = 900;
         printk("button 1 pushed\n");
