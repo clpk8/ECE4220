@@ -85,13 +85,13 @@ int kthread_fn(void *ptr)
     {
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
 
-        udelay(1000);    // good for a few us (micro s)
+        udelay(fqcy);    // good for a few us (micro s)
        
         
         
         *clr = *clr | 0x40; //clear 6th bit to be 0, which is speaker
         
-        udelay(1000);    // good for a few us (micro s)
+        udelay(fqcy);    // good for a few us (micro s)
         
         // In an infinite loop, you should check if the kthread_stop
         // function has been called (e.g. in clean up module). If so,
