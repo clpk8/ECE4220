@@ -32,12 +32,14 @@ static struct task_struct *kthread1;
 // Function to be associated with the kthread; what the kthread executes.
 int kthread_fn(void *ptr)
 {
-    unsigned long *basePtr, *set, *sel;
-//    basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-//    sel = basePtr;
-//    set = basePtr;
-//    *sel = *sel | 0x9240;
-
+    ptr = (unsigned long *) ioremap(0x3F200000, 4096);
+    
+    //error check
+    if(NULL == ptr)
+    {
+        printk("Unable to map memory space\n");
+        return -1;
+    }
 
 
 	unsigned long j0, j1;
@@ -63,25 +65,12 @@ int kthread_fn(void *ptr)
 //        set = set + (0x001c / 4);    //GPIO Pin Output Set 0
 //        *set = *set & 0x40;
         //test
-
-        basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-        if(basePtr == NULL){
-            printk("Ubable to map memory space\n");
-        }
-        sel = basePtr;
-        set = basePtr;
         
-        //set LED as output 0x 1001 0010 0100 0000 will set bit 2,3,4,5 as output
-        *sel = *sel | 0x9240;
+        *ptr = *ptr | 0x9240;    //GPFSEL select 001001001001000000 -> 0x9240
+        ptr = ptr + (0x0028 / 4);    //GPIO Pin Output clear 0
+        *ptr = *ptr | 0x003c;    //set the Led pins to 1 -> ...00000111100
         
-        //GPSET1 register
-        set = set + (0x001C/4);//gpset the pin to 0
-        //set 4 led to 1
-        *set = *set & ~(0x3C);//complement of 3C
-      //  printk("Removed");
-        
-        
-		msleep(5000);	// good for > 10 ms
+		msleep(1000);	// good for > 10 ms
 		//msleep_interruptible(1000); // good for > 10 ms
 		//udelay(unsigned long usecs);	// good for a few us (micro s)
 		//usleep_range(unsigned long min, unsigned long max); // good for 10us - 20 ms
@@ -89,16 +78,13 @@ int kthread_fn(void *ptr)
 //        *sel = *sel | 0x40040;//turn speaker as output 001 000 000 000 000 000 000
 //        set = set + (0x0028 / 4);    //GPIO Pin Output clear 0
 //        *set = *set & 0x40;
-        basePtr = (unsigned long*)ioremap(0x3F200000,4096);
-        sel = basePtr;
-        set = basePtr;
-        
-        //GPFSEL to set bit 2,3,4,5 as output
-        *sel = *sel | 0x9240; //GPFSEL which turn LEDS to output  0x001001001001000000
-        set = set + (0x0020/4); //gpset the pin to 1
-        *set = *set & 0x3C; //set 4 leds to 1        00x 0011 1100
 
-        msleep(5000);
+        
+        *ptr = *ptr | 0x9240;    //GPFSEL select 001001001001000000 -> 0x9240
+        ptr = ptr + (0x001c / 4);    //GPIO Pin Output Set 0
+        *ptr = *ptr | 0x003c;    //set the Led pins to 1 -> ...00000111100
+
+        msleep(1000);
 		// In an infinite loop, you should check if the kthread_stop
 		// function has been called (e.g. in clean up module). If so,
 		// the kthread should exit. If this is not done, the thread
