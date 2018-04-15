@@ -24,6 +24,9 @@
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
 int fqcy,mydev_id;
+//part2
+unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
+unsigned long *event,*Pdown,*Penable,*edge;
 
 unsigned long timer_interval_ns = fqcy;	// timer interval length (nano sec part)
 static struct hrtimer hr_timer;			// timer structure
