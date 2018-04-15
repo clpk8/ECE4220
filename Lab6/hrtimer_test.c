@@ -188,6 +188,8 @@ int timer_init(void)
 void timer_exit(void)
 {
 	int ret;
+    free_irq(79, &mydev_id);
+
   	ret = hrtimer_cancel(&hr_timer);	// cancels the timer.
   	if(ret)
 		printk("The timer was still in use...\n");
