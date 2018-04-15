@@ -65,6 +65,9 @@ int kthread_fn(void *ptr)
         //test
 
         basePtr = (unsigned long*)ioremap(0x3F200000,4096);
+        if(basePtr == NULL){
+            printk("Ubable to map memory space\n");
+        }
         sel = basePtr;
         set = basePtr;
         
