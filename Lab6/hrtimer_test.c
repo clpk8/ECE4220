@@ -30,7 +30,7 @@ unsigned long *event,*Pdown,*Penable,*edge;
 
 unsigned long timer_interval_ns = 200000;	// timer interval length (nano sec part)
 static struct hrtimer hr_timer;			// timer structure
-static int count = 0, dummy = 0;
+static int count = 1;
 
 static irqreturn_t button_isr(int irq, void *dev_id)
 {
@@ -103,18 +103,19 @@ enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
 	
 	
 	// The following printk only executes once every 1000 cycles.
-	if(dummy == 0){
+	if(count % 2 == 0){
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
+        count++;
+
 	}
     else{
         *clr = *clr | 0x40; //clear 6th bit to be 0, which is speaker
+        count++;
 
     }
     
     }
 
-    dummy += 1;
-    dymmy %= 1000;
 
 	
 	return HRTIMER_RESTART;	// Return this value to restart the timer.
