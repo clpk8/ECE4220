@@ -45,6 +45,7 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     // use event detect status registers to detect to pin associated to the pushbutton
     
     // DO STUFF (whatever you need to do, based on the button that was pushed)
+    printk("%lu\n",*event & setPb);
     if((*event & setPb) == 10000){
         //0 0001 0 0 0 0, 16th bit is push button 1
         fqcy = 900;
