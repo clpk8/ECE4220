@@ -24,7 +24,7 @@
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
-int fqcy,mydev_id,dummy = 0;
+int fqcy,mydev_id;
 
 //part2
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
@@ -111,7 +111,8 @@ int kthread_fn(void *ptr)
 
 int thread_init(void)
 {
-    
+    int dummy = 0;
+    fqcy = 200;
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
     printk("In init module\n");
@@ -169,6 +170,8 @@ void thread_cleanup(void) {
     // the following doesn't actually stop the thread, but signals that
     // the thread should stop itself (with do_exit above).
     // kthread should not be called if the thread has already stopped.
+    free_irq(79, &mydev_id);
+
     ret = kthread_stop(kthread1);
     
     if(!ret)
