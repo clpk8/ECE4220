@@ -48,22 +48,31 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     if((*event & setPb) == 10000){
         //0 0001 0 0 0 0, 16th bit is push button 1
         fqcy = 900;
+        printk("button 1 pushed\n");
     }
     else if((*event & setPb) == 20000){
         //0 0010 0 0 0 0, 17th bit is PB2
         fqcy = 750;
+        printk("button 2 pushed\n");
+
     }
     else if((*event & setPb) == 40000){
         //0 0100 0 0 0 0, 18th bit is pb3
         fqcy = 600;
+        printk("button 3 pushed\n");
+
     }
     else if((*event & setPb) == 80000){
         //0 1000 0 0 0 0, 19th bit is pb4
         fqcy = 450;
+        printk("button 4 pushed\n");
+
     }
     else if((*event & setPb) == 100000){
         //0001 0 0 0 0 0 20th bit is pb5
         fqcy = 300;
+        printk("button 5 pushed\n");
+
     }
 
     // IMPORTANT: Clear the Event Detect status register before leaving.
