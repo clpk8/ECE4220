@@ -23,12 +23,12 @@
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
-int fqcy,mydev_id;
+int mydev_id;
 //part2
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
 unsigned long *event,*Pdown,*Penable,*edge;
 
-unsigned long timer_interval_ns = fqcy;	// timer interval length (nano sec part)
+unsigned long timer_interval_ns = 200000;	// timer interval length (nano sec part)
 static struct hrtimer hr_timer;			// timer structure
 static int count = 0, dummy = 0;
 
@@ -47,30 +47,30 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     printk("%lu\n",*event & setPb);
     if((*event & setPb) == 65536){//10000hex in decimal
         //0 0001 0 0 0 0, 16th bit is push button 1
-        fqcy = 900;
+        timer_interval_ns = 900000;
         printk("button 1 pushed\n");
     }
     else if((*event & setPb) == 131072){//20000 in decimal
         //0 0010 0 0 0 0, 17th bit is PB2
-        fqcy = 750;
+        timer_interval_ns = 750000;
         printk("button 2 pushed\n");
         
     }
     else if((*event & setPb) == 262144){//40000 in decimal
         //0 0100 0 0 0 0, 18th bit is pb3
-        fqcy = 600;
+        timer_interval_ns = 600000;
         printk("button 3 pushed\n");
         
     }
     else if((*event & setPb) == 524288){//80000 in decimal
         //0 1000 0 0 0 0, 19th bit is pb4
-        fqcy = 450;
+        timer_interval_ns = 450000;
         printk("button 4 pushed\n");
         
     }
     else if((*event & setPb) == 1048576){//100000 in decimal
         //0001 0 0 0 0 0 20th bit is pb5
-        fqcy = 300;
+        timer_interval_ns = 300000;
         printk("button 5 pushed\n");
         
     }
@@ -104,7 +104,7 @@ enum hrtimer_restart timer_callback(struct hrtimer *timer_for_restart)
 	
 	// The following printk only executes once every 1000 cycles.
 	if(dummy == 0){
-		++countl
+        ++count;
 	}
     if(count % 2 == 0){
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
@@ -135,7 +135,7 @@ int timer_init(void)
 	hr_timer.function = &timer_callback;
 	
     int irqdummy = 0;
-    fqcy = 200;
+
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
     printk("In init module\n");
