@@ -84,6 +84,11 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     
     return IRQ_HANDLED;
 }
+//kthread2
+//read, and comapre.
+
+
+
 
 // Function to be associated with the kthread; what the kthread executes.
 int kthread_fn(void *ptr)
@@ -93,6 +98,7 @@ int kthread_fn(void *ptr)
 
     while(1)
     {
+        
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
 
         udelay(fqcy);    // good for a few us (micro s)
@@ -121,8 +127,10 @@ int kthread_fn(void *ptr)
 
 int thread_init(void)
 {
+    //create net_link socket(test fitst)
     int dummy = 0;
     fqcy = 200;
+    //create another thread
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
     printk("In init module\n");

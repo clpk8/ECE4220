@@ -22,6 +22,7 @@ int masterFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 #define MSG_SIZE 40            // message size
+#define CHAR_DEV "/dev/Lab6"
 //used for parsing
 const char s[2] = " ";
 const char c[2] = ".";
