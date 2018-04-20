@@ -146,7 +146,7 @@ int main(int argc, const char * argv[]) {
                     error("sendto");
             }
             else{
-                printf("I'm not master\n");                
+                printf("I'm not master\n");
             }
 
         }
@@ -211,12 +211,12 @@ int main(int argc, const char * argv[]) {
                         }
                         else{
                             masterFlag = 0;
-                            roundFlag == 1;
+                            roundFlag = 1;
                         }
                     }
                     else{
                         masterFlag = 0;
-                        roundFlag == 1;
+                        roundFlag = 1;
                         printf("second else!\n");
                     }
                 }
