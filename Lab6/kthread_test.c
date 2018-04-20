@@ -32,7 +32,8 @@ static char msg[MSG_SIZE];
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
-int fqcy,mydev_id;
+long fqcy;
+int mydev_id;
 
 //part2
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
@@ -72,8 +73,8 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
     long *temp;
     int n = kstrtol(msg,10,temp);
     if(n == 0){
-        printk("The transfered number is :%d\n",(int)*temp);
-        fqcy = (int)*temp;
+        printk("The transfered number is :%l\n",*temp);
+        fqcy = *temp;
     }
     
     return len;        // the number of bytes that were written to the Character Device.
