@@ -147,7 +147,7 @@ int main(int argc, const char * argv[]) {
             }
             else{
                 printf("I'm not master\n");
-                else if(buf[0] == '#'){
+                masterFlag = 1;
                 
             }
 
@@ -175,6 +175,7 @@ int main(int argc, const char * argv[]) {
         }
 
         //case 3
+        else if(buf[0] == '#'){
 
             //copy message over
             char temp[MSG_SIZE];
