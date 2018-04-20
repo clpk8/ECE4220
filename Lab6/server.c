@@ -243,19 +243,24 @@ int main(int argc, const char * argv[]) {
             //Lab6
             
             if(buf[1] == 'A'){
-                strcpy(buf,"900");
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"A");
             }
             else if(buf[1] == 'B'){
-                strcpy(buf,"750");
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"B");
             }
             else if(buf[1] == 'C'){
-                strcpy(buf,"600");
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"C");
             }
             else if(buf[1] == 'D'){
-                strcpy(buf,"450");
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"D");
             }
             else if(buf[1] == 'E'){
-                strcpy(buf,"300");
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"E");
             }
             
             int errorFlag = write(cdev_id, buf, sizeof(buf));

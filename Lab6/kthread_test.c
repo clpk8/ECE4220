@@ -70,19 +70,19 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
 
     // You may want to remove the following printk in your final version.
     printk("Message from user space: %s\n", msg);
-    if (msg[1] == 'A'){
+    if (msg[0] == 'A'){
         fqcy = 900;
     }
-    else if(msg[1] == 'B'){
+    else if(msg[0] == 'B'){
         fqcy = 750;
     }
-    else if(msg[1] == 'C'){
+    else if(msg[0] == 'C'){
         fqcy = 600;
     }
-    else if(msg[1] == 'D'){
+    else if(msg[0] == 'D'){
         fqcy = 450;
     }
-    else if(msg[1] == 'E'){
+    else if(msg[0] == 'E'){
         fqcy = 300;
     }
     else{
