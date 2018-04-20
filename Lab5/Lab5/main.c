@@ -18,7 +18,7 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <time.h>
-int masterFlag = 1;
+int masterFlag = 0;
 int roundFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
