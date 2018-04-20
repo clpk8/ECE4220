@@ -18,7 +18,7 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <time.h>
-int masterFlag = 0;
+int masterFlag = 1;
 int roundFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
@@ -174,7 +174,7 @@ int main(int argc, const char * argv[]) {
 
         //case 3
         else if(buf[0] == '#'){
-
+            masterFlag = 1;
 
             //copy message over
             char temp[MSG_SIZE];
