@@ -190,7 +190,7 @@ int main(int argc, const char * argv[]) {
             }
             int ranNum = atoi(tempNum);
             printf("The Vote is:%d\n\n",ranNum);
-
+            printf("The round flag is %d",roundFlag);
             strcpy(temp, buf);
             token = strtok(temp,c);
             while(token != NULL){
@@ -219,7 +219,7 @@ int main(int argc, const char * argv[]) {
                     else{
                         masterFlag = 0;
                         roundFlag == 1;
-                        //  printf("second else!\n");
+                        printf("second else!\n");
                     }
                 }
             }
