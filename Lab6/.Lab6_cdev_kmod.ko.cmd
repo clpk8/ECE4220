@@ -1,0 +1,1 @@
+cmd_/home/pi/ECE4220/Lab6/Lab6_cdev_kmod.ko := ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/pi/ECE4220/Lab6/Lab6_cdev_kmod.ko /home/pi/ECE4220/Lab6/Lab6_cdev_kmod.o /home/pi/ECE4220/Lab6/Lab6_cdev_kmod.mod.o

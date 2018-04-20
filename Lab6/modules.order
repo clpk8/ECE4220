@@ -1,2 +1,3 @@
 kernel//home/pi/ECE4220/Lab6/kthread_test.ko
 kernel//home/pi/ECE4220/Lab6/hrtimer_test.ko
+kernel//home/pi/ECE4220/Lab6/Lab6_cdev_kmod.ko

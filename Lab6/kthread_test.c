@@ -1,6 +1,6 @@
 /* Based on example from: http://tuxthink.blogspot.com/2011/02/kernel-thread-creation-1.html
  Modified and commented by: Luis Rivera
- 
+
  Compile using the Makefile
  */
 
@@ -37,13 +37,13 @@ static irqreturn_t button_isr(int irq, void *dev_id)
 {
     // In general, you want to disable the interrupt while handling it.
     disable_irq_nosync(79);
-    
+
     // This same handler will be called regardless of what button was pushed,
     // assuming that they were properly configured.
     // How can you determine which button was the one actually pushed?
-    
+
     // use event detect status registers to detect to pin associated to the pushbutton
-    
+
     // DO STUFF (whatever you need to do, based on the button that was pushed)
     printk("%lu\n",*event & setPb);
     if((*event & setPb) == 65536){//10000hex in decimal
@@ -78,17 +78,17 @@ static irqreturn_t button_isr(int irq, void *dev_id)
 
     // IMPORTANT: Clear the Event Detect status register before leaving.
     *event = *event | setPb;//clear it
-    
+
     printk("Interrupt handled\n");
     enable_irq(79);        // re-enable interrupt
-    
+
     return IRQ_HANDLED;
 }
 
 // Function to be associated with the kthread; what the kthread executes.
 int kthread_fn(void *ptr)
 {
-   
+
     printk("Before loop\n");
 
     while(1)
@@ -96,13 +96,13 @@ int kthread_fn(void *ptr)
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
 
         udelay(fqcy);    // good for a few us (micro s)
-       
-        
-        
+
+
+
         *clr = *clr | 0x40; //clear 6th bit to be 0, which is speaker
-        
+
         udelay(fqcy);    // good for a few us (micro s)
-        
+
         // In an infinite loop, you should check if the kthread_stop
         // function has been called (e.g. in clean up module). If so,
         // the kthread should exit. If this is not done, the thread
@@ -110,12 +110,12 @@ int kthread_fn(void *ptr)
         if(kthread_should_stop()) {
             do_exit(0);
         }
-        
-        
+
+
         // comment out if your loop is going "fast". You don't want to
         // printk too often. Sporadically or every second or so, it's okay.
     }
-    
+
     return 0;
 }
 
@@ -126,19 +126,19 @@ int thread_init(void)
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
     printk("In init module\n");
-    
+
     bptr = (unsigned long *) ioremap(0x3F200000, 4096);
     sel = bptr;
     set = bptr + 0x1C/4; //point at gpset register
     clr = bptr + 0x28/4; //point at gpclr register
-    
+
     *sel = *sel | 0x40000;//turn speaker as output 001 000 000 000 000 000 000
 
-    
-    
+
+
     //part 2
     event = bptr + 0x40/4; //even detect
-    
+
     //pull-down setting
     //1)
     Pdown = bptr + 0x94/4;//point at gppud register
@@ -154,24 +154,24 @@ int thread_init(void)
     *Pdown = *Pdown & ~(0x155);//remove the control signal, only apply to the bit we turn to 1 before
     //6)
     *Penable = *Penable & ~(setPb);//remove the clock, only to the bit associated to button
-    
-    
+
+
     // Enable (Async) Rising Edge detection for all 5 GPIO ports.
     edge = bptr + 0x4C/4;//point at rising edge detect enable 0
     *edge = *edge | setPb;
-    
+
     dummy = request_irq(79, button_isr, IRQF_SHARED, "Button_handler", &mydev_id);
 
-    
+
     kthread1 = kthread_create(kthread_fn, NULL, kthread_name);
-    
+
     if((kthread1))    // true if kthread creation is successful
     {
         printk("Inside if\n");
         // kthread is dormant after creation. Needs to be woken up
         wake_up_process(kthread1);
     }
-    
+
     return 0;
 }
 
@@ -183,7 +183,7 @@ void thread_cleanup(void) {
     free_irq(79, &mydev_id);
 
     ret = kthread_stop(kthread1);
-    
+
     if(!ret)
         printk("Kthread stopped\n");
 }
