@@ -45,38 +45,42 @@ static ssize_t device_read(struct file *filp, char __user *buffer, size_t length
 {
     // Whatever is in msg will be placed into buffer, which will be copied into user space
     ssize_t dummy = copy_to_user(buffer, msg, length);    // dummy will be 0 if successful
-    
+
     // msg should be protected (e.g. semaphore). Not implemented here, but you can add it.
     msg[0] = '\0';    // "Clear" the message, in case the device is read again.
     // This way, the same message will not be read twice.
     // Also convenient for checking if there is nothing new, in user space.
-    
+
     return length;
 }
 // Function called when the user space program writes to the Character Device.
 static ssize_t device_write(struct file *filp, const char __user *buff, size_t len, loff_t *off)
 {
     ssize_t dummy;
-    
+
     if(len > MSG_SIZE)
         return -EINVAL;
-    
+
     // unsigned long copy_from_user(void *to, const void __user *from, unsigned long n);
     dummy = copy_from_user(msg, buff, len);    // Transfers the data from user space to kernel space
     if(len == MSG_SIZE)
         msg[len-1] = '\0';    // will ignore the last character received.
     else
         msg[len] = '\0';
-    
+
     // You may want to remove the following printk in your final version.
     printk("Message from user space: %s\n", msg);
     long *temp;
+    printk("1");
     int n = kstrtol(msg,10,temp);
+    printk("2");
     if(n == 0){
+        printk("3");
         printk("The transfered number is :%l\n",temp);
+        printk("4");
         fqcy = temp;
     }
-    
+
     return len;        // the number of bytes that were written to the Character Device.
 }
 // structure needed when registering the Character Device. Members are the callback
@@ -156,7 +160,7 @@ int kthread_fn(void *ptr)
 
     while(1)
     {
-        
+
         *set = *set | 0x40; //set 6th bit to be on, which is speaker
 
         udelay(fqcy);    // good for a few us (micro s)
@@ -194,7 +198,7 @@ int thread_init(void)
     }
     printk("Lab6_cdev_kmod example, assigned major: %d\n", major);
     printk("Create Char Device (node) with: sudo mknod /dev/%s c %d 0\n", CDEV_NAME, major);
-    
+
     int dummy = 0;
     fqcy = 200;
     //create another thread
@@ -253,7 +257,7 @@ int thread_init(void)
 void thread_cleanup(void) {
     unregister_chrdev(major, CDEV_NAME);
     printk("Char Device /dev/%s unregistered.\n", CDEV_NAME);
-    
+
     int ret;
     // the following doesn't actually stop the thread, but signals that
     // the thread should stop itself (with do_exit above).
