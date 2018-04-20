@@ -2,13 +2,13 @@
  * ECE4220/7220
  * Based on code from: https://github.com/blue119/kernel_user_space_interfaces_example/blob/master/cdev.c
  * Modified and commented by: Luis Alberto Rivera
- 
+
  You can compile the module using the Makefile provided. Just add
  obj-m += Lab6_cdev_kmod.o
 
  This Kernel module prints its "MajorNumber" to the system log. The "MinorNumber"
  can be chosen to be 0.
- 
+
  -----------------------------------------------------------------------------------
  Broadly speaking: The Major Number refers to a type of device/driver, and the
  Minor Number specifies a particular device of that type or sometimes the operation
@@ -18,15 +18,15 @@
  example, you'll see tty0, tty1, etc., which represent the terminals. All those have
  the same Major number, but they will have different Minor numbers: 0, 1, etc.
  -----------------------------------------------------------------------------------
- 
- After installing the module, 
- 
+
+ After installing the module,
+
  1) Check the MajorNumber using dmesg
- 
+
  2) You can then create a Character device using the MajorNumber returned:
 	  sudo mknod /dev/YourDevName c MajorNumber 0
     You need to create the device every time the Pi is rebooted.
-	
+
  3) Change writing permissions, so that everybody can write to the Character Device:
 	  sudo chmod go+w /dev/YourDevName
     Reading permissions should be enabled by default. You can check using
@@ -37,11 +37,11 @@
  If you uninstall your module, you won't be able to access your Character Device.
  If you install it again (without having shutdown the Pi), you don't need to
  create the device again --steps 2 and 3--, unless you manually delete it.
- 
+
  Note: In this implementation, there is no buffer associated to writing to the
  Character Device. Every new string written to it will overwrite the previous one.
 */
-  
+
 #ifndef MODULE
 #define MODULE
 #endif
@@ -55,11 +55,11 @@
 #include <asm/uaccess.h>
 
 #define MSG_SIZE 50
-#define CDEV_NAME "Lab6"	// "YourDevName"
+#define CDEV_NAME "Lab6Dev"	// "YourDevName"
 
 MODULE_LICENSE("GPL");
- 
-static int major; 
+
+static int major;
 static char msg[MSG_SIZE];
 
 // Function called when the user space program reads the character device.
@@ -76,7 +76,7 @@ static ssize_t device_read(struct file *filp, char __user *buffer, size_t length
 	msg[0] = '\0';	// "Clear" the message, in case the device is read again.
 					// This way, the same message will not be read twice.
 					// Also convenient for checking if there is nothing new, in user space.
-	
+
 	return length;
 }
 
@@ -90,27 +90,27 @@ static ssize_t device_read(struct file *filp, char __user *buffer, size_t length
 static ssize_t device_write(struct file *filp, const char __user *buff, size_t len, loff_t *off)
 {
 	ssize_t dummy;
-	
+
 	if(len > MSG_SIZE)
 		return -EINVAL;
-	
+
 	// unsigned long copy_from_user(void *to, const void __user *from, unsigned long n);
 	dummy = copy_from_user(msg, buff, len);	// Transfers the data from user space to kernel space
 	if(len == MSG_SIZE)
 		msg[len-1] = '\0';	// will ignore the last character received.
 	else
 		msg[len] = '\0';
-	
+
 	// You may want to remove the following printk in your final version.
 	printk("Message from user space: %s\n", msg);
-	
+
 	return len;		// the number of bytes that were written to the Character Device.
 }
 
 // structure needed when registering the Character Device. Members are the callback
 // functions when the device is read from or written to.
 static struct file_operations fops = {
-	.read = device_read, 
+	.read = device_read,
 	.write = device_write,
 };
 
@@ -133,7 +133,7 @@ void cdev_module_exit(void)
 	// even if the file /dev/YourDevName still exists. Give that a try...
 	unregister_chrdev(major, CDEV_NAME);
 	printk("Char Device /dev/%s unregistered.\n", CDEV_NAME);
-}  
+}
 
 module_init(cdev_module_init);
 module_exit(cdev_module_exit);

@@ -18,6 +18,7 @@ static const struct modversion_info ____versions[]
 __used
 __attribute__((section("__versions"))) = {
 	{ 0x1fd34168, __VMLINUX_SYMBOL_STR(module_layout) },
+	{ 0xf20dabd8, __VMLINUX_SYMBOL_STR(free_irq) },
 	{ 0x544f18ad, __VMLINUX_SYMBOL_STR(hrtimer_cancel) },
 	{ 0x12685075, __VMLINUX_SYMBOL_STR(hrtimer_start_range_ns) },
 	{ 0xd6b8e852, __VMLINUX_SYMBOL_STR(request_threaded_irq) },
@@ -39,4 +40,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "BBE58E923C2AE05E99FC7E5");
+MODULE_INFO(srcversion, "1CF2BCE642D1DC44EE3CBAE");
