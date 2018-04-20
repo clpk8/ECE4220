@@ -21,6 +21,8 @@
 #include <asm/io.h>
 #include <linux/interrupt.h>
 #include <asm/uaccess.h>
+#include <linux/fs.h>
+
 #define MSG_SIZE 40
 #define CDEV_NAME "Lab6"    // "YourDevName"
 
