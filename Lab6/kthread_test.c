@@ -20,7 +20,13 @@
 #include <linux/delay.h>
 #include <asm/io.h>
 #include <linux/interrupt.h>
+#include <asm/uaccess.h>
+#define MSG_SIZE 40
+#define CDEV_NAME "Lab6"    // "YourDevName"
 
+//part3
+static int major;
+static char msg[MSG_SIZE];
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
@@ -29,6 +35,42 @@ int fqcy,mydev_id;
 //part2
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
 unsigned long *event,*Pdown,*Penable,*edge;
+
+//function called when user space program reads the chardev
+static ssize_t device_read(struct file *filp, char __user *buffer, size_t length, loff_t *offset)
+{
+    // Whatever is in msg will be placed into buffer, which will be copied into user space
+    ssize_t dummy = copy_to_user(buffer, msg, length);    // dummy will be 0 if successful
+    
+    // msg should be protected (e.g. semaphore). Not implemented here, but you can add it.
+    msg[0] = '\0';    // "Clear" the message, in case the device is read again.
+    // This way, the same message will not be read twice.
+    // Also convenient for checking if there is nothing new, in user space.
+    
+    return length;
+}
+// Function called when the user space program writes to the Character Device.
+static ssize_t device_write(struct file *filp, const char __user *buff, size_t len, loff_t *off)
+{
+    ssize_t dummy;
+    
+    if(len > MSG_SIZE)
+        return -EINVAL;
+    
+    // unsigned long copy_from_user(void *to, const void __user *from, unsigned long n);
+    dummy = copy_from_user(msg, buff, len);    // Transfers the data from user space to kernel space
+    if(len == MSG_SIZE)
+        msg[len-1] = '\0';    // will ignore the last character received.
+    else
+        msg[len] = '\0';
+    
+    // You may want to remove the following printk in your final version.
+    printk("Message from user space: %s\n", msg);
+    
+    return len;        // the number of bytes that were written to the Character Device.
+}
+
+
 
 // structure for the kthread.
 static struct task_struct *kthread1;
@@ -125,9 +167,26 @@ int kthread_fn(void *ptr)
     return 0;
 }
 
+// structure needed when registering the Character Device. Members are the callback
+// functions when the device is read from or written to.
+static struct file_operations fops = {
+    .read = device_read,
+    .write = device_write,
+};
+
+
 int thread_init(void)
 {
-    //create net_link socket(test fitst)
+    //Part 3
+    // register the Characted Device and obtain the major (assigned by the system)
+    major = register_chrdev(0, CDEV_NAME, &fops);
+    if (major < 0) {
+        printk("Registering the character device failed with %d\n", major);
+        return major;
+    }
+    printk("Lab6_cdev_kmod example, assigned major: %d\n", major);
+    printk("Create Char Device (node) with: sudo mknod /dev/%s c %d 0\n", CDEV_NAME, major);
+    
     int dummy = 0;
     fqcy = 200;
     //create another thread
@@ -184,6 +243,9 @@ int thread_init(void)
 }
 
 void thread_cleanup(void) {
+    unregister_chrdev(major, CDEV_NAME);
+    printk("Char Device /dev/%s unregistered.\n", CDEV_NAME);
+    
     int ret;
     // the following doesn't actually stop the thread, but signals that
     // the thread should stop itself (with do_exit above).
