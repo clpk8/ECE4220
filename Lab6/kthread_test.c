@@ -36,6 +36,14 @@ int fqcy,mydev_id;
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
 unsigned long *event,*Pdown,*Penable,*edge;
 
+// structure needed when registering the Character Device. Members are the callback
+// functions when the device is read from or written to.
+static struct file_operations fops = {
+    .read = device_read,
+    .write = device_write,
+};
+
+
 //function called when user space program reads the chardev
 static ssize_t device_read(struct file *filp, char __user *buffer, size_t length, loff_t *offset)
 {
@@ -166,14 +174,6 @@ int kthread_fn(void *ptr)
 
     return 0;
 }
-
-// structure needed when registering the Character Device. Members are the callback
-// functions when the device is read from or written to.
-static struct file_operations fops = {
-    .read = device_read,
-    .write = device_write,
-};
-
 
 int thread_init(void)
 {
