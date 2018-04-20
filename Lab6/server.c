@@ -253,7 +253,7 @@ int main(int argc, const char * argv[]) {
                 strcpy(buf,"300");
             }
             
-            int errorFlag = write(cdev_id, buf, sizeof(buf);
+            int errorFlag = write(cdev_id, buf, sizeof(buf));
             if(errorFlag != sizeof(buf)){
                 error("Writing to device");
             }
