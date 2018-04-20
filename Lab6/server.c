@@ -22,6 +22,7 @@
 
 
 int masterFlag = 0;
+int roundFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 #define MSG_SIZE 40            // message size
@@ -213,23 +214,27 @@ int main(int argc, const char * argv[]) {
             int machineNum = atoi(token);
             
             
-            //deternmind if im master
-            if(ranNum < num){
-                masterFlag = 1;
-            }
-            else{
-                if(ranNum == num){
-                    if(machineNum < myMachine){
-                        masterFlag = 1;
-                    //    printf("IM MASTER\n");
+            if(roundFlag == 0){
+                //deternmind if im master
+                if(ranNum < num){
+                    masterFlag = 1;
+                }
+                else{
+                    if(ranNum == num){
+                        if(machineNum <= myMachine){
+                            masterFlag = 1;
+                            //    printf("IM MASTER\n");
+                        }
+                        else{
+                            masterFlag = 0;
+                            roundFlag = 1;
+                        }
                     }
                     else{
                         masterFlag = 0;
+                        //  printf("second else!\n");
+                        roundFlag = 1;
                     }
-                }
-                else{
-                    masterFlag = 0;
-                  //  printf("second else!\n");
                 }
             }
         }
