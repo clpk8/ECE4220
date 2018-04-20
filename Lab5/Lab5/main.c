@@ -174,7 +174,6 @@ int main(int argc, const char * argv[]) {
         
         //case 3
         else if(buf[0] == '#'){
-            
             //copy message over
             char temp[MSG_SIZE];
             strcpy(temp, buf);
