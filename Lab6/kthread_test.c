@@ -69,6 +69,12 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
     
     // You may want to remove the following printk in your final version.
     printk("Message from user space: %s\n", msg);
+    long *temp;
+    int n = kstrtol(msg,10,temp);
+    if(n == 0){
+        printk("The transfered number is :%d\n",(int)*temp);
+        fqcy = (int)*temp;
+    }
     
     return len;        // the number of bytes that were written to the Character Device.
 }
