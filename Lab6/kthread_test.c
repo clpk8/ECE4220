@@ -22,8 +22,6 @@
 #include <linux/interrupt.h>
 #include <asm/uaccess.h>
 #include <linux/fs.h>
-#include <string.h>
-
 
 #define MSG_SIZE 40
 #define CDEV_NAME "Lab6"    // "YourDevName"
@@ -72,20 +70,23 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
 
     // You may want to remove the following printk in your final version.
     printk("Message from user space: %s\n", msg);
-    if (strcmp(msg[1],"A") == 0){
+    if (msg[1] == 'A'){
         fqcy = 900;
     }
-    else if(strcmp(smg[1],"B") == 0){
+    else if(msg[1] == 'B'){
         fqcy = 750;
     }
-    else if(strcmp(smg[1],"C") == 0){
+    else if(msg[1] == 'C'){
         fqcy = 600;
     }
-    else if(strcmp(smg[1],"D") == 0){
+    else if(msg[1] == 'D'){
         fqcy = 450;
     }
-    else if(strcmp(smg[1],"E") == 0){
+    else if(msg[1] == 'E'){
         fqcy = 300;
+    }
+    else{
+        printk("Nothing, :%c\n",msg[1]);
     }
 
     return len;        // the number of bytes that were written to the Character Device.
