@@ -46,48 +46,48 @@ int main(int argc, const char * argv[]) {
     char buf[MSG_SIZE]; //define buf
     socklen_t fromlen;
     struct ifreq ifr;
-    
+
     char ip_address[13];
-    
+
     //get IP
     /*AF_INET - to define IPv4 Address type.*/
     ifr.ifr_addr.sa_family = AF_INET;
     /*wlan0 - define the ifr_name - port name
      where network attached.*/
     memcpy(ifr.ifr_name, "wlan0", IFNAMSIZ-1);
-    
+
     //makesure port number is provided
     if(argc < 2){
-        
+
         printf("Error, Please enter the port number");
         exit(-1);
     }
-    
+
     //set up the socket
     sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
     if (sock < 0)
         error("Opening socket");
-    
+
     length = sizeof(broadcast);            // length of structure
     bzero(&broadcast,length);            // sets all values to zero. memset() could be used
-    
+
     length = sizeof(server);            // length of structure
     bzero(&server,length);            // sets all values to zero. memset() could be used
-    
+
     //initilize the server
     server.sin_family = AF_INET;        // symbol constant for Internet domain
     server.sin_addr.s_addr = INADDR_ANY;        // IP address of the machine on which
     // the server is running
     server.sin_port = htons(atoi(argv[1]));    // port number
-    
-    
-    
+
+
+
     /*Accessing network interface information by
      passing address using ioctl.*/
     ioctl(sock, SIOCGIFADDR, &ifr);
-    
+
     strcpy(ip_address,inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
-    
+
     //parsing to get machine number
     printf("System IP Address is: %s\n",ip_address);
     char temp[13];
@@ -102,8 +102,8 @@ int main(int argc, const char * argv[]) {
     char tempIP[13];
     const char *name = "ChunBin: ";
     const char *word = " is master!";
-    
-    
+
+
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
         //        error("binding");
@@ -114,12 +114,12 @@ int main(int argc, const char * argv[]) {
         printf("error setting socket options\n");
         exit(-1);
     }
-    
+
     //set up broadcast
     broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
     broadcast.sin_family = AF_INET;
     broadcast.sin_port = htons(atoi(argv[1]));    // port number
-    
+
     //get the length
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
@@ -130,7 +130,7 @@ int main(int argc, const char * argv[]) {
         n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&clint, &fromlen);
         if (n < 0)
             error("recvfrom");
-        
+
         //print buf
         printf("Message received is %s\n", buf);
         //case 1
@@ -148,36 +148,38 @@ int main(int argc, const char * argv[]) {
             else{
                 printf("I'm not master\n");
             }
-            
+
         }
-        
+
         //case 2
         else if(strcmp(buf,"VOTE\n") == 0){
             roundFlag = 0;
             bzero(buf,MSG_SIZE);
             num = 1 + rand() % 10; //random number
-            
+
             sprintf(buf, "# %s %d",ip_address,num); //concat string to broadcast
             printf("String Send to broad cast is %s\n",buf);
-            
+
             broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
             broadcast.sin_family = AF_INET;
             broadcast.sin_port = htons(atoi(argv[1]));    // port number
-            
+
             //send to broadcast
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
-            
+
             printf("IM here1\n");
         }
-        
+
         //case 3
         else if(buf[0] == '#'){
+
+
             //copy message over
             char temp[MSG_SIZE];
             strcpy(temp, buf);
-            
+
             //prase message
             char tempNum[20];
             char* token = strtok(temp,s);
@@ -187,7 +189,7 @@ int main(int argc, const char * argv[]) {
             }
             int ranNum = atoi(tempNum);
             printf("The Vote is:%d\n\n",ranNum);
-            
+
             strcpy(temp, buf);
             token = strtok(temp,c);
             while(token != NULL){
@@ -196,7 +198,7 @@ int main(int argc, const char * argv[]) {
             }
             token = strtok(tempNum, s);
             int machineNum = atoi(token);
-            
+
             if(roundFlag == 0){
                 //deternmind if im master
                 if(ranNum < num){
