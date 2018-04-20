@@ -18,11 +18,16 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include <fcntl.h>
+
+
 int masterFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 #define MSG_SIZE 40            // message size
-#define CHAR_DEV "/dev/Lab6"
+#define CHAR_DEV "/dev/Lab6" // "/dev/YourDevName"
+char toKernel[MSG_SIZE];
+
 //used for parsing
 const char s[2] = " ";
 const char c[2] = ".";
@@ -62,6 +67,16 @@ int main(int argc, const char * argv[]) {
         printf("Error, Please enter the port number");
         exit(-1);
     }
+    
+    //Lab6part3
+    //open char device
+    //read and write
+    int cdev_id;
+    if((cdev_id = open(CHAR_DEV, O_RDWR)) == -1) {
+        printf("Cannot open device %s\n", CHAR_DEV);
+        exit(1);
+    }
+    
     
     //set up the socket
     sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
@@ -216,6 +231,31 @@ int main(int argc, const char * argv[]) {
                     masterFlag = 0;
                   //  printf("second else!\n");
                 }
+            }
+        }
+        else if(buf[0] == '@'){
+            
+            //Lab6
+            
+            if(buf[1] == 'A'){
+                strcpy(buf,"900");
+            }
+            else if(buf[1] == 'B'){
+                strcpy(buf,"750");
+            }
+            else if(buf[1] == 'C'){
+                strcpy(buf,"600");
+            }
+            else if(buf[1] == 'D'){
+                strcpy(buf,"450");
+            }
+            else if(buf[1] == 'E'){
+                strcpy(buf,"300");
+            }
+            
+            int errorFlag = write(cdev_id, buf, sizeof(buf);
+            if(errorFlag != sizeof(buf)){
+                error("Writing to device");
             }
         }
     }
