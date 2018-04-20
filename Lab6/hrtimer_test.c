@@ -188,7 +188,6 @@ int timer_init(void)
 void timer_exit(void)
 {
 	int ret;
-//    free_irq(79, &mydev_id);
 
   	ret = hrtimer_cancel(&hr_timer);	// cancels the timer.
   	if(ret)
@@ -199,7 +198,8 @@ void timer_exit(void)
             free_irq(79, &mydev_id);
     }
 
-	
+    free_irq(79, &mydev_id);
+
   	printk("HR Timer module uninstalling\n");
 	
 }
