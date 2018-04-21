@@ -70,7 +70,11 @@ void readFromKernel(void* ptr){
     }
 
 
-
+    //set up broadcast
+    broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
+    broadcast.sin_family = AF_INET;
+    printf("portNum is :%d\n",portNum);
+    broadcast.sin_port = portNum;    // port number
 
 
 
@@ -89,11 +93,6 @@ void readFromKernel(void* ptr){
             printf("%s\n",rbuf);
             strcpy(pbuf,rbuf);
             if(masterFlag == 1){
-                //set up broadcast
-                broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-                broadcast.sin_family = AF_INET;
-                printf("portNum is :%d\n",portNum);
-                broadcast.sin_port = portNum;    // port number
                 
                 printf("Borad cast:%s\n",rbuf);
 
@@ -112,8 +111,8 @@ void readFromKernel(void* ptr){
 
 int main(int argc, const char * argv[]) {
     //Lab6
-  //  pthread_t read;
-   // pthread_create(&read, NULL, (void*)readFromKernel,NULL);
+    pthread_t read;
+    pthread_create(&read, NULL, (void*)readFromKernel,NULL);
 
     //function to make sure it will yield random number
     srand(time(NULL));
