@@ -252,6 +252,7 @@ int main(int argc, const char * argv[]) {
 
         //case 2
         else if(strcmp(buf,"VOTE\n") == 0){
+            roundFlag = 0;
             bzero(buf,MSG_SIZE);
             num = 1 + rand() % 10; //random number
 
