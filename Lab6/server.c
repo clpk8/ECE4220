@@ -25,6 +25,7 @@ int masterFlag = 0;
 int roundFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
+int cdev_id;
 #define MSG_SIZE 40            // message size
 #define CHAR_DEV "/dev/Lab6" // "/dev/YourDevName"
 char toKernel[MSG_SIZE];
@@ -40,18 +41,20 @@ void error(const char *msg)
     exit(0);
 }
 void readFromKernel(void* ptr){
+    printf("Pthread created\n");
     int n;
+    char rbuf[MSG_SIZE];
     while(1){
-        n = read(cdev_id, buffer, sizeof(buffer));
-        if(n != sizeof(buffer)) {
+        n = read(cdev_id, rbuf, sizeof(rbuf));
+        if(n != sizeof(rbuf)) {
             printf("Write failed, leaving...\n");
             break;
         }
-        
-        printf("%s",buffer);
+
+        printf("%s",rbuf);
     }
     close(cdev_id);    // close the device.
-    
+
 }
 
 
@@ -60,7 +63,7 @@ int main(int argc, const char * argv[]) {
     //Lab6
     pthread_t read;
     pthread_create(&read, NULL, (void*)readFromKernel,NULL);
-    
+
     //function to make sure it will yield random number
     srand(time(NULL));
     //set up socket
@@ -91,7 +94,6 @@ int main(int argc, const char * argv[]) {
     //Lab6part3
     //open char device
     //read and write
-    int cdev_id;
     if((cdev_id = open(CHAR_DEV, O_RDWR)) == -1) {
         printf("Cannot open device %s\n", CHAR_DEV);
         exit(1);

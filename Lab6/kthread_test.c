@@ -48,7 +48,7 @@ static ssize_t device_read(struct file *filp, char __user *buffer, size_t length
         strcpy(msg,"A");
     }
     else if(fqcy == 750){
-        strcpy(msg,"B")
+        strcpy(msg,"B");
     }
     else if(fqcy == 600){
         strcpy(msg,"C");
