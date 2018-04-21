@@ -45,19 +45,19 @@ unsigned long *event,*Pdown,*Penable,*edge;
 static ssize_t device_read(struct file *filp, char __user *buffer, size_t length, loff_t *offset)
 {
     if(fqcy == 900){
-        strcpy(msg,"A");
+        strcpy(msg,"@A");
     }
     else if(fqcy == 750){
-        strcpy(msg,"B");
+        strcpy(msg,"@B");
     }
     else if(fqcy == 600){
-        strcpy(msg,"C");
+        strcpy(msg,"@C");
     }
     else if(fqcy == 450){
-        strcpy(msg,"D");
+        strcpy(msg,"@D");
     }
     else if(fqcy == 300){
-        strcpy(msg,"E");
+        strcpy(msg,"@E");
     }
     else{
         msg[0] = '\0';
