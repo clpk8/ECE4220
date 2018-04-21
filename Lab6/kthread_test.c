@@ -22,6 +22,7 @@
 #include <linux/interrupt.h>
 #include <asm/uaccess.h>
 #include <linux/fs.h>
+#include <linux/string.h>
 
 #define MSG_SIZE 40
 #define CDEV_NAME "Lab6"    // "YourDevName"
@@ -44,19 +45,19 @@ unsigned long *event,*Pdown,*Penable,*edge;
 static ssize_t device_read(struct file *filp, char __user *buffer, size_t length, loff_t *offset)
 {
     if(fqcy == 900){
-        msg[0] = 'A';
+        strcpy(msg,"A");
     }
     else if(fqcy == 750){
-      msg[0] = 'B';
+        strcpy(msg,"B")
     }
     else if(fqcy == 600){
-        msg[0] = 'B';
+        strcpy(msg,"C");
     }
     else if(fqcy == 450){
-        msg[0] = 'D';
+        strcpy(msg,"D");
     }
     else if(fqcy == 300){
-       msg[0] = 'E';
+        strcpy(msg,"E");
     }
     else{
         msg[0] = '\0';
