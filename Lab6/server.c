@@ -44,14 +44,23 @@ void readFromKernel(void* ptr){
     printf("Pthread created\n");
     int n;
     char rbuf[MSG_SIZE];
+    char pbuf[MSG_SIZE];
+    strcpy(pbuf,"Z");
     while(1){
         n = read(cdev_id, rbuf, sizeof(rbuf));
         if(n != sizeof(rbuf)) {
             printf("Write failed, leaving...\n");
             break;
         }
-
-        printf("%s",rbuf);
+        if(strcmp(rbuf,pbuf) != 0){
+            //send to borad cast
+            printf("%s\n",rbuf);
+            strcpy(pbuf,rbuf);
+            if(masterFlag == 1){
+                printf("Borad cast:%s\n",rbuf);
+            }
+            
+        }
     }
     close(cdev_id);    // close the device.
 
