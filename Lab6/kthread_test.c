@@ -22,7 +22,6 @@
 #include <linux/interrupt.h>
 #include <asm/uaccess.h>
 #include <linux/fs.h>
-#include <string.h>
 
 #define MSG_SIZE 40
 #define CDEV_NAME "Lab6"    // "YourDevName"
@@ -107,7 +106,7 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
     else{
         printk("Nothing, :%c\n",msg[1]);
     }
-    
+
 
     return len;        // the number of bytes that were written to the Character Device.
 }
@@ -169,7 +168,7 @@ static irqreturn_t button_isr(int irq, void *dev_id)
     // IMPORTANT: Clear the Event Detect status register before leaving.
     *event = *event | setPb;//clear it
 
-    
+
     printk("Interrupt handled\n");
     enable_irq(79);        // re-enable interrupt
 
