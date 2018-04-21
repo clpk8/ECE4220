@@ -47,12 +47,16 @@ void readFromKernel(void* ptr){
     int sock, length, n;
     int boolval = 1; //use for socket option, to allow broadcast
     socklen_t fromlen;
+    fromlen = sizeof(struct sockaddr_in);    // size of structure
 
     //set up the socket
     sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
     if (sock < 0)
         error("Opening socket");
 
+    length = sizeof(server);            // length of structure
+    bzero(&server,length);            // sets all values to zero. memset() could be used
+    
     length = sizeof(broadcast);            // length of structure
     bzero(&broadcast,length);            // sets all values to zero. memset() could be used
     
@@ -61,7 +65,8 @@ void readFromKernel(void* ptr){
     server.sin_addr.s_addr = INADDR_ANY;        // IP address of the machine on which
     // the server is running
     server.sin_port = portNum;    // port number
-    
+    fromlen = sizeof(struct sockaddr_in);    // size of structure
+
     
 
     // binds the socket to the address of the host and the port number
@@ -76,10 +81,6 @@ void readFromKernel(void* ptr){
     }
 
 
-    //set up broadcast
-    broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-    broadcast.sin_family = AF_INET;
-    broadcast.sin_port = portNum;    // port number
 
 
 
@@ -102,6 +103,7 @@ void readFromKernel(void* ptr){
                 //set up broadcast
                 broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
                 broadcast.sin_family = AF_INET;
+                printf("portNum is :%d\n",portNum);
                 broadcast.sin_port = portNum;    // port number
                 
                 printf("Borad cast:%s\n",rbuf);
