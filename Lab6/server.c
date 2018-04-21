@@ -47,17 +47,17 @@ void readFromKernel(void* ptr){
     int sock, length, n;
     int boolval = 1; //use for socket option, to allow broadcast
     socklen_t fromlen;
-    
+
     //set up the socket
     sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
     if (sock < 0)
         error("Opening socket");
-    
+
     length = sizeof(broadcast);            // length of structure
     bzero(&broadcast,length);            // sets all values to zero. memset() could be used
-    
 
-    
+
+
     // binds the socket to the address of the host and the port number
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
         //        error("binding");
@@ -68,7 +68,7 @@ void readFromKernel(void* ptr){
         printf("error setting socket options\n");
         exit(-1);
     }
-    
+
     //set up broadcast
     broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
     broadcast.sin_family = AF_INET;
@@ -76,9 +76,8 @@ void readFromKernel(void* ptr){
 
 
 
-    
+
     printf("Pthread created\n");
-    int n;
     char rbuf[MSG_SIZE];
     char pbuf[MSG_SIZE];
     strcpy(pbuf,"Z");
@@ -94,12 +93,12 @@ void readFromKernel(void* ptr){
             strcpy(pbuf,rbuf);
             if(masterFlag == 1){
                 printf("Borad cast:%s\n",rbuf);
-                
+
                 n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
             }
-            
+
         }
     }
     close(cdev_id);    // close the device.
