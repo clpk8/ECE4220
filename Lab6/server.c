@@ -54,19 +54,11 @@ void readFromKernel(void* ptr){
     if (sock < 0)
         error("Opening socket");
 
-    length = sizeof(server);            // length of structure
-    bzero(&server,length);            // sets all values to zero. memset() could be used
+
     
     length = sizeof(broadcast);            // length of structure
     bzero(&broadcast,length);            // sets all values to zero. memset() could be used
     
-    //initilize the server
-    server.sin_family = AF_INET;        // symbol constant for Internet domain
-    server.sin_addr.s_addr = INADDR_ANY;        // IP address of the machine on which
-    // the server is running
-    server.sin_port = portNum;    // port number
-    fromlen = sizeof(struct sockaddr_in);    // size of structure
-
     
 
     // binds the socket to the address of the host and the port number
