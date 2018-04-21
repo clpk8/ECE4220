@@ -112,8 +112,8 @@ void readFromKernel(void* ptr){
 
 int main(int argc, const char * argv[]) {
     //Lab6
-    pthread_t read;
-    pthread_create(&read, NULL, (void*)readFromKernel,NULL);
+  //  pthread_t read;
+   // pthread_create(&read, NULL, (void*)readFromKernel,NULL);
 
     //function to make sure it will yield random number
     srand(time(NULL));
