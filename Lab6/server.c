@@ -26,6 +26,7 @@ int roundFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 int cdev_id;
+int portNum;
 #define MSG_SIZE 40            // message size
 #define CHAR_DEV "/dev/Lab6" // "/dev/YourDevName"
 char toKernel[MSG_SIZE];
@@ -41,6 +42,41 @@ void error(const char *msg)
     exit(0);
 }
 void readFromKernel(void* ptr){
+    //set up boradcast
+    struct sockaddr_in server, broadcast, clint; //define structures
+    int sock, length, n;
+    int boolval = 1; //use for socket option, to allow broadcast
+    socklen_t fromlen;
+    
+    //set up the socket
+    sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
+    if (sock < 0)
+        error("Opening socket");
+    
+    length = sizeof(broadcast);            // length of structure
+    bzero(&broadcast,length);            // sets all values to zero. memset() could be used
+    
+
+    
+    // binds the socket to the address of the host and the port number
+    if (bind(sock, (struct sockaddr *)&server, length) < 0)
+        //        error("binding");
+        printf("2");
+    // change socket permissions to allow broadcast
+    if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &boolval, sizeof(boolval)) < 0)
+    {
+        printf("error setting socket options\n");
+        exit(-1);
+    }
+    
+    //set up broadcast
+    broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
+    broadcast.sin_family = AF_INET;
+    broadcast.sin_port = portNum;    // port number
+
+
+
+    
     printf("Pthread created\n");
     int n;
     char rbuf[MSG_SIZE];
@@ -58,6 +94,10 @@ void readFromKernel(void* ptr){
             strcpy(pbuf,rbuf);
             if(masterFlag == 1){
                 printf("Borad cast:%s\n",rbuf);
+                
+                n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
+                if (n  < 0)
+                    error("sendto");
             }
             
         }
@@ -126,7 +166,7 @@ int main(int argc, const char * argv[]) {
     // the server is running
     server.sin_port = htons(atoi(argv[1]));    // port number
 
-
+    portNum = htons(atoi(argv[1]));
 
     /*Accessing network interface information by
      passing address using ioctl.*/
