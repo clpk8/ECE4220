@@ -30,6 +30,7 @@
 //part3
 static int major;
 static char msg[MSG_SIZE];
+static char msg2[MSG_SIZE];
 
 MODULE_LICENSE("GPL");
 unsigned long *bptr, *set,*sel,*clr;
@@ -81,31 +82,31 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
         return -EINVAL;
 
     // unsigned long copy_from_user(void *to, const void __user *from, unsigned long n);
-    dummy = copy_from_user(msg, buff, len);    // Transfers the data from user space to kernel space
+    dummy = copy_from_user(msg2, buff, len);    // Transfers the data from user space to kernel space
 //    if(len == MSG_SIZE)
 //        msg[len-1] = '\0';    // will ignore the last character received.
 //    else
 //        msg[len] = '\0';
 
     // You may want to remove the following printk in your final version.
-    printk("Message from user space: %s\n", msg);
-    if (msg[0] == 'A'){
+    printk("Message from user space: %s\n", msg2);
+    if (msg2[0] == 'A'){
         fqcy = 900;
     }
-    else if(msg[0] == 'B'){
+    else if(msg2[0] == 'B'){
         fqcy = 750;
     }
-    else if(msg[0] == 'C'){
+    else if(msg2[0] == 'C'){
         fqcy = 600;
     }
-    else if(msg[0] == 'D'){
+    else if(msg2[0] == 'D'){
         fqcy = 450;
     }
-    else if(msg[0] == 'E'){
+    else if(msg2[0] == 'E'){
         fqcy = 300;
     }
     else{
-        printk("Nothing, :%c\n",msg[1]);
+        printk("Nothing, :%c\n",msg2[1]);
     }
 
 
