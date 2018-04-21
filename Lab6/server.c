@@ -325,7 +325,13 @@ int main(int argc, const char * argv[]) {
         else if(buf[0] == '@'){
 
             //Lab6
-
+            if(masterFlag == 1){
+                //send to broadcast
+                n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
+                if (n  < 0)
+                    error("sendto");
+            }
+            
             if(buf[1] == 'A'){
                 bzero(buf,MSG_SIZE);
                 strcpy(buf,"A");
