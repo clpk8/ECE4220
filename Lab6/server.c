@@ -61,10 +61,7 @@ void readFromKernel(void* ptr){
     
     
 
-    // binds the socket to the address of the host and the port number
-    if (bind(sock, (struct sockaddr *)&server, length) < 0)
-        //        error("binding");
-        printf("2");
+
     // change socket permissions to allow broadcast
     if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &boolval, sizeof(boolval)) < 0)
     {
