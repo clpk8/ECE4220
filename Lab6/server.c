@@ -239,6 +239,41 @@ int main(int argc, const char * argv[]) {
 
         }
 
+        else if(buf[0] == '@'){
+            
+            //Lab6
+            
+            printf("buf1 is%c",buf[1]);
+            if(buf[1] == 'A'){
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"A");
+            }
+            else if(buf[1] == 'B'){
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"B");
+            }
+            else if(buf[1] == 'C'){
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"C");
+            }
+            else if(buf[1] == 'D'){
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"D");
+            }
+            else if(buf[1] == 'E'){
+                bzero(buf,MSG_SIZE);
+                strcpy(buf,"E");
+            }
+            else{
+                printf("message is:%s\n",buf);
+            }
+            
+            int errorFlag = write(cdev_id, buf, sizeof(buf));
+            if(errorFlag != sizeof(buf)){
+                error("Writing to device");
+            }
+        }
+        
         //case 2
         else if(strcmp(buf,"VOTE\n") == 0){
             roundFlag = 0;
@@ -260,6 +295,7 @@ int main(int argc, const char * argv[]) {
             printf("IM here1\n");
         }
 
+        
         //case 3
         else if(buf[0] == '#'){
 
@@ -311,39 +347,9 @@ int main(int argc, const char * argv[]) {
                 }
             }
         }
-        else if(buf[0] == '@'){
 
-            //Lab6
- 
-            printf("buf1 is%c",buf[1]);
-            if(buf[1] == 'A'){
-                bzero(buf,MSG_SIZE);
-                strcpy(buf,"A");
-            }
-            else if(buf[1] == 'B'){
-                bzero(buf,MSG_SIZE);
-                strcpy(buf,"B");
-            }
-            else if(buf[1] == 'C'){
-                bzero(buf,MSG_SIZE);
-                strcpy(buf,"C");
-            }
-            else if(buf[1] == 'D'){
-                bzero(buf,MSG_SIZE);
-                strcpy(buf,"D");
-            }
-            else if(buf[1] == 'E'){
-                bzero(buf,MSG_SIZE);
-                strcpy(buf,"E");
-            }
-            else{
-                printf("message is:%s\n",buf);
-            }
-
-            int errorFlag = write(cdev_id, buf, sizeof(buf));
-            if(errorFlag != sizeof(buf)){
-                error("Writing to device");
-            }
+        else{
+            printf("else statepemtn, buf:%s\n",buf);
         }
     }
     return 0;
