@@ -33,9 +33,24 @@ void error(const char *msg)
     perror(msg);
     exit(0);
 }
+void readFromKernel(void* ptr){
+    int n;
+    while(1){
+         n = write(cdev_id, buffer, sizeof(buffer));
+        if(n != sizeof(buffer)) {
+            printf("Write failed, leaving...\n");
+            break;
+        }
+        
+        printf("%s",buffer);
+    }
+    close(cdev_id);    // close the device.
 
+}
 
 int main(int argc, const char * argv[]) {
+    
+
     //function to make sure it will yield random number
     srand(time(NULL));
     //set up socket
