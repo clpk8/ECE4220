@@ -346,6 +346,9 @@ int main(int argc, const char * argv[]) {
                 bzero(buf,MSG_SIZE);
                 strcpy(buf,"E");
             }
+            else{
+                printf("message is:%s\n",buf);
+            }
 
             int errorFlag = write(cdev_id, buf, sizeof(buf));
             if(errorFlag != sizeof(buf)){
