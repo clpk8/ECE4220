@@ -326,6 +326,7 @@ int main(int argc, const char * argv[]) {
 
             //Lab6
  
+            printf("buf1 is%c",buf[1]);
             if(buf[1] == 'A'){
                 bzero(buf,MSG_SIZE);
                 strcpy(buf,"A");
