@@ -82,10 +82,10 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
 
     // unsigned long copy_from_user(void *to, const void __user *from, unsigned long n);
     dummy = copy_from_user(msg, buff, len);    // Transfers the data from user space to kernel space
-    if(len == MSG_SIZE)
-        msg[len-1] = '\0';    // will ignore the last character received.
-    else
-        msg[len] = '\0';
+//    if(len == MSG_SIZE)
+//        msg[len-1] = '\0';    // will ignore the last character received.
+//    else
+//        msg[len] = '\0';
 
     // You may want to remove the following printk in your final version.
     printk("Message from user space: %s\n", msg);
