@@ -23,6 +23,7 @@
 
 int masterFlag = 0;
 int roundFlag = 0;
+int sendFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 int cdev_id;
@@ -122,6 +123,7 @@ int main(int argc, const char * argv[]) {
     //receive should be empty, it will been fill up
     struct sockaddr_in server, broadcast, clint; //define structures
     char buf[MSG_SIZE]; //define buf
+    char pbuf[MSG_SIZE] = "lala"; //pervious buffer
     socklen_t fromlen;
     struct ifreq ifr;
 
@@ -217,6 +219,9 @@ int main(int argc, const char * argv[]) {
         n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&clint, &fromlen);
         if (n < 0)
             error("recvfrom");
+        
+        if(strcmp(buf,pbuf) != 0)
+            sendFlag = 1;
 
         //print buf
         printf("Message received is %s\n", buf);
@@ -243,12 +248,14 @@ int main(int argc, const char * argv[]) {
             //Lab6
 
             //printf("buf1 is%c",buf[1]);
-            if(masterFlag == 1){
+            if(masterFlag == 1 && sendFlag == 1){
 
                 //send to broadcast
                 n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
+                
+                sendFlag = 0;
             }
 
             printf("buf1 is%c",buf[1]);
