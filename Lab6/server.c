@@ -241,8 +241,20 @@ int main(int argc, const char * argv[]) {
         else if(buf[0] == '@'){
 
             //Lab6
+<<<<<<< HEAD
 
             //printf("buf1 is%c",buf[1]);
+=======
+            if(masterFlag == 1){
+                
+                //send to broadcast
+                n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
+                if (n  < 0)
+                    error("sendto");
+            }
+            
+            printf("buf1 is%c",buf[1]);
+>>>>>>> 15287bd270de43f0f37589a7ad6e0a0902263f86
             if(buf[1] == 'A'){
                 bzero(buf,MSG_SIZE);
                 strcpy(buf,"A");
@@ -282,9 +294,9 @@ int main(int argc, const char * argv[]) {
             sprintf(buf, "# %s %d",ip_address,num); //concat string to broadcast
             printf("String Send to broad cast is %s\n",buf);
 
-            broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-            broadcast.sin_family = AF_INET;
-            broadcast.sin_port = htons(atoi(argv[1]));    // port number
+//            broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
+//            broadcast.sin_family = AF_INET;
+//            broadcast.sin_port = htons(atoi(argv[1]));    // port number
 
             //send to broadcast
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
@@ -297,7 +309,7 @@ int main(int argc, const char * argv[]) {
 
         //case 3
         else if(buf[0] == '#'){
-
+            
             //copy message over
             char temp[MSG_SIZE];
             strcpy(temp, buf);
