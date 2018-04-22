@@ -219,11 +219,11 @@ int main(int argc, const char * argv[]) {
         n = recvfrom(sock, buf, MSG_SIZE, 0, (struct sockaddr *)&clint, &fromlen);
         if (n < 0)
             error("recvfrom");
-        
+
         if(strcmp(buf,pbuf) != 0)
             sendFlag = 1;
 
-        printf("------------\nbuf is %s, rbuf is &s, and flag is %d",buf,rbuf,sendFlag);
+        printf("------------\nbuf is %s, pbuf is &s, and flag is %d",buf,pbuf,sendFlag);
         //print buf
         printf("Message received is %s\n", buf);
         //case 1
@@ -255,7 +255,7 @@ int main(int argc, const char * argv[]) {
                 n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
-                
+
                 sendFlag = 0;
             }
 
