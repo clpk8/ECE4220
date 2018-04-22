@@ -20,23 +20,25 @@
 #include <time.h>
 #include <fcntl.h>
 #include <pthread.h>
-
+//---------------------Flags----------------------
 int masterFlag = 0;
 int roundFlag = 0;
 int sendFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
+
+//Lab6
 int cdev_id;
-int portNum;
+int portNum; //store port as globel for thread
 #define MSG_SIZE 40            // message size
 #define CHAR_DEV "/dev/Lab6" // "/dev/YourDevName"
-char toKernel[MSG_SIZE];
+char toKernel[MSG_SIZE]; //message to kernel
 
 //used for parsing
 const char s[2] = " ";
 const char c[2] = ".";
 
-//globel value
+//globel value for socket
 struct sockaddr_in server, broadcast, clint; //define structures
 int sock, length, n;
 int boolval = 1; //use for socket option, to allow broadcast
@@ -50,25 +52,14 @@ void error(const char *msg)
     exit(0);
 }
 void readFromKernel(void* ptr){
-    //set up boradcast
-//    struct sockaddr_in server, broadcast, clint; //define structures
-//    int sock, length, n;
-//    int boolval = 1; //use for socket option, to allow broadcast
-//    socklen_t fromlen;
-//    fromlen = sizeof(struct sockaddr_in);    // size of structure
 
     //set up the socket
     sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
     if (sock < 0)
         error("Opening socket");
 
-
-
     length = sizeof(broadcast);            // length of structure
     bzero(&broadcast,length);            // sets all values to zero. memset() could be used
-
-
-
 
     // change socket permissions to allow broadcast
     if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &boolval, sizeof(boolval)) < 0)
@@ -77,7 +68,6 @@ void readFromKernel(void* ptr){
         exit(-1);
     }
 
-
     //set up broadcast
     broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
     broadcast.sin_family = AF_INET;
@@ -85,25 +75,27 @@ void readFromKernel(void* ptr){
     broadcast.sin_port = portNum;    // port number
 
 
-
+    //beginning of pthread
     printf("Pthread created\n");
     char rbuf[MSG_SIZE];
     char pbuf[MSG_SIZE];
-    strcpy(pbuf,"Z");
+    strcpy(pbuf,"Z");//pervisous buffer used to deternmind a change
     while(1){
+        //read from char device
         n = read(cdev_id, rbuf, sizeof(rbuf));
         if(n != sizeof(rbuf)) {
             printf("Write failed, leaving...\n");
             break;
         }
+        //if different, send the new one, so it does not send too many
         if(strcmp(rbuf,pbuf) != 0){
             //send to borad cast
             printf("Message playing on the borad:%s\n\n",rbuf);
-            strcpy(pbuf,rbuf);
+            strcpy(pbuf,rbuf);//update pervious buffer
+            //if master, boradcast my keyboard event
             if(masterFlag == 1){
-
                 printf("I've sent:%s\n",rbuf);
-
+                //sendto function
                 n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
@@ -118,24 +110,19 @@ void readFromKernel(void* ptr){
 
 
 int main(int argc, const char * argv[]) {
-    //Lab6
+    //Lab6 creating a thread
     pthread_t read;
     pthread_create(&read, NULL, (void*)readFromKernel,NULL);
 
     //function to make sure it will yield random number
     srand(time(NULL));
-    //set up socket
-//    int sock, length, n;
-//    int boolval = 1; //use for socket option, to allow broadcast
-    //receive should be empty, it will been fill up
- //   struct sockaddr_in server, broadcast, clint; //define structures
+    //buffer
     char buf[MSG_SIZE]; //define buf
-    char pbuf[MSG_SIZE] = "lala"; //pervious buffer
- //   socklen_t fromlen;
+    char pbuf[MSG_SIZE] = "lala"; //pervious buffer, used to find change
+
+    //-------------get IP dynamicaly-------------------
     struct ifreq ifr;
-
     char ip_address[13];
-
     //get IP
     /*AF_INET - to define IPv4 Address type.*/
     ifr.ifr_addr.sa_family = AF_INET;
@@ -143,6 +130,9 @@ int main(int argc, const char * argv[]) {
      where network attached.*/
     memcpy(ifr.ifr_name, "wlan0", IFNAMSIZ-1);
 
+    //-------------------------------------------------
+    
+    
     //makesure port number is provided
     if(argc < 2){
 
@@ -170,21 +160,20 @@ int main(int argc, const char * argv[]) {
     length = sizeof(server);            // length of structure
     bzero(&server,length);            // sets all values to zero. memset() could be used
 
-    //initilize the server
+    //-----------------initilize the server-----------------------
     server.sin_family = AF_INET;        // symbol constant for Internet domain
     server.sin_addr.s_addr = INADDR_ANY;        // IP address of the machine on which
     // the server is running
     server.sin_port = htons(atoi(argv[1]));    // port number
+    portNum = htons(atoi(argv[1]));//set globel value
 
-    portNum = htons(atoi(argv[1]));
-
-    /*Accessing network interface information by
-     passing address using ioctl.*/
+    
+    
+    /*Accessing network interface information bypassing address using ioctl.*/
     ioctl(sock, SIOCGIFADDR, &ifr);
-
     strcpy(ip_address,inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 
-    //parsing to get machine number
+    //-----------parsing to get machine number--------------------
     printf("System IP Address is: %s\n",ip_address);
     char temp[13];
     strcpy(temp, ip_address);
@@ -200,18 +189,18 @@ int main(int argc, const char * argv[]) {
     const char *word = " is master!";
 
 
-    // binds the socket to the address of the host and the port number
+    // -----------------binds the socket---------------------
     if (bind(sock, (struct sockaddr *)&server, length) < 0)
         //        error("binding");
         printf("2");
-    // change socket permissions to allow broadcast
+    // -------change socket permissions to allow broadcast---------
     if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &boolval, sizeof(boolval)) < 0)
     {
         printf("error setting socket options\n");
         exit(-1);
     }
 
-    //set up broadcast
+    //----------------set up broadcast--------------------
     broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
     broadcast.sin_family = AF_INET;
     broadcast.sin_port = htons(atoi(argv[1]));    // port number
@@ -219,6 +208,7 @@ int main(int argc, const char * argv[]) {
     //get the length
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
+        
         //store IP in a temp variable
         strcpy(tempIP, ip_address);
         bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
@@ -227,12 +217,14 @@ int main(int argc, const char * argv[]) {
         if (n < 0)
             error("recvfrom");
 
+        //Lab 6, only send to boradcast if there is a change
         if(strcmp(buf,pbuf) != 0){
             sendFlag = 1;
             strcpy(pbuf,buf);
         }
 
-        printf("------------\nbuf is %s, pbuf is &s, and flag is %d",buf,pbuf,sendFlag);
+        //printf("------------\nbuf is %s, pbuf is %s, and flag is %d",buf,pbuf,sendFlag);
+        
         //print buf
         printf("Message received is %s\n", buf);
         //case 1
@@ -252,22 +244,21 @@ int main(int argc, const char * argv[]) {
             }
 
         }
-
+        
+        //Lab6
         else if(buf[0] == '@'){
-
-            //Lab6
-
             //printf("buf1 is%c",buf[1]);
+            //forward message to broadcast
             if(masterFlag == 1 && sendFlag == 1){
 
                 //send to broadcast
                 n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
-
-                sendFlag = 0;
+                sendFlag = 0;//set flag to 0 to avoid repeating
             }
 
+            //compare the message, and then send it to kernel by char device
             printf("buf1 is%c",buf[1]);
             if(buf[1] == 'A'){
                 bzero(buf,MSG_SIZE);
@@ -293,6 +284,7 @@ int main(int argc, const char * argv[]) {
                 printf("message is:%s\n",buf);
             }
 
+            //sending
             int errorFlag = write(cdev_id, buf, sizeof(buf));
             if(errorFlag != sizeof(buf)){
                 error("Writing to device");
@@ -301,16 +293,14 @@ int main(int argc, const char * argv[]) {
 
         //case 2
         else if(strcmp(buf,"VOTE\n") == 0){
+            //set roundFlag to deternmind master
             roundFlag = 0;
+            
+            //--------------Creating and send messgae-------------------
             bzero(buf,MSG_SIZE);
             num = 1 + rand() % 10; //random number
-
             sprintf(buf, "# %s %d",ip_address,num); //concat string to broadcast
             printf("String Send to broad cast is %s\n",buf);
-
-//            broadcast.sin_addr.s_addr = inet_addr("128.206.19.255");
-//            broadcast.sin_family = AF_INET;
-//            broadcast.sin_port = htons(atoi(argv[1]));    // port number
 
             //send to broadcast
             n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
@@ -324,6 +314,7 @@ int main(int argc, const char * argv[]) {
         //case 3
         else if(buf[0] == '#'){
 
+            //----------------Parsing info--------------------------
             //copy message over
             char temp[MSG_SIZE];
             strcpy(temp, buf);
@@ -348,8 +339,8 @@ int main(int argc, const char * argv[]) {
             int machineNum = atoi(token);
 
 
-            if(roundFlag == 0){
-                //deternmind if im master
+            //--------------Deternmind master-----------------
+            if(roundFlag == 0){//roundFlag used to make sure i'm not getting replaced,
                 if(ranNum < num){
                     masterFlag = 1;
                 }
@@ -374,6 +365,7 @@ int main(int argc, const char * argv[]) {
         }
 
         else{
+            //for testing purpose.
             printf("else statepemtn, buf:%s\n",buf);
         }
     }
