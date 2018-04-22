@@ -220,8 +220,10 @@ int main(int argc, const char * argv[]) {
         if (n < 0)
             error("recvfrom");
 
-        if(strcmp(buf,pbuf) != 0)
+        if(strcmp(buf,pbuf) != 0){
             sendFlag = 1;
+            strcpy(pbuf,buf);
+        }
 
         printf("------------\nbuf is %s, pbuf is &s, and flag is %d",buf,pbuf,sendFlag);
         //print buf
