@@ -55,11 +55,11 @@ void readFromKernel(void* ptr){
         error("Opening socket");
 
 
-    
+
     length = sizeof(broadcast);            // length of structure
     bzero(&broadcast,length);            // sets all values to zero. memset() could be used
-    
-    
+
+
 
 
     // change socket permissions to allow broadcast
@@ -90,11 +90,11 @@ void readFromKernel(void* ptr){
         }
         if(strcmp(rbuf,pbuf) != 0){
             //send to borad cast
-            printf("%s\n",rbuf);
+            printf("Message playing on the borad:%s\n\n",rbuf);
             strcpy(pbuf,rbuf);
             if(masterFlag == 1){
-                
-                printf("Borad cast:%s\n",rbuf);
+
+                printf("I've sent:%s\n",rbuf);
 
                 n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
@@ -239,10 +239,10 @@ int main(int argc, const char * argv[]) {
         }
 
         else if(buf[0] == '@'){
-            
+
             //Lab6
-            
-            printf("buf1 is%c",buf[1]);
+
+            //printf("buf1 is%c",buf[1]);
             if(buf[1] == 'A'){
                 bzero(buf,MSG_SIZE);
                 strcpy(buf,"A");
@@ -266,13 +266,13 @@ int main(int argc, const char * argv[]) {
             else{
                 printf("message is:%s\n",buf);
             }
-            
+
             int errorFlag = write(cdev_id, buf, sizeof(buf));
             if(errorFlag != sizeof(buf)){
                 error("Writing to device");
             }
         }
-        
+
         //case 2
         else if(strcmp(buf,"VOTE\n") == 0){
             roundFlag = 0;
@@ -294,7 +294,7 @@ int main(int argc, const char * argv[]) {
             printf("IM here1\n");
         }
 
-        
+
         //case 3
         else if(buf[0] == '#'){
 
