@@ -223,6 +223,7 @@ int main(int argc, const char * argv[]) {
         if(strcmp(buf,pbuf) != 0)
             sendFlag = 1;
 
+        printf("------------\nbuf is %s, rbuf is &s, and flag is %d",buf,rbuf,sendFlag);
         //print buf
         printf("Message received is %s\n", buf);
         //case 1
