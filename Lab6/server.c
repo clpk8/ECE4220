@@ -36,6 +36,13 @@ char toKernel[MSG_SIZE];
 const char s[2] = " ";
 const char c[2] = ".";
 
+//globel value
+struct sockaddr_in server, broadcast, clint; //define structures
+int sock, length, n;
+int boolval = 1; //use for socket option, to allow broadcast
+socklen_t fromlen;
+fromlen = sizeof(struct sockaddr_in);    // size of structure
+
 //errpr message function
 void error(const char *msg)
 {
@@ -44,11 +51,11 @@ void error(const char *msg)
 }
 void readFromKernel(void* ptr){
     //set up boradcast
-    struct sockaddr_in server, broadcast, clint; //define structures
-    int sock, length, n;
-    int boolval = 1; //use for socket option, to allow broadcast
-    socklen_t fromlen;
-    fromlen = sizeof(struct sockaddr_in);    // size of structure
+//    struct sockaddr_in server, broadcast, clint; //define structures
+//    int sock, length, n;
+//    int boolval = 1; //use for socket option, to allow broadcast
+//    socklen_t fromlen;
+//    fromlen = sizeof(struct sockaddr_in);    // size of structure
 
     //set up the socket
     sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
@@ -118,13 +125,13 @@ int main(int argc, const char * argv[]) {
     //function to make sure it will yield random number
     srand(time(NULL));
     //set up socket
-    int sock, length, n;
-    int boolval = 1; //use for socket option, to allow broadcast
+//    int sock, length, n;
+//    int boolval = 1; //use for socket option, to allow broadcast
     //receive should be empty, it will been fill up
-    struct sockaddr_in server, broadcast, clint; //define structures
+ //   struct sockaddr_in server, broadcast, clint; //define structures
     char buf[MSG_SIZE]; //define buf
     char pbuf[MSG_SIZE] = "lala"; //pervious buffer
-    socklen_t fromlen;
+ //   socklen_t fromlen;
     struct ifreq ifr;
 
     char ip_address[13];
