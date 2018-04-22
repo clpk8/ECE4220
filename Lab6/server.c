@@ -247,7 +247,6 @@ int main(int argc, const char * argv[]) {
         
         //Lab6
         else if(buf[0] == '@'){
-            //printf("buf1 is%c",buf[1]);
             //forward message to broadcast
             if(masterFlag == 1 && sendFlag == 1){
 
@@ -259,7 +258,7 @@ int main(int argc, const char * argv[]) {
             }
 
             //compare the message, and then send it to kernel by char device
-            printf("buf1 is%c",buf[1]);
+         //   printf("buf1 is%c",buf[1]);
             if(buf[1] == 'A'){
                 bzero(buf,MSG_SIZE);
                 strcpy(buf,"A");
@@ -307,7 +306,6 @@ int main(int argc, const char * argv[]) {
             if (n  < 0)
                 error("sendto");
 
-            printf("IM here1\n");
         }
 
 
