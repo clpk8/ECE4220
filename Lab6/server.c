@@ -40,8 +40,8 @@ const char c[2] = ".";
 struct sockaddr_in server, broadcast, clint; //define structures
 int sock, length, n;
 int boolval = 1; //use for socket option, to allow broadcast
-socklen_t fromlen;
-fromlen = sizeof(struct sockaddr_in);    // size of structure
+socklen_t fromlen = sizeof(struct sockaddr_in);
+//fromlen = sizeof(struct sockaddr_in);    // size of structure
 
 //errpr message function
 void error(const char *msg)
