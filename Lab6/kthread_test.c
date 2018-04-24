@@ -29,17 +29,18 @@
 
 //part3
 static int major;
+//created 2 msg because sometime read will overwrite write
 static char msg[MSG_SIZE];
 static char msg2[MSG_SIZE];
 
 MODULE_LICENSE("GPL");
-unsigned long *bptr, *set,*sel,*clr;
+unsigned long *bptr, *set,*sel,*clr;//part 1, only speaker
 long fqcy;
 int mydev_id;
 
 //part2
 unsigned long setPb = 0x1F0000; //set 5 push button to 1, 0001 1111 0 0 0 0
-unsigned long *event,*Pdown,*Penable,*edge;
+unsigned long *event,*Pdown,*Penable,*edge;//part2
 
 
 //function called when user space program reads the chardev
@@ -230,7 +231,7 @@ int thread_init(void)
     printk("Create Char Device (node) with: sudo mknod /dev/%s c %d 0\n", CDEV_NAME, major);
 
     int dummy = 0;
-    fqcy = 200;
+    fqcy = 200;//set it to a default value
     //create another thread
     char kthread_name[11]="my_kthread";    // try running  ps -ef | grep my_kthread
     // when the thread is active.
@@ -269,9 +270,10 @@ int thread_init(void)
     edge = bptr + 0x4C/4;//point at rising edge detect enable 0
     *edge = *edge | setPb;
 
+    //request irq
     dummy = request_irq(79, button_isr, IRQF_SHARED, "Button_handler", &mydev_id);
 
-
+    //creating kthread
     kthread1 = kthread_create(kthread_fn, NULL, kthread_name);
 
     if((kthread1))    // true if kthread creation is successful

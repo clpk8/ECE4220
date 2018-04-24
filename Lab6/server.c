@@ -24,6 +24,7 @@
 int masterFlag = 0;
 int roundFlag = 0;
 int sendFlag = 0;
+int bonusFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 
@@ -96,7 +97,8 @@ void readFromKernel(void* ptr){
             if(masterFlag == 1){
                 printf("I've sent:%s\n",rbuf);
                 //sendto function
-                n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
+                bonusFlag = 1;
+               // n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
             }
@@ -209,6 +211,13 @@ int main(int argc, const char * argv[]) {
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
         
+        if(bonusFlag == 1){
+            n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
+            if (n  < 0)
+                error("sendto");
+            bonusFlag = 0;
+            
+        }
         //store IP in a temp variable
         strcpy(tempIP, ip_address);
         bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
