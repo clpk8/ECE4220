@@ -255,7 +255,7 @@ int main(int argc, const char * argv[]) {
             if(masterFlag == 1 && sendFlag == 1 &&(strcmp(compareBuf,buf)) !=0){
 
                 //send to broadcast
-                n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
+          //      n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
                 sendFlag = 0;//set flag to 0 to avoid repeating
