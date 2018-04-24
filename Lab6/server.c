@@ -24,7 +24,6 @@
 int masterFlag = 0;
 int roundFlag = 0;
 int sendFlag = 0;
-int bonusFlag = 0;
 int num;//store my vote
 int myMachine; //my machine number
 
@@ -34,7 +33,7 @@ int portNum; //store port as globel for thread
 #define MSG_SIZE 40            // message size
 #define CHAR_DEV "/dev/Lab6" // "/dev/YourDevName"
 char toKernel[MSG_SIZE]; //message to kernel
-char bonusBuf[MSG_SIZE];
+char compareBuf[MSG_SIZE];
 
 //used for parsing
 const char s[2] = " ";
@@ -98,11 +97,12 @@ void readFromKernel(void* ptr){
             if(masterFlag == 1){
                 printf("I've sent:%s\n",rbuf);
                 //sendto function
-                bonusFlag = 1;
                 strcpy(bonusBuf,rbuf);
                 n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
+                
+                strcpy(compareBuf,rbuf);
             }
 
         }
@@ -213,13 +213,6 @@ int main(int argc, const char * argv[]) {
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
         
-        if(bonusFlag == 1 && masterFlag == 1){
-            n = sendto(sock, &bonusBuf, strlen(bonusBuf), 0,(struct sockaddr *)&broadcast, fromlen);
-            if (n  < 0)
-                error("sendto");
-            bonusFlag = 0;
-            
-        }
         //store IP in a temp variable
         strcpy(tempIP, ip_address);
         bzero(buf,MSG_SIZE);        // sets all values to zero. memset() could be used
@@ -259,7 +252,7 @@ int main(int argc, const char * argv[]) {
         //Lab6
         else if(buf[0] == '@'){
             //forward message to broadcast
-            if(masterFlag == 1 && sendFlag == 1){
+            if(masterFlag == 1 && sendFlag == 1 &&(strcmp(compareBuf,buf)) !=0){
 
                 //send to broadcast
                 n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
