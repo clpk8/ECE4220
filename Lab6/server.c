@@ -97,7 +97,7 @@ void readFromKernel(void* ptr){
             if(masterFlag == 1){
                 printf("I've sent:%s\n",rbuf);
                 //sendto function
-                strcpy(bonusBuf,rbuf);
+              //  strcpy(bonusBuf,rbuf);
                 n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
