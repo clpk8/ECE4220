@@ -34,6 +34,7 @@ int portNum; //store port as globel for thread
 #define MSG_SIZE 40            // message size
 #define CHAR_DEV "/dev/Lab6" // "/dev/YourDevName"
 char toKernel[MSG_SIZE]; //message to kernel
+char bonusBuf[MSG_SIZE];
 
 //used for parsing
 const char s[2] = " ";
@@ -98,7 +99,8 @@ void readFromKernel(void* ptr){
                 printf("I've sent:%s\n",rbuf);
                 //sendto function
                 bonusFlag = 1;
-               // n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
+                strcpy(bonusBuf,rbuf);
+                n = sendto(sock, &rbuf, strlen(rbuf), 0,(struct sockaddr *)&broadcast, fromlen);
                 if (n  < 0)
                     error("sendto");
             }
@@ -211,8 +213,8 @@ int main(int argc, const char * argv[]) {
     fromlen = sizeof(struct sockaddr_in);    // size of structure
     while(1){
         
-        if(bonusFlag == 1){
-            n = sendto(sock, &buf, strlen(buf), 0,(struct sockaddr *)&broadcast, fromlen);
+        if(bonusFlag == 1 && masterFlag == 1){
+            n = sendto(sock, &bonusBuf, strlen(bonusBuf), 0,(struct sockaddr *)&broadcast, fromlen);
             if (n  < 0)
                 error("sendto");
             bonusFlag = 0;
